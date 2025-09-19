@@ -30,6 +30,39 @@ import { FaGoogle, FaFacebook } from "react-icons/fa"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 
+// Custom hook for localStorage with SSR support
+function useLocalStorage<T>(key: string, defaultValue: T) {
+  const [value, setValue] = useState<T>(defaultValue)
+  const [isHydrated, setIsHydrated] = useState(false)
+
+  useEffect(() => {
+    setIsHydrated(true)
+    if (typeof window !== 'undefined') {
+      try {
+        const item = localStorage.getItem(key)
+        if (item) {
+          setValue(JSON.parse(item))
+        }
+      } catch (error) {
+        console.warn(`Error reading localStorage key "${key}":`, error)
+      }
+    }
+  }, [key])
+
+  const setStoredValue = (newValue: T) => {
+    setValue(newValue)
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(key, JSON.stringify(newValue))
+      } catch (error) {
+        console.warn(`Error setting localStorage key "${key}":`, error)
+      }
+    }
+  }
+
+  return [value, setStoredValue, isHydrated] as const
+}
+
 // Mock data
 const carMakes = [
   "Toyota",
@@ -131,6 +164,36 @@ interface CarSelection {
   year: string
 }
 
+// Star Rating Component
+const StarRating = ({ rating, className = "w-4 h-4" }: { rating: number; className?: string }) => {
+  return (
+    <div className="flex items-center">
+      {[...Array(5)].map((_, i) => {
+        const difference = rating - i;
+
+        return (
+          <div key={i} className="relative">
+            {/* Base star (always gray) */}
+            <Star className={`${className} text-gray-300`} />
+
+            {/* Filled portion overlay */}
+            {difference > 0 && (
+              <div
+                className="absolute inset-0 overflow-hidden"
+                style={{
+                  clipPath: `polygon(0 0, ${Math.min(difference * 100, 100)}% 0, ${Math.min(difference * 100, 100)}% 100%, 0 100%)`
+                }}
+              >
+                <Star className={`${className} fill-yellow-400 text-yellow-400`} />
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function CustomerInterface() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -170,58 +233,42 @@ export default function CustomerInterface() {
   const [socketExpanded, setSocketExpanded] = useState(false)
   const [hasNotification, setHasNotification] = useState(false)
 
-  // Persistent state with localStorage
-  const [selectedCar, setSelectedCar] = useState<CarSelection>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('selectedCar')
-      return saved ? JSON.parse(saved) : { make: "", model: "", year: "" }
-    }
-    return { make: "", model: "", year: "" }
-  })
+  // Use localStorage hook for persistent state
+  const [selectedCar, setSelectedCar, carHydrated] = useLocalStorage<CarSelection>('selectedCar', { make: "", model: "", year: "" })
+  const [problemDescription, setProblemDescription, descriptionHydrated] = useLocalStorage('problemDescription', "")
+  const [selectedQuote, setSelectedQuote, quoteHydrated] = useLocalStorage<(typeof mockQuotes)[0] | null>('selectedQuote', null)
+  const [isSignedUp, setIsSignedUp, signupHydrated] = useLocalStorage('isSignedUp', false)
+  const [selectedTime, setSelectedTime, timeHydrated] = useLocalStorage('selectedTime', "")
 
-  const [problemDescription, setProblemDescription] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('problemDescription') || ""
-    }
-    return ""
-  })
+  // Special handling for Date objects
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const [dateHydrated, setDateHydrated] = useState(false)
 
-  const [selectedQuote, setSelectedQuote] = useState<(typeof mockQuotes)[0] | null>(() => {
+  useEffect(() => {
+    setDateHydrated(true)
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('selectedQuote')
-      return saved ? JSON.parse(saved) : null
+      const savedDate = localStorage.getItem('selectedDate')
+      if (savedDate) {
+        setSelectedDate(new Date(savedDate))
+      }
     }
-    return null
-  })
+  }, [])
 
-  const [isSignedUp, setIsSignedUp] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('isSignedUp') === 'true'
+  useEffect(() => {
+    if (typeof window !== 'undefined' && selectedDate) {
+      localStorage.setItem('selectedDate', selectedDate.toISOString())
     }
-    return false
-  })
+  }, [selectedDate])
 
-  const [selectedDate, setSelectedDate] = useState<Date | null>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('selectedDate')
-      return saved ? new Date(saved) : null
-    }
-    return null
-  })
-
-  const [selectedTime, setSelectedTime] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('selectedTime') || ""
-    }
-    return ""
-  })
+  // Check if all data is hydrated
+  const isHydrated = carHydrated && descriptionHydrated && quoteHydrated && signupHydrated && timeHydrated && dateHydrated
 
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
   const [uploadedQuoteFiles, setUploadedQuoteFiles] = useState<File[]>([]) // Added state for quote files
   const [rfpSent, setRfpSent] = useState(false)
   const [proposalReady, setProposalReady] = useState(false)
 
-  const years = Array.from({ length: 46 }, (_, i) => 2025 - i)
+  const years = ["Don't know", ...Array.from({ length: 46 }, (_, i) => 2025 - i)]
   const timeSlots = [
     "7:00 AM",
     "8:00 AM",
@@ -425,7 +472,7 @@ export default function CustomerInterface() {
               <Label htmlFor="make">Make</Label>
               <Select
                 value={selectedCar.make}
-                onValueChange={(value) => setSelectedCar((prev) => ({ ...prev, make: value, model: "" }))}
+                onValueChange={(value) => setSelectedCar({ ...selectedCar, make: value, model: "" })}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select make" />
@@ -444,7 +491,7 @@ export default function CustomerInterface() {
               <Label htmlFor="model">Model</Label>
               <Select
                 value={selectedCar.model}
-                onValueChange={(value) => setSelectedCar((prev) => ({ ...prev, model: value }))}
+                onValueChange={(value) => setSelectedCar({ ...selectedCar, model: value })}
                 disabled={!selectedCar.make}
               >
                 <SelectTrigger>
@@ -465,7 +512,8 @@ export default function CustomerInterface() {
               <Label htmlFor="year">Year</Label>
               <Select
                 value={selectedCar.year}
-                onValueChange={(value) => setSelectedCar((prev) => ({ ...prev, year: value }))}
+                onValueChange={(value) => setSelectedCar({ ...selectedCar, year: value })}
+                disabled={!selectedCar.model}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select year" />
@@ -799,8 +847,7 @@ export default function CustomerInterface() {
             </ul>
           </div>
           <p className="text-sm text-gray-600">
-            I recommend getting quotes from multiple service centers to ensure you get the best value. Even if one quote
-            seems good, it never hurts to get a second opinion!
+            We'll match you to the best service centers for your needs.
           </p>
           <Button
             onClick={() => setCurrentStep("quotes")}
@@ -814,7 +861,7 @@ export default function CustomerInterface() {
   )
 
   const renderQuotes = () => {
-    const quoteLength = isSignedUp ? mockQuotes.length : 2
+    const quoteLength = isSignedUp ? mockQuotes.length : 1
     return (
       <div className="max-w-4xl mx-auto px-6 py-12">
         <div className="mb-8">
@@ -830,14 +877,7 @@ export default function CustomerInterface() {
                   <div>
                     <h3 className={cn("text-xl font-semibold", !isSignedUp && "blur-sm")}>{quote.serviceCenterName}</h3>
                     <div className="flex items-center gap-2 mt-1">
-                      <div className="flex items-center">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-4 h-4 ${i < Math.floor(quote.rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
-                          />
-                        ))}
-                      </div>
+                      <StarRating rating={quote.rating} />
                       <span className="text-sm text-gray-600">{quote.rating}</span>
                     </div>
                   </div>
@@ -854,6 +894,7 @@ export default function CustomerInterface() {
                     setCurrentStep("quote-details")
                   }}
                   className="w-full bg-[#f16c63] hover:bg-[#e55a51] text-white"
+                  disabled={!isSignedUp}
                 >
                   View Details
                 </Button>
@@ -864,11 +905,11 @@ export default function CustomerInterface() {
           {/* Blurred quotes requiring signup */}
           {!isSignedUp && (
             <div className="relative">
-              <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex items-center justify-center rounded-lg">
+              <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex items-start justify-center rounded-lg">
                 <Card className="max-w-sm">
                   <CardContent className="p-6 text-center">
                     <h3 className="text-lg font-semibold mb-2">See All Quotes</h3>
-                    <p className="text-gray-600 mb-4">Sign up to view 3 more competitive quotes</p>
+                    <p className="text-gray-600 mb-4">Sign up to view {mockQuotes.length - quoteLength} more competitive quotes</p>
                     <Button
                       onClick={() => setCurrentStep("signup")}
                       className="bg-[#f16c63] hover:bg-[#e55a51] text-white"
@@ -969,14 +1010,7 @@ export default function CustomerInterface() {
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-2">{selectedQuote.serviceCenterName}</h2>
             <div className="flex items-center gap-2">
-              <div className="flex items-center">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`w-4 h-4 ${i < Math.floor(selectedQuote.rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
-                  />
-                ))}
-              </div>
+              <StarRating rating={selectedQuote.rating} />
               <span className="text-gray-600">{selectedQuote.rating} rating</span>
             </div>
           </div>
@@ -1259,6 +1293,18 @@ export default function CustomerInterface() {
       default:
         return renderWelcome()
     }
+  }
+
+  // Prevent hydration mismatch by not rendering until client-side hydration is complete
+  if (!isHydrated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f8f4f1] to-white">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-[#f16c63] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
