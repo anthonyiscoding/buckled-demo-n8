@@ -26,7 +26,6 @@ import {
 } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
-import { FaGoogle, FaFacebook } from "react-icons/fa"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import { SpeedInsights } from "@vercel/speed-insights/next"
@@ -195,6 +194,48 @@ const StarRating = ({ rating, className = "w-4 h-4" }: { rating: number; classNa
   );
 }
 
+// Reusable Socket Dialog Component
+interface SocketDialogProps {
+  isOpen: boolean
+  onOpenChange: (open: boolean) => void
+  title?: string
+  message: string
+  buttonText?: string
+  onButtonClick: () => void
+  showIcon?: boolean
+}
+
+const SocketDialog = ({
+  isOpen,
+  onOpenChange,
+  title = "Hi, I'm Socket!",
+  message,
+  buttonText = "Continue",
+  onButtonClick,
+  showIcon = true
+}: SocketDialogProps) => {
+  return (
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            {showIcon && <span className="text-2xl">🔧</span>}
+            {title}
+          </DialogTitle>
+          <DialogDescription className="text-base">
+            {message}
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex justify-center pt-4">
+          <Button onClick={onButtonClick} className="bg-[#f16c63] hover:bg-[#e55a51] text-white">
+            {buttonText}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
 function CustomerInterface() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -268,6 +309,8 @@ function CustomerInterface() {
   const [uploadedQuoteFiles, setUploadedQuoteFiles] = useState<File[]>([]) // Added state for quote files
   const [rfpSent, setRfpSent] = useState(false)
   const [proposalReady, setProposalReady] = useState(false)
+  const [diagnosisProgress, setDiagnosisProgress] = useState(0)
+  const [showDiagnosisResults, setShowDiagnosisResults] = useState(false)
 
   const years = ["Don't know", ...Array.from({ length: 46 }, (_, i) => 2025 - i)]
   const timeSlots = [
@@ -381,6 +424,33 @@ function CustomerInterface() {
     }
   }, [currentStep])
 
+  // Animate diagnosis progress over 3 seconds
+  useEffect(() => {
+    if (currentStep === "diagnosis") {
+      setDiagnosisProgress(0)
+      setShowDiagnosisResults(false)
+      const duration = 3000 // 3 seconds
+      const startTime = Date.now()
+
+      const animateProgress = () => {
+        const elapsed = Date.now() - startTime
+        const progress = Math.min((elapsed / duration) * 100, 100)
+        setDiagnosisProgress(progress)
+
+        if (progress < 100) {
+          requestAnimationFrame(animateProgress)
+        } else {
+          // Show diagnosis results with fade-in after progress completes
+          setTimeout(() => {
+            setShowDiagnosisResults(true)
+          }, 500)
+        }
+      }
+
+      requestAnimationFrame(animateProgress)
+    }
+  }, [currentStep])
+
   const handleSocketClick = () => {
     if (hasNotification) {
       setHasNotification(false)
@@ -417,25 +487,14 @@ function CustomerInterface() {
         </p>
 
         {socketVisible && (
-          <Dialog open={socketExpanded} onOpenChange={setSocketExpanded}>
-            <DialogContent className="sm:max-w-md">
-              <DialogHeader>
-                <DialogTitle className="flex items-center gap-2">
-                  <span className="text-2xl">🔧</span>
-                  Hi, I'm Socket!
-                </DialogTitle>
-                <DialogDescription className="text-base">
-                  Welcome! I'm here to help you resolve your car diagnosis and repair needs. I'll guide you through the
-                  main steps to get you back on the road.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="flex justify-center pt-4">
-                <Button onClick={handleGetStarted} className="bg-[#f16c63] hover:bg-[#e55a51] text-white">
-                  Get Started
-                </Button>
-              </div>
-            </DialogContent>
-          </Dialog>
+          <SocketDialog
+            isOpen={socketExpanded}
+            onOpenChange={setSocketExpanded}
+            title="Hi, I'm Socket!"
+            message="Welcome! I'm here to help you resolve your car diagnosis and repair needs. I'll guide you through the main steps to get you back on the road."
+            buttonText="Get Started"
+            onButtonClick={handleGetStarted}
+          />
         )}
       </div>
 
@@ -816,42 +875,72 @@ function CustomerInterface() {
           <span className="text-2xl">🔧</span>
         </div>
         <h2 className="text-3xl font-bold text-gray-900 mb-2">Analyzing your issue...</h2>
-        <Progress value={100} className="w-full max-w-md mx-auto" />
+        <Progress value={diagnosisProgress} className="w-full max-w-md mx-auto" />
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <span className="text-xl">🔧</span>
-            Socket's Diagnosis
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-gray-700">Based on your description and vehicle information, it appears you need:</p>
-          <div className="bg-[#fef7f7] border border-[#f16c63] rounded-lg p-4">
-            <h4 className="font-semibold text-[#732621] mb-2">Recommended Services:</h4>
-            <ul className="space-y-2 text-sm">
-              <li className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-[#f16c63]" />
-                Transmission fluid change (~$200)
-              </li>
-              <li className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-[#f16c63]" />
-                Brake pad replacement (~$250-400)
-              </li>
-            </ul>
-          </div>
-          <p className="text-sm text-gray-600">
-            We'll match you to the best service centers for your needs.
-          </p>
-          <Button
-            onClick={() => setCurrentStep("quotes")}
-            className="w-full bg-[#f16c63] hover:bg-[#e55a51] text-white"
-          >
-            Look at Quotes
-          </Button>
-        </CardContent>
-      </Card>
+      {showDiagnosisResults && (
+        <div className="animate-fade-in">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <span className="text-xl">🔧</span>
+                Socket's Diagnosis
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-gray-700">Based on your description and vehicle information, it appears you need:</p>
+              <div className="bg-[#fef7f7] border border-[#f16c63] rounded-lg p-4 animate-fade-in-delayed">
+                <h4 className="font-semibold text-[#732621] mb-2">Recommended Services:</h4>
+                <ul className="space-y-2 text-sm">
+                  <li className="flex items-center gap-2 animate-fade-in-delayed-1">
+                    <Check className="w-4 h-4 text-[#f16c63]" />
+                    Transmission fluid change (~$200)
+                  </li>
+                  <li className="flex items-center gap-2 animate-fade-in-delayed-2">
+                    <Check className="w-4 h-4 text-[#f16c63]" />
+                    Brake pad replacement (~$250-400)
+                  </li>
+                </ul>
+              </div>
+              <p className="text-sm text-gray-600 animate-fade-in-delayed-3">
+                We'll match you to the best service centers for your needs.
+              </p>
+              <Button
+                onClick={() => setCurrentStep("quotes")}
+                className="w-full bg-[#f16c63] hover:bg-[#e55a51] text-white animate-fade-in-delayed-4"
+              >
+                Look at Quotes
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {showDiagnosisResults && (
+        <SocketDialog
+          isOpen={socketExpanded}
+          onOpenChange={setSocketExpanded}
+          title="Diagnosis Complete!"
+          message="I've analyzed your vehicle and identified the likely issues. The recommended services above should get your car running smoothly again. Ready to see quotes from trusted service centers?"
+          buttonText="View Quotes"
+          onButtonClick={() => setCurrentStep("quotes")}
+        />
+      )}
+
+      {/* Socket Assistant */}
+      {showDiagnosisResults && !socketExpanded && (
+        <div
+          className="fixed bottom-6 right-6 w-12 h-12 bg-[#f16c63] rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 animate-bounce-in"
+          onClick={handleSocketClick}
+        >
+          <span className="text-xl">🔧</span>
+          {hasNotification && (
+            <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
+              <span className="text-xs text-white font-bold">1</span>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 
@@ -971,14 +1060,14 @@ function CustomerInterface() {
             Sign Up
           </Button>
           <div className="space-y-2">
-            <Button variant="outline" className="w-full bg-transparent">
-              <FaGoogle
-                onClick={() => {
-                  setIsSignedUp(true)
-                  setCurrentStep("quotes")
-                }}
-                className="w-4 h-4 mr-2"
-              />
+            <Button
+              onClick={() => {
+                setIsSignedUp(true)
+                setCurrentStep("quotes")
+              }}
+              variant="outline"
+              className="w-full bg-transparent"
+            >
               Continue with Google
             </Button>
             <Button
@@ -989,7 +1078,6 @@ function CustomerInterface() {
               variant="outline"
               className="w-full bg-transparent"
             >
-              <FaFacebook className="w-4 h-4 mr-2" />
               Continue with Facebook
             </Button>
           </div>
@@ -1038,11 +1126,11 @@ function CustomerInterface() {
                 <h4 className="font-semibold mb-2">Draft RFP Summary</h4>
                 <p className="text-sm align-items">
                   <Label className="font-bold">Vehicle</Label>
-                  <p>{selectedCar.year} {selectedCar.make} {selectedCar.model}</p>
+                  <p className="mb-2">{selectedCar.year} {selectedCar.make} {selectedCar.model}</p>
                   <Label className="font-bold">Issue</Label>
-                  <p>{problemDescription}</p>
+                  <p className="mb-2">{problemDescription}</p>
                   <Label className="font-bold">Suggested Services</Label>
-                  <ul>
+                  <ul className="mb-2">
                     <li className="flex items-center">
                       <CheckSquare className="w-5 h-5 mr-2" />
                       Transmission fluid change
