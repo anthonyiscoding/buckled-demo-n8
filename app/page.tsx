@@ -293,7 +293,6 @@ function CustomerInterface() {
 
   const [socketVisible, setSocketVisible] = useState(false)
   const [socketExpanded, setSocketExpanded] = useState(false)
-  const [hasNotification, setHasNotification] = useState(false)
 
   // Use localStorage hook for persistent state
   const [selectedCar, setSelectedCar, carHydrated] = useLocalStorage<CarSelection>('selectedCar', { make: "", model: "", year: "" })
@@ -399,12 +398,11 @@ function CustomerInterface() {
 
   useEffect(() => {
     if (currentStep === "confirmation") {
-      // Make Socket visible and show notification after a delay
+      // Make Socket visible after a delay
       setSocketVisible(true)
       const timer = setTimeout(() => {
-        setHasNotification(true)
         setSocketExpanded(true) // Auto-expand the Socket dialog
-      }, 500) // Show notification and dialog after 2 seconds
+      }, 500)
       return () => clearTimeout(timer)
     }
   }, [currentStep])
@@ -437,7 +435,7 @@ function CustomerInterface() {
       // Auto-advance to scheduling after 7 seconds
       const advanceTimer = setTimeout(() => {
         setCurrentStep("scheduling")
-      }, 7000)
+      }, 8000)
 
       return () => {
         clearTimeout(sendTimer)
@@ -475,13 +473,8 @@ function CustomerInterface() {
   }, [currentStep])
 
   const handleSocketClick = () => {
-    if (hasNotification) {
-      setHasNotification(false)
-      // Show the socket dialog with notification message
-      setSocketExpanded(true)
-    } else {
-      setSocketExpanded(!socketExpanded)
-    }
+    // Show the socket dialog
+    setSocketExpanded(true)
   }
 
   const handleGetStarted = () => {
@@ -1419,7 +1412,6 @@ function CustomerInterface() {
         isVisible={currentStep !== "welcome"}
         isExpanded={false}
         onClick={handleSocketClick}
-        hasNotification={hasNotification}
       />
     </div>
   )
