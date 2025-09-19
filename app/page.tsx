@@ -185,7 +185,7 @@ export default function CustomerInterface() {
   const renderWelcome = () => (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f8f4f1] to-white">
       <div className="text-center max-w-2xl mx-auto px-6">
-        <h1 className="text-4xl font-bold text-gray-900 mb-6">Welcome to AutoDiagnose</h1>
+        <h1 className="text-4xl font-bold text-gray-900 mb-6">Welcome to Buckled.io</h1>
         <p className="text-xl text-gray-600 mb-8">
           Get expert car diagnosis and fair quotes from trusted service centers
         </p>
@@ -503,7 +503,9 @@ export default function CustomerInterface() {
     </div>
   )
 
-  const renderQuotes = () => (
+  const renderQuotes = () => {
+    const quoteLength = isSignedUp ? mockQuotes.length : 2 
+    return (
     <div className="max-w-4xl mx-auto px-6 py-12">
       <div className="mb-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-2">Service Center Quotes</h2>
@@ -511,12 +513,12 @@ export default function CustomerInterface() {
       </div>
 
       <div className="grid gap-6">
-        {mockQuotes.slice(0, 2).map((quote) => (
+        {mockQuotes.slice(0, quoteLength).map((quote) => (
           <Card key={quote.id} className="border-2">
             <CardContent className="p-6">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="text-xl font-semibold">{quote.serviceCenterName}</h3>
+                  <h3 className={cn("text-xl font-semibold", !isSignedUp && "blur-sm")}>{quote.serviceCenterName}</h3>
                   <div className="flex items-center gap-2 mt-1">
                     <div className="flex items-center">
                       {[...Array(5)].map((_, i) => (
@@ -532,6 +534,7 @@ export default function CustomerInterface() {
                 <div className="text-right">
                   <div className="text-2xl font-bold text-[#f16c63]">${quote.price}</div>
                   <div className="text-sm text-gray-600">{quote.estimatedTime}</div>
+                  <div className="text-sm text-gray-600">{quote.warranty}</div>
                 </div>
               </div>
               <p className="text-gray-700 mb-4">{quote.description}</p>
@@ -549,6 +552,8 @@ export default function CustomerInterface() {
         ))}
 
         {/* Blurred quotes requiring signup */}
+        {!isSignedUp && 
+        
         <div className="relative">
           <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex items-center justify-center rounded-lg">
             <Card className="max-w-sm">
@@ -586,9 +591,10 @@ export default function CustomerInterface() {
             ))}
           </div>
         </div>
+}
       </div>
     </div>
-  )
+  )}
 
   const renderSignup = () => (
     <div className="max-w-md mx-auto px-6 py-12">
@@ -841,54 +847,7 @@ export default function CustomerInterface() {
       case "diagnosis":
         return renderDiagnosis()
       case "quotes":
-        return isSignedUp ? (
-          <div className="max-w-4xl mx-auto px-6 py-12">
-            <div className="mb-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">All Service Center Quotes</h2>
-              <p className="text-gray-600">Compare all available quotes from trusted service centers</p>
-            </div>
-            <div className="grid gap-6">
-              {mockQuotes.map((quote) => (
-                <Card key={quote.id} className="border-2">
-                  <CardContent className="p-6">
-                    <div className="flex justify-between items-start mb-4">
-                      <div>
-                        <h3 className="text-xl font-semibold">{quote.serviceCenterName}</h3>
-                        <div className="flex items-center gap-2 mt-1">
-                          <div className="flex items-center">
-                            {[...Array(5)].map((_, i) => (
-                              <Star
-                                key={i}
-                                className={`w-4 h-4 ${i < Math.floor(quote.rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
-                              />
-                            ))}
-                          </div>
-                          <span className="text-sm text-gray-600">{quote.rating}</span>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-2xl font-bold text-[#f16c63]">${quote.price}</div>
-                        <div className="text-sm text-gray-600">{quote.estimatedTime}</div>
-                      </div>
-                    </div>
-                    <p className="text-gray-700 mb-4">{quote.description}</p>
-                    <Button
-                      onClick={() => {
-                        setSelectedQuote(quote)
-                        setCurrentStep("quote-details")
-                      }}
-                      className="w-full bg-[#f16c63] hover:bg-[#e55a51] text-white"
-                    >
-                      View Details
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        ) : (
-          renderQuotes()
-        )
+        return renderQuotes()
       case "signup":
         return renderSignup()
       case "quote-details":
