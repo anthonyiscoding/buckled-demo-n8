@@ -4,6 +4,7 @@ import type React from "react"
 
 import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
+import Image from 'next/image'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -203,6 +204,7 @@ interface SocketDialogProps {
   buttonText?: string
   onButtonClick: () => void
   showIcon?: boolean
+  socketImage?: string
 }
 
 const SocketDialog = ({
@@ -212,24 +214,39 @@ const SocketDialog = ({
   message,
   buttonText = "Continue",
   onButtonClick,
-  showIcon = true
+  socketImage = "socket-arm-raised.png",
 }: SocketDialogProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            {showIcon && <span className="text-2xl">🔧</span>}
-            {title}
-          </DialogTitle>
-          <DialogDescription className="text-base">
-            {message}
-          </DialogDescription>
-        </DialogHeader>
-        <div className="flex justify-center pt-4">
-          <Button onClick={onButtonClick} className="bg-[#f16c63] hover:bg-[#e55a51] text-white">
-            {buttonText}
-          </Button>
+      <DialogContent className="sm:max-w-lg max-w-md w-full">
+        <div className="flex gap-4 items-stretch min-h-[200px]">
+          {/* Socket Character Section - 20% width, full height */}
+          <div className="w-[20%] flex-shrink-0 flex items-center justify-center">
+            <Image
+              src={`/images/${socketImage}`}
+              alt="Socket character"
+              className="w-full h-full object-contain animate-socket-appear max-h-[300px]"
+              width={120}
+              height={300}
+            />
+          </div>
+
+          {/* Content Section - 80% width */}
+          <div className="flex-1 min-w-0 flex flex-col justify-center py-4">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2 text-left">
+                {title}
+              </DialogTitle>
+              <DialogDescription className="text-base text-left">
+                {message}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex justify-start pt-4">
+              <Button onClick={onButtonClick} className="bg-[#f16c63] hover:bg-[#e55a51] text-white">
+                {buttonText}
+              </Button>
+            </div>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
@@ -379,9 +396,12 @@ function CustomerInterface() {
 
   useEffect(() => {
     if (currentStep === "confirmation") {
+      // Make Socket visible and show notification after a delay
+      setSocketVisible(true)
       const timer = setTimeout(() => {
         setHasNotification(true)
-      }, 3000)
+        setSocketExpanded(true) // Auto-expand the Socket dialog
+      }, 500) // Show notification and dialog after 2 seconds
       return () => clearTimeout(timer)
     }
   }, [currentStep])
@@ -494,6 +514,7 @@ function CustomerInterface() {
             message="Welcome! I'm here to help you resolve your car diagnosis and repair needs. I'll guide you through the main steps to get you back on the road."
             buttonText="Get Started"
             onButtonClick={handleGetStarted}
+            socketImage="socket-arm-raised.png"
           />
         )}
       </div>
@@ -597,12 +618,6 @@ function CustomerInterface() {
             >
               Continue
             </Button>
-            <button
-              onClick={() => setCurrentStep("problem-description")}
-              className="text-gray-500 hover:text-gray-700 text-sm cursor-pointer transition-colors"
-            >
-              Skip &gt;
-            </button>
           </div>
         </CardContent>
       </Card>
@@ -871,8 +886,14 @@ function CustomerInterface() {
   const renderDiagnosis = () => (
     <div className="max-w-2xl mx-auto px-6 py-12">
       <div className="text-center mb-8">
-        <div className="w-16 h-16 bg-[#f16c63] rounded-full flex items-center justify-center mx-auto mb-4">
-          <span className="text-2xl">🔧</span>
+        <div className="w-32 h-32 flex items-center justify-center mx-auto mb-4">
+          <Image
+            src="/images/socket-thinking.png"
+            alt="Socket character"
+            className="w-full h-full object-contain animate-socket-appear max-h-[300px]"
+            width={120}
+            height={300}
+          />
         </div>
         <h2 className="text-3xl font-bold text-gray-900 mb-2">Analyzing your issue...</h2>
         <Progress value={diagnosisProgress} className="w-full max-w-md mx-auto" />
@@ -924,6 +945,7 @@ function CustomerInterface() {
           message="I've analyzed your vehicle and identified the likely issues. The recommended services above should get your car running smoothly again. Ready to see quotes from trusted service centers?"
           buttonText="View Quotes"
           onButtonClick={() => setCurrentStep("quotes")}
+          socketImage="socket-thinking.png"
         />
       )}
 
@@ -1303,7 +1325,7 @@ function CustomerInterface() {
         <h2 className="text-3xl font-bold text-gray-900 mb-2">Appointment Scheduled!</h2>
       </div>
 
-      <Card>
+      <Card className="animate-fade-in">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <span className="text-xl">🔧</span>
@@ -1317,7 +1339,7 @@ function CustomerInterface() {
             to respond within 24 hours!
           </p>
 
-          <div className="bg-success animate-pulse rounded-lg p-4">
+          <div className="bg-success animate-pulse rounded-lg p-4 animate-fade-in-delayed">
             <div className="flex items-center justify-center mb-2">
               <div className="flex items-center gap-2 text-lg">
                 <span>📧</span>
@@ -1329,7 +1351,7 @@ function CustomerInterface() {
             </div>
           </div>
 
-          <div className="bg-gray-50 rounded-lg p-4">
+          <div className="bg-gray-50 rounded-lg p-4 animate-fade-in-delayed-1">
             <h4 className="font-semibold mb-2">Appointment Details:</h4>
             <div className="space-y-1 text-sm">
               <p>
@@ -1347,12 +1369,38 @@ function CustomerInterface() {
             </div>
           </div>
 
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 animate-fade-in-delayed-2">
             You can always come back here any time you have additional car needs or even just a question about your
             vehicle.
           </p>
         </CardContent>
       </Card>
+
+      {/* Socket Dialog for confirmation step */}
+      <SocketDialog
+        isOpen={socketExpanded}
+        onOpenChange={setSocketExpanded}
+        title="Congratulations! 🎉"
+        message="Your appointment has been successfully scheduled! The service center will contact you within 24 hours to confirm the details. I'm always here if you need help with future car troubles!"
+        buttonText="Got it!"
+        onButtonClick={() => setSocketExpanded(false)}
+        socketImage="socket-thumbs-up.png"
+      />
+
+      {/* Socket Assistant */}
+      {!socketExpanded && (
+        <div
+          className="fixed bottom-6 right-6 w-12 h-12 bg-[#f16c63] rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 animate-bounce-in"
+          onClick={handleSocketClick}
+        >
+          <span className="text-xl">🔧</span>
+          {hasNotification && (
+            <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
+              <span className="text-xs text-white font-bold">1</span>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 
