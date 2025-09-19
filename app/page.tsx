@@ -10,13 +10,13 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Separator } from "@/components/ui/separator"
 import { Progress } from "@/components/ui/progress"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { CalendarIcon, Upload, Camera, Star, Check, ArrowLeft } from "lucide-react"
+import { CalendarIcon, UploadIcon, Camera, Star, Check, ArrowLeft } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
+import { Google, Facebook } from "@/components/ui/social-icons" // Added imports for Google and Facebook icons
 
 // Mock data
 const carMakes = [
@@ -103,6 +103,8 @@ type Step =
   | "car-selection"
   | "problem-description"
   | "media-upload"
+  | "quote-upload" // Added new step for uploading existing quotes
+  | "quote-scanning" // Added new step for scanning animation
   | "diagnosis"
   | "quotes"
   | "signup"
@@ -122,6 +124,7 @@ export default function CustomerInterface() {
   const [selectedDate, setSelectedDate] = useState<Date>()
   const [selectedTime, setSelectedTime] = useState("")
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
+  const [uploadedQuoteFiles, setUploadedQuoteFiles] = useState<File[]>([]) // Added state for quote files
 
   const years = Array.from({ length: 46 }, (_, i) => 2025 - i)
   const timeSlots = [
@@ -160,6 +163,16 @@ export default function CustomerInterface() {
     }
   }, [currentStep])
 
+  useEffect(() => {
+    // Auto-advance after 3 seconds for quote-scanning step
+    if (currentStep === "quote-scanning") {
+      const timer = setTimeout(() => {
+        setCurrentStep("diagnosis")
+      }, 3000)
+      return () => clearTimeout(timer)
+    }
+  }, [currentStep])
+
   const handleSocketClick = () => {
     if (hasNotification) {
       setHasNotification(false)
@@ -180,6 +193,11 @@ export default function CustomerInterface() {
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || [])
     setUploadedFiles((prev) => [...prev, ...files])
+  }
+
+  const handleQuoteFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || [])
+    setUploadedQuoteFiles((prev) => [...prev, ...files])
   }
 
   const renderWelcome = () => (
@@ -349,11 +367,7 @@ export default function CustomerInterface() {
           </div>
 
           <div className="flex gap-4">
-            <Button
-              variant="outline"
-              onClick={() => setCurrentStep("car-selection")}
-              className="flex items-center gap-2"
-            >
+            <Button variant="outline" onClick={() => setCurrentStep("car-selection")} className="flex items-center gap-2">
               <ArrowLeft className="w-4 h-4" />
               Back
             </Button>
@@ -391,12 +405,12 @@ export default function CustomerInterface() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-            <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <UploadIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-600 mb-4">Drag and drop files here, or click to browse</p>
             <div className="flex gap-4 justify-center">
               <div className="relative">
                 <Button variant="outline" className="flex items-center gap-2 bg-transparent">
-                  <Upload className="w-4 h-4" />
+                  <UploadIcon className="w-4 h-4" />
                   Upload Files
                 </Button>
                 <input
@@ -438,7 +452,94 @@ export default function CustomerInterface() {
             </Button>
             <div className="flex-1 flex items-center justify-between">
               <Button
-                onClick={() => setCurrentStep("diagnosis")}
+                onClick={() => setCurrentStep("quote-upload")} // Updated to go to quote-upload instead of diagnosis
+                className="bg-[#f16c63] hover:bg-[#e55a51] text-white"
+              >
+                Continue
+              </Button>
+              <button
+                onClick={() => setCurrentStep("quote-upload")} // Updated to go to quote-upload instead of diagnosis
+                className="text-gray-500 hover:text-gray-700 text-sm cursor-pointer transition-colors ml-4"
+              >
+                Skip &gt;
+              </button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  )
+
+  const renderQuoteUpload = () => (
+    <div className="max-w-2xl mx-auto px-6 py-12">
+      <div className="mb-8">
+        <h2 className="text-3xl font-bold text-gray-900 mb-2">Upload existing quotes</h2>
+        <p className="text-gray-600">Have quotes from other service centers? Upload them for comparison (optional)</p>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Upload Quote Documents</CardTitle>
+          <CardDescription>
+            Upload photos or PDFs of quotes you've received from other service centers
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+            <UploadIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <p className="text-gray-600 mb-4">Upload photos or PDFs of existing quotes</p>
+            <div className="flex gap-4 justify-center">
+              <div className="relative">
+                <Button variant="outline" className="flex items-center gap-2 bg-transparent">
+                  <UploadIcon className="w-4 h-4" />
+                  Upload Quote
+                </Button>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*,.pdf"
+                  onChange={handleQuoteFileUpload}
+                  className="absolute inset-0 opacity-0 cursor-pointer"
+                />
+              </div>
+              <Button variant="outline" className="flex items-center gap-2 bg-transparent">
+                <Camera className="w-4 h-4" />
+                Take Photo
+              </Button>
+            </div>
+          </div>
+
+          {uploadedQuoteFiles.length > 0 && (
+            <div>
+              <h4 className="font-medium mb-2">Uploaded Quote Files:</h4>
+              <div className="space-y-2">
+                {uploadedQuoteFiles.map((file, index) => (
+                  <div key={index} className="flex items-center gap-2 p-2 bg-gray-50 rounded">
+                    <span className="text-sm">{file.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="flex gap-4">
+            <Button
+              variant="outline"
+              onClick={() => setCurrentStep("media-upload")}
+              className="flex items-center gap-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back
+            </Button>
+            <div className="flex-1 flex items-center justify-between">
+              <Button
+                onClick={() => {
+                  if (uploadedQuoteFiles.length > 0) {
+                    setCurrentStep("quote-scanning")
+                  } else {
+                    setCurrentStep("diagnosis")
+                  }
+                }}
                 className="bg-[#f16c63] hover:bg-[#e55a51] text-white"
               >
                 Continue
@@ -450,6 +551,45 @@ export default function CustomerInterface() {
                 Skip &gt;
               </button>
             </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  )
+
+  const renderQuoteScanning = () => (
+    <div className="max-w-2xl mx-auto px-6 py-12">
+      <div className="text-center mb-8">
+        <div className="w-16 h-16 bg-[#f16c63] rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+          <span className="text-2xl">📄</span>
+        </div>
+        <h2 className="text-3xl font-bold text-gray-900 mb-2">Scanning your quotes...</h2>
+        <p className="text-gray-600">Our AI is analyzing your uploaded quotes for comparison</p>
+      </div>
+
+      <Card>
+        <CardContent className="p-8">
+          <div className="space-y-6">
+            <div className="flex items-center justify-center">
+              <div className="relative">
+                <div className="w-32 h-40 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+                  <span className="text-4xl">📄</span>
+                </div>
+                <div className="absolute inset-0 bg-[#f16c63] opacity-20 rounded-lg animate-pulse"></div>
+                <div className="absolute top-0 left-0 w-full h-1 bg-[#f16c63] animate-pulse rounded-t-lg"></div>
+              </div>
+            </div>
+            
+            <div className="text-center space-y-2">
+              <div className="flex items-center justify-center gap-2">
+                <div className="w-2 h-2 bg-[#f16c63] rounded-full animate-bounce"></div>
+                <div className="w-2 h-2 bg-[#f16c63] rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                <div className="w-2 h-2 bg-[#f16c63] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+              </div>
+              <p className="text-sm text-gray-600">Processing {uploadedQuoteFiles.length} quote{uploadedQuoteFiles.length !== 1 ? 's' : ''}...</p>
+            </div>
+
+            <Progress value={100} className="w-full" />
           </div>
         </CardContent>
       </Card>
@@ -552,8 +692,7 @@ export default function CustomerInterface() {
           ))}
 
           {/* Blurred quotes requiring signup */}
-          {!isSignedUp &&
-
+          {!isSignedUp && (
             <div className="relative">
               <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex items-center justify-center rounded-lg">
                 <Card className="max-w-sm">
@@ -591,46 +730,47 @@ export default function CustomerInterface() {
                 ))}
               </div>
             </div>
-          }
+          )}
         </div>
       </div>
     )
-  }
+  )
 
-  const renderSignup = () => (
-    <div className="max-w-md mx-auto px-6 py-12">
+  const renderSignup = () => (\
+    <div className="max-w-md mx-auto px-6 py-12">\
       <Card>
         <CardHeader>
           <CardTitle>Create Your Account</CardTitle>
           <CardDescription>Sign up to see all quotes and book services</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div>
+          <div>\
             <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" placeholder="your@email.com" />
           </div>
           <div>
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" placeholder="••••••••" />
+            <Input id="password" type="password\" placeholder="••••••••\" />
           </div>
-          <Button
-            onClick={() => {
+          <Button\
+            onClick=() => {
               setIsSignedUp(true)
               setCurrentStep("quotes")
-            }}
+            }
             className="w-full bg-[#f16c63] hover:bg-[#e55a51] text-white"
           >
             Sign Up
           </Button>
-          <Separator />
-          <div className="space-y-2">
+          <div className=\"space-y-2">
             <Button variant="outline" className="w-full bg-transparent">
+              <Google className="w-4 h-4 mr-2" />
               Continue with Google
-            </Button>
-            <Button variant="outline" className="w-full bg-transparent">
+            </Button>\
+            <Button variant=\"outline" className="w-full bg-transparent">
+              <Facebook className="w-4 h-4 mr-2" />
               Continue with Facebook
             </Button>
-          </div>
+          </div>\
         </CardContent>
       </Card>
     </div>
@@ -845,6 +985,10 @@ export default function CustomerInterface() {
         return renderProblemDescription()
       case "media-upload":
         return renderMediaUpload()
+      case "quote-upload": // Added new quote upload case
+        return renderQuoteUpload()
+      case "quote-scanning": // Added new quote scanning case
+        return renderQuoteScanning()
       case "diagnosis":
         return renderDiagnosis()
       case "quotes":
@@ -877,6 +1021,8 @@ export default function CustomerInterface() {
                     "car-selection",
                     "problem-description",
                     "media-upload",
+                    "quote-upload", // Added quote-upload to step counter
+                    "quote-scanning", // Added quote-scanning to step counter
                     "diagnosis",
                     "quotes",
                     "signup",
@@ -884,7 +1030,7 @@ export default function CustomerInterface() {
                     "scheduling",
                     "confirmation",
                   ].indexOf(currentStep) + 1}{" "}
-                  of 9
+                  of 11 {/* Updated total step count from 9 to 11 */}
                 </div>
               </div>
               <div className="text-sm text-gray-600">
