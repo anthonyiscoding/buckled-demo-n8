@@ -11,8 +11,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Progress } from "@/components/ui/progress"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import {
   CalendarIcon,
   UploadIcon,
@@ -1069,18 +1067,18 @@ export default function CustomerInterface() {
         <CardContent className="space-y-4">
           <p className="text-gray-700">
             See that was easy! We're sending off this RFP to {selectedQuote?.serviceCenterName}. Remember to check your
-            email, they will be in touch soon. Our Service Centers are top-notch, customer-focused, and are guaranteed
+            email, they will be in touch soon. Our Service Centers are top-notch, customer-focused, and are always guaranteed
             to respond within 24 hours!
           </p>
 
-          <div className="bg-[#fef7f7] border border-[#f16c63] rounded-lg p-4">
+          <div className="bg-success animate-pulse rounded-lg p-4">
             <div className="flex items-center justify-center mb-2">
-              <div className="flex items-center gap-2 text-sm text-[#732621]">
+              <div className="flex items-center gap-2 text-lg">
                 <span>📧</span>
                 <span>RFP</span>
                 <span>→</span>
                 <span>🔧</span>
-                <span className="animate-pulse">Sending...</span>
+                <span>Sent</span>
               </div>
             </div>
           </div>
