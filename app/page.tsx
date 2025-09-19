@@ -13,10 +13,21 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Progress } from "@/components/ui/progress"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { CalendarIcon, UploadIcon, Camera, Star, Check, ArrowLeft } from "lucide-react"
+import {
+  CalendarIcon,
+  UploadIcon,
+  Camera,
+  Star,
+  Check,
+  ArrowLeft,
+  ArrowRight,
+  FileText,
+  Wrench,
+  Clock,
+} from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
-import { FaGoogle, FaFacebook } from 'react-icons/fa'
+import { FaGoogle, FaFacebook } from "react-icons/fa"
 
 // Mock data
 const carMakes = [
@@ -109,6 +120,7 @@ type Step =
   | "quotes"
   | "signup"
   | "quote-details"
+  | "rfp-confirmation" // Added new step for RFP confirmation
   | "scheduling"
   | "confirmation"
 
@@ -126,6 +138,8 @@ export default function CustomerInterface() {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
   const [uploadedQuoteFiles, setUploadedQuoteFiles] = useState<File[]>([]) // Added state for quote files
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
+  const [rfpSent, setRfpSent] = useState(false)
+  const [proposalReady, setProposalReady] = useState(false)
 
   const years = Array.from({ length: 46 }, (_, i) => 2025 - i)
   const timeSlots = [
@@ -171,6 +185,34 @@ export default function CustomerInterface() {
         setCurrentStep("diagnosis")
       }, 3000)
       return () => clearTimeout(timer)
+    }
+  }, [currentStep])
+
+  useEffect(() => {
+    if (currentStep === "rfp-confirmation") {
+      setRfpSent(false)
+      setProposalReady(false)
+
+      // Start RFP sending animation
+      const sendTimer = setTimeout(() => {
+        setRfpSent(true)
+      }, 1000)
+
+      // Show proposal ready after 5 seconds
+      const readyTimer = setTimeout(() => {
+        setProposalReady(true)
+      }, 5000)
+
+      // Auto-advance to scheduling after 7 seconds
+      const advanceTimer = setTimeout(() => {
+        setCurrentStep("scheduling")
+      }, 7000)
+
+      return () => {
+        clearTimeout(sendTimer)
+        clearTimeout(readyTimer)
+        clearTimeout(advanceTimer)
+      }
     }
   }, [currentStep])
 
@@ -368,7 +410,11 @@ export default function CustomerInterface() {
           </div>
 
           <div className="flex gap-4">
-            <Button variant="outline" onClick={() => setCurrentStep("car-selection")} className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setCurrentStep("car-selection")}
+              className="flex items-center gap-2"
+            >
               <ArrowLeft className="w-4 h-4" />
               Back
             </Button>
@@ -481,9 +527,7 @@ export default function CustomerInterface() {
       <Card>
         <CardHeader>
           <CardTitle>Upload Quote Documents</CardTitle>
-          <CardDescription>
-            Upload photos or PDFs of quotes you've received from other service centers
-          </CardDescription>
+          <CardDescription>Upload photos or PDFs of quotes you've received from other service centers</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
@@ -584,10 +628,18 @@ export default function CustomerInterface() {
             <div className="text-center space-y-2">
               <div className="flex items-center justify-center gap-2">
                 <div className="w-2 h-2 bg-[#f16c63] rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-[#f16c63] rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                <div className="w-2 h-2 bg-[#f16c63] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                <div
+                  className="w-2 h-2 bg-[#f16c63] rounded-full animate-bounce"
+                  style={{ animationDelay: "0.1s" }}
+                ></div>
+                <div
+                  className="w-2 h-2 bg-[#f16c63] rounded-full animate-bounce"
+                  style={{ animationDelay: "0.2s" }}
+                ></div>
               </div>
-              <p className="text-sm text-gray-600">Processing {uploadedQuoteFiles.length} quote{uploadedQuoteFiles.length !== 1 ? 's' : ''}...</p>
+              <p className="text-sm text-gray-600">
+                Processing {uploadedQuoteFiles.length} quote{uploadedQuoteFiles.length !== 1 ? "s" : ""}...
+              </p>
             </div>
 
             <Progress value={100} className="w-full" />
@@ -700,7 +752,10 @@ export default function CustomerInterface() {
                   <CardContent className="p-6 text-center">
                     <h3 className="text-lg font-semibold mb-2">See All Quotes</h3>
                     <p className="text-gray-600 mb-4">Sign up to view 3 more competitive quotes</p>
-                    <Button onClick={() => setCurrentStep("signup")} className="bg-[#f16c63] hover:bg-[#e55a51] text-white">
+                    <Button
+                      onClick={() => setCurrentStep("signup")}
+                      className="bg-[#f16c63] hover:bg-[#e55a51] text-white"
+                    >
                       Sign Up to See All Offers
                     </Button>
                   </CardContent>
@@ -755,31 +810,39 @@ export default function CustomerInterface() {
           </div>
           <Button
             onClick={() => {
-              setIsSignedUp(true);
+              setIsSignedUp(true)
               setCurrentStep("quotes")
             }}
-            className="w-full bg-[#f16c63] hover:bg-[#e55a51] text-white">
+            className="w-full bg-[#f16c63] hover:bg-[#e55a51] text-white"
+          >
             Sign Up
           </Button>
           <div className="space-y-2">
             <Button variant="outline" className="w-full bg-transparent">
-              <FaGoogle onClick={() => {
-                setIsSignedUp(true);
-                setCurrentStep("quotes")
-              }} className="w-4 h-4 mr-2" />
+              <FaGoogle
+                onClick={() => {
+                  setIsSignedUp(true)
+                  setCurrentStep("quotes")
+                }}
+                className="w-4 h-4 mr-2"
+              />
               Continue with Google
             </Button>
-            <Button onClick={() => {
-              setIsSignedUp(true);
-              setCurrentStep("quotes")
-            }} variant="outline" className="w-full bg-transparent">
+            <Button
+              onClick={() => {
+                setIsSignedUp(true)
+                setCurrentStep("quotes")
+              }}
+              variant="outline"
+              className="w-full bg-transparent"
+            >
               <FaFacebook className="w-4 h-4 mr-2" />
               Continue with Facebook
             </Button>
           </div>
         </CardContent>
       </Card>
-    </div >
+    </div>
   )
 
   const renderQuoteDetails = () => (
@@ -842,7 +905,7 @@ export default function CustomerInterface() {
                   Go Back
                 </Button>
                 <Button
-                  onClick={() => setCurrentStep("scheduling")}
+                  onClick={() => setCurrentStep("rfp-confirmation")}
                   className="flex-1 bg-[#f16c63] hover:bg-[#e55a51] text-white"
                 >
                   Accept Quote
@@ -852,6 +915,85 @@ export default function CustomerInterface() {
           </Card>
         </>
       )}
+    </div>
+  )
+
+  const renderRfpConfirmation = () => (
+    <div className="max-w-2xl mx-auto px-6 py-12">
+      <div className="text-center">
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Sending Your Request</h2>
+          <p className="text-gray-600 mb-6">We're sending your RFP to {selectedQuote?.serviceCenterName}</p>
+        </div>
+
+        <Card className="p-8">
+          <CardContent className="space-y-6">
+            {/* Animation Container */}
+            <div className="flex items-center justify-center mb-8">
+              <div className="relative">
+                {/* Document Icon */}
+                <div
+                  className={`w-16 h-20 bg-white border-2 border-gray-300 rounded-lg flex items-center justify-center transition-all duration-1000 ${rfpSent ? "transform translate-x-20 opacity-50" : ""}`}
+                >
+                  <FileText className="w-8 h-8 text-gray-600" />
+                </div>
+
+                {/* Arrow Animation */}
+                <div
+                  className={`absolute top-1/2 left-20 transform -translate-y-1/2 transition-opacity duration-500 ${rfpSent ? "opacity-100" : "opacity-0"}`}
+                >
+                  <ArrowRight className="w-6 h-6 text-[#f16c63] animate-pulse" />
+                </div>
+
+                {/* Service Center Icon */}
+                <div
+                  className={`absolute top-0 left-32 w-16 h-20 bg-[#f16c63] rounded-lg flex items-center justify-center transition-all duration-1000 ${rfpSent ? "ring-4 ring-[#f16c63] ring-opacity-30" : ""}`}
+                >
+                  <Wrench className="w-8 h-8 text-white" />
+                </div>
+              </div>
+            </div>
+
+            {/* Status Messages */}
+            {!proposalReady ? (
+              <div className="space-y-4">
+                <div className="flex items-center justify-center gap-2">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#f16c63]"></div>
+                  <span className="text-gray-700">{rfpSent ? "Processing your request..." : "Sending RFP..."}</span>
+                </div>
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="flex items-start gap-3">
+                    <Clock className="w-5 h-5 text-blue-600 mt-0.5" />
+                    <div className="text-sm">
+                      <p className="font-medium text-blue-900 mb-1">Response Time:</p>
+                      <p className="text-blue-700">
+                        • Common requests: Automatic response within seconds
+                        <br />• Complex cases: Response within 24 hours
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex items-center justify-center gap-3">
+                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                    <Check className="w-5 h-5 text-white" />
+                  </div>
+                  <span className="text-xl font-semibold text-green-700">Proposal Ready!</span>
+                </div>
+
+                <p className="text-gray-600">
+                  Great news! Your service proposal has been prepared and is ready for review.
+                </p>
+
+                <div className="animate-pulse text-sm text-gray-500">Redirecting to scheduling...</div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 
@@ -1006,6 +1148,8 @@ export default function CustomerInterface() {
         return renderSignup()
       case "quote-details":
         return renderQuoteDetails()
+      case "rfp-confirmation": // Added new rfp confirmation case
+        return renderRfpConfirmation()
       case "scheduling":
         return renderScheduling()
       case "confirmation":
@@ -1036,10 +1180,11 @@ export default function CustomerInterface() {
                     "quotes",
                     "signup",
                     "quote-details",
+                    "rfp-confirmation", // Added rfp-confirmation to step counter
                     "scheduling",
                     "confirmation",
                   ].indexOf(currentStep) + 1}{" "}
-                  of 11 {/* Updated total step count from 9 to 11 */}
+                  of 12 {/* Updated total step count from 11 to 12 */}
                 </div>
               </div>
               <div className="text-sm text-gray-600">
