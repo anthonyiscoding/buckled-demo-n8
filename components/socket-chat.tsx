@@ -12,17 +12,26 @@ interface Message {
 interface SocketChatProps {
     isOpen: boolean
     onClose: () => void
+    externalMessages?: Message[]
+    onAddMessage?: (message: Omit<Message, 'id' | 'timestamp'>) => void
+    showContinueButton?: boolean
+    continueButtonText?: string
+    onContinueClick?: () => void
 }
 
-const SocketChat: React.FC<SocketChatProps> = ({ isOpen, onClose }) => {
-    const [messages, setMessages] = useState<Message[]>([
-        {
-            id: '1',
-            text: "Hi! I'm Socket, your AI car assistant. How can I help you today?",
-            sender: 'socket',
-            timestamp: new Date()
-        }
-    ])
+const SocketChat: React.FC<SocketChatProps> = ({
+    isOpen,
+    onClose,
+    externalMessages = [],
+    onAddMessage,
+    showContinueButton = false,
+    continueButtonText = "Continue",
+    onContinueClick
+}) => {
+    const [internalMessages, setInternalMessages] = useState<Message[]>([])
+
+    // Combine internal messages with external messages
+    const messages = [...internalMessages, ...externalMessages]
     const [inputValue, setInputValue] = useState('')
     const [isTyping, setIsTyping] = useState(false)
     const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -34,6 +43,15 @@ const SocketChat: React.FC<SocketChatProps> = ({ isOpen, onClose }) => {
     useEffect(() => {
         scrollToBottom()
     }, [messages])
+
+    // Effect to handle external messages being added
+    useEffect(() => {
+        if (onAddMessage) {
+            // This effect ensures that when external messages are added, 
+            // the chat scrolls to the bottom
+            scrollToBottom()
+        }
+    }, [externalMessages, onAddMessage])
 
     const generateSocketResponse = (userMessage: string): string => {
         const lowerMessage = userMessage.toLowerCase()
@@ -88,7 +106,7 @@ const SocketChat: React.FC<SocketChatProps> = ({ isOpen, onClose }) => {
             timestamp: new Date()
         }
 
-        setMessages(prev => [...prev, userMessage])
+        setInternalMessages(prev => [...prev, userMessage])
         setInputValue('')
         setIsTyping(true)
 
@@ -101,7 +119,7 @@ const SocketChat: React.FC<SocketChatProps> = ({ isOpen, onClose }) => {
                 timestamp: new Date()
             }
 
-            setMessages(prev => [...prev, socketResponse])
+            setInternalMessages(prev => [...prev, socketResponse])
             setIsTyping(false)
         }, 1000 + Math.random() * 2000) // 1-3 second delay
     }
@@ -116,7 +134,7 @@ const SocketChat: React.FC<SocketChatProps> = ({ isOpen, onClose }) => {
     if (!isOpen) return null
 
     return (
-        <div className="fixed bottom-24 right-4 w-80 h-96 bg-white rounded-lg shadow-2xl border border-gray-200 flex flex-col animate-socket-dialog-in z-50">
+        <div className="fixed bottom-24 right-4 lg:h-200 w-90 h-120 bg-white rounded-lg shadow-2xl border border-gray-200 flex flex-col animate-socket-dialog-in z-50">
             {/* Header */}
             <div className="p-4 border-b bg-[#f16c63] text-white rounded-t-lg">
                 <div className="flex items-center justify-between">
@@ -149,8 +167,8 @@ const SocketChat: React.FC<SocketChatProps> = ({ isOpen, onClose }) => {
                 {messages.map((message) => (
                     <div key={message.id} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                         <div className={`max-w-[80%] rounded-lg p-3 ${message.sender === 'user'
-                                ? 'bg-[#f16c63] text-white'
-                                : 'bg-gray-100 text-gray-800'
+                            ? 'bg-[#f16c63] text-white'
+                            : 'bg-gray-100 text-gray-800'
                             }`}>
                             <p className="text-sm">{message.text}</p>
                             <p className={`text-xs mt-1 ${message.sender === 'user' ? 'text-white/70' : 'text-gray-500'
@@ -175,6 +193,18 @@ const SocketChat: React.FC<SocketChatProps> = ({ isOpen, onClose }) => {
 
                 <div ref={messagesEndRef} />
             </div>
+
+            {/* Continue Button */}
+            {showContinueButton && (
+                <div className="px-4 pb-2">
+                    <button
+                        onClick={onContinueClick}
+                        className="w-full bg-[#f16c63] hover:bg-[#e55a51] text-white py-3 px-4 rounded-md font-medium transition-colors"
+                    >
+                        {continueButtonText}
+                    </button>
+                </div>
+            )}
 
             {/* Input */}
             <div className="p-4 border-t bg-white rounded-b-lg">

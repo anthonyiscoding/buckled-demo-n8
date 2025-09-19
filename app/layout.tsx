@@ -5,9 +5,8 @@ import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.app',
+  title: 'Buckled.io',
+  description: 'Easily find trustworthy car service centers and mechanics in seconds',
 }
 
 export default function RootLayout({

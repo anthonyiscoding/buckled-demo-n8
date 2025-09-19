@@ -29,6 +29,14 @@ import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
+
+// Interface for Socket messages
+interface Message {
+  id: string
+  text: string
+  sender: 'user' | 'socket'
+  timestamp: Date
+}
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
 // Custom hook for localStorage with SSR support
@@ -195,67 +203,6 @@ const StarRating = ({ rating, className = "w-4 h-4" }: { rating: number; classNa
   );
 }
 
-// Reusable Socket Dialog Component
-interface SocketDialogProps {
-  isOpen: boolean
-  onOpenChange: (open: boolean) => void
-  title?: string
-  message: string
-  buttonText?: string
-  onButtonClick: () => void
-  showIcon?: boolean
-  socketImage?: string
-}
-
-const SocketDialog = ({
-  isOpen,
-  onOpenChange,
-  title = "Hi, I'm Socket!",
-  message,
-  buttonText = "Continue",
-  onButtonClick,
-  socketImage = "socket-arm-raised.png",
-}: SocketDialogProps) => {
-  return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent
-        className="sm:max-w-lg max-w-md w-full fixed bottom-24 right-4 top-auto left-auto translate-x-0 translate-y-0 animate-socket-dialog-in data-[state=closed]:animate-socket-dialog-out sm:bottom-28 sm:right-6 transform-origin-bottom-right"
-        showCloseButton={false}
-      >
-        <div className="flex gap-4 items-stretch min-h-[200px]">
-          {/* Socket Character Section - 20% width, full height */}
-          <div className="w-[20%] flex-shrink-0 flex items-center justify-center">
-            <Image
-              src={`/images/${socketImage}`}
-              alt="Socket character"
-              className="w-full h-full object-contain animate-socket-appear max-h-[300px]"
-              width={120}
-              height={300}
-            />
-          </div>
-
-          {/* Content Section - 80% width */}
-          <div className="flex-1 min-w-0 flex flex-col justify-center py-4">
-            <DialogHeader>
-              <DialogTitle className="flex items-center gap-2 text-left">
-                {title}
-              </DialogTitle>
-              <DialogDescription className="text-base text-left">
-                {message}
-              </DialogDescription>
-            </DialogHeader>
-            <div className="flex justify-start pt-4">
-              <Button onClick={onButtonClick} className="bg-[#f16c63] hover:bg-[#e55a51] text-white">
-                {buttonText}
-              </Button>
-            </div>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
-  )
-}
-
 function CustomerInterface() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -293,8 +240,28 @@ function CustomerInterface() {
 
   const [socketVisible, setSocketVisible] = useState(false)
   const [socketExpanded, setSocketExpanded] = useState(false)
+  const [shouldOpenChat, setShouldOpenChat] = useState(false)
 
-  // Use localStorage hook for persistent state
+  // Continue button state
+  const [showContinueButton, setShowContinueButton] = useState(false)
+  const [continueButtonText, setContinueButtonText] = useState("Continue")
+
+  // State for external Socket messages that get added to SocketChat
+  const [externalSocketMessages, setExternalSocketMessages] = useState<Message[]>([])
+
+  // Function to add messages to SocketChat from automatic events
+  const addSocketMessage = (message: Omit<Message, 'id' | 'timestamp'>, autoOpen: boolean = false) => {
+    const newMessage: Message = {
+      ...message,
+      id: Date.now().toString(),
+      timestamp: new Date()
+    }
+    setExternalSocketMessages(prev => [...prev, newMessage])
+    // Only auto-open the chat if explicitly requested
+    if (autoOpen) {
+      setShouldOpenChat(true)
+    }
+  }  // Use localStorage hook for persistent state
   const [selectedCar, setSelectedCar, carHydrated] = useLocalStorage<CarSelection>('selectedCar', { make: "", model: "", year: "" })
   const [problemDescription, setProblemDescription, descriptionHydrated] = useLocalStorage('problemDescription', "")
   const [selectedQuote, setSelectedQuote, quoteHydrated] = useLocalStorage<(typeof mockQuotes)[0] | null>('selectedQuote', null)
@@ -390,7 +357,14 @@ function CustomerInterface() {
     if (currentStep === "welcome") {
       const timer = setTimeout(() => {
         setSocketVisible(true)
-        setSocketExpanded(true)
+        // Add welcome message to chat and auto-open it
+        addSocketMessage({
+          text: "Welcome! I'm here to help you resolve your car diagnosis and repair needs. I'll guide you through the main steps to get you back on the road.",
+          sender: 'socket'
+        }, true) // Auto-open for welcome message
+        // Show continue button for welcome step
+        setShowContinueButton(true)
+        setContinueButtonText("Get Started")
       }, 1000)
       return () => clearTimeout(timer)
     }
@@ -401,7 +375,14 @@ function CustomerInterface() {
       // Make Socket visible after a delay
       setSocketVisible(true)
       const timer = setTimeout(() => {
-        setSocketExpanded(true) // Auto-expand the Socket dialog
+        // Add confirmation message to chat and auto-open
+        addSocketMessage({
+          text: "Congratulations! 🎉 Your appointment has been successfully scheduled! The service center will contact you within 24 hours to confirm the details. I'm always here if you need help with future car troubles!",
+          sender: 'socket'
+        }, true) // Auto-open for confirmation message
+        // Show continue button for confirmation step
+        setShowContinueButton(true)
+        setContinueButtonText("Got it!")
       }, 500)
       return () => clearTimeout(timer)
     }
@@ -473,16 +454,30 @@ function CustomerInterface() {
   }, [currentStep])
 
   const handleSocketClick = () => {
-    // Show the socket dialog
-    setSocketExpanded(true)
+    // Just open the chat, don't trigger any messages
+    // Messages should be triggered by specific events, not user clicks
+    setShouldOpenChat(true)
   }
 
-  const handleGetStarted = () => {
-    setSocketExpanded(false)
-    setTimeout(() => {
-      setCurrentStep("car-selection")
-    }, 500)
+  const handleChatOpenChange = (isOpen: boolean) => {
+    // Reset the shouldOpenChat flag when chat closes
+    if (!isOpen) {
+      setShouldOpenChat(false)
+    }
   }
+
+  const handleContinueClick = () => {
+    setShowContinueButton(false)
+
+    // Handle different continue actions based on current step
+    if (currentStep === "welcome") {
+      setCurrentStep("car-selection")
+    } else if (currentStep === "confirmation") {
+      // Could navigate to a different screen or close the chat
+      setShowContinueButton(false)
+    }
+  }
+
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || [])
@@ -501,18 +496,6 @@ function CustomerInterface() {
         <p className="text-xl text-gray-600 mb-8">
           Get expert car diagnosis and fair quotes from trusted service centers
         </p>
-
-        {socketVisible && (
-          <SocketDialog
-            isOpen={socketExpanded}
-            onOpenChange={setSocketExpanded}
-            title="Hi, I'm Socket!"
-            message="Welcome! I'm here to help you resolve your car diagnosis and repair needs. I'll guide you through the main steps to get you back on the road."
-            buttonText="Get Started"
-            onButtonClick={handleGetStarted}
-            socketImage="socket-arm-raised.png"
-          />
-        )}
       </div>
     </div>
   )
@@ -1328,17 +1311,6 @@ function CustomerInterface() {
           </p>
         </CardContent>
       </Card>
-
-      {/* Socket Dialog for confirmation step */}
-      <SocketDialog
-        isOpen={socketExpanded}
-        onOpenChange={setSocketExpanded}
-        title="Congratulations! 🎉"
-        message="Your appointment has been successfully scheduled! The service center will contact you within 24 hours to confirm the details. I'm always here if you need help with future car troubles!"
-        buttonText="Got it!"
-        onButtonClick={() => setSocketExpanded(false)}
-        socketImage="socket-thumbs-up.png"
-      />
     </div>
   )
 
@@ -1409,9 +1381,16 @@ function CustomerInterface() {
       <main>{renderCurrentStep()}</main>
 
       <SocketAssistant
-        isVisible={currentStep !== "welcome"}
+        isVisible={true}
         isExpanded={false}
         onClick={handleSocketClick}
+        externalMessages={externalSocketMessages}
+        onAddMessage={addSocketMessage}
+        shouldOpenChat={shouldOpenChat}
+        onChatOpenChange={handleChatOpenChange}
+        showContinueButton={showContinueButton}
+        continueButtonText={continueButtonText}
+        onContinueClick={handleContinueClick}
       />
     </div>
   )
