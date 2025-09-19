@@ -755,7 +755,7 @@ export default function CustomerInterface() {
                 ></div>
               </div>
               <p className="text-sm text-gray-600">
-                Processing {uploadedQuoteFiles.length} quote{uploadedQuoteFiles.length !== 1 ? "s" : ""}...
+                Reading your prior quote{uploadedQuoteFiles.length !== 1 ? "s" : ""}...
               </p>
             </div>
 
