@@ -1404,24 +1404,6 @@ function CustomerInterface() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <h1 className="text-xl font-semibold text-gray-900">Buckled.io</h1>
-                <div className="text-sm text-gray-500">
-                  Step{" "}
-                  {[
-                    "car-selection",
-                    "problem-description",
-                    "media-upload",
-                    "quote-upload", // Added quote-upload to step counter
-                    "quote-scanning", // Added quote-scanning to step counter
-                    "diagnosis",
-                    "quotes",
-                    "signup",
-                    "quote-details",
-                    "rfp-confirmation", // Added rfp-confirmation to step counter
-                    "scheduling",
-                    "confirmation",
-                  ].indexOf(currentStep) + 1}{" "}
-                  of 12 {/* Updated total step count from 11 to 12 */}
-                </div>
               </div>
               <div className="text-sm text-gray-600">
                 {selectedCar.make && `${selectedCar.year != "Don't know" ? selectedCar.year : ""} ${selectedCar.make} ${selectedCar.model}`}
