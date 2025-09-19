@@ -29,6 +29,7 @@ import { cn } from "@/lib/utils"
 import { FaGoogle, FaFacebook } from "react-icons/fa"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 // Custom hook for localStorage with SSR support
 function useLocalStorage<T>(key: string, defaultValue: T) {
