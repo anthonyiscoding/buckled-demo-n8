@@ -219,7 +219,10 @@ const SocketDialog = ({
 }: SocketDialogProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg max-w-md w-full">
+      <DialogContent
+        className="sm:max-w-lg max-w-md w-full fixed bottom-24 right-4 top-auto left-auto translate-x-0 translate-y-0 animate-socket-dialog-in data-[state=closed]:animate-socket-dialog-out sm:bottom-28 sm:right-6 transform-origin-bottom-right"
+        showCloseButton={false}
+      >
         <div className="flex gap-4 items-stretch min-h-[200px]">
           {/* Socket Character Section - 20% width, full height */}
           <div className="w-[20%] flex-shrink-0 flex items-center justify-center">
@@ -475,8 +478,8 @@ function CustomerInterface() {
   const handleSocketClick = () => {
     if (hasNotification) {
       setHasNotification(false)
-      // Show notification overlay
-      alert("Great news! AutoCare Plus has accepted your proposal and provided a final quote.")
+      // Show the socket dialog with notification message
+      setSocketExpanded(true)
     } else {
       setSocketExpanded(!socketExpanded)
     }
@@ -519,14 +522,6 @@ function CustomerInterface() {
           />
         )}
       </div>
-
-      <SocketAssistant
-        isVisible={socketVisible}
-        isExpanded={socketExpanded}
-        onClick={handleSocketClick}
-        hasNotification={hasNotification}
-        showBounceAnimation={true}
-      />
     </div>
   )
 
@@ -930,27 +925,6 @@ function CustomerInterface() {
           </Card>
         </div>
       )}
-
-      {showDiagnosisResults && (
-        <SocketDialog
-          isOpen={socketExpanded}
-          onOpenChange={setSocketExpanded}
-          title="Diagnosis Complete!"
-          message="I've analyzed your vehicle and identified the likely issues. The recommended services above should get your car running smoothly again. Ready to see quotes from trusted service centers?"
-          buttonText="View Quotes"
-          onButtonClick={() => setCurrentStep("quotes")}
-          socketImage="socket-thinking.png"
-        />
-      )}
-
-      <SocketAssistant
-        isVisible={showDiagnosisResults}
-        isExpanded={socketExpanded}
-        onClick={handleSocketClick}
-        hasNotification={hasNotification}
-        socketImage="socket-holding-rfp.png"
-        showBounceAnimation={true}
-      />
     </div>
   )
 
@@ -1372,14 +1346,6 @@ function CustomerInterface() {
         buttonText="Got it!"
         onButtonClick={() => setSocketExpanded(false)}
         socketImage="socket-thumbs-up.png"
-      />
-
-      <SocketAssistant
-        isVisible={true}
-        isExpanded={socketExpanded}
-        onClick={handleSocketClick}
-        hasNotification={hasNotification}
-        socketImage="socket-thinking.png"
       />
     </div>
   )
