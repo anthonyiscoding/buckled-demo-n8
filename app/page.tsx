@@ -1042,11 +1042,11 @@ export default function CustomerInterface() {
               <div className="bg-success rounded-lg p-4">
                 <h4 className="font-semibold mb-2">Draft RFP Summary</h4>
                 <p className="text-sm align-items">
-                  <p className="font-bold">Vehicle</p>
+                  <Label className="font-bold">Vehicle</Label>
                   <p>{selectedCar.year} {selectedCar.make} {selectedCar.model}</p>
-                  <p className="font-bold">Issue</p>
+                  <Label className="font-bold">Issue</Label>
                   <p>{problemDescription}</p>
-                  <p className="font-bold">Suggested Services</p>
+                  <Label className="font-bold">Suggested Services</Label>
                   <ul>
                     <li className="flex items-center">
                       <CheckSquare className="w-5 h-5 mr-2" />
@@ -1173,10 +1173,11 @@ export default function CustomerInterface() {
           <div>
             <Label>Select Date</Label>
             <DatePicker
+              placeholderText="Pick a date"
               selected={selectedDate}
               onChange={setSelectedDate}
               minDate={new Date()}
-              maxDate={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)}
+              maxDate={new Date(Date.now() + 60 * 24 * 60 * 60 * 1000)}
               dateFormat="MMMM d, yyyy"
               className="w-full px-3 py-2 border rounded-md"
             />
