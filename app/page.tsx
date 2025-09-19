@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Progress } from "@/components/ui/progress"
+import { SocketAssistant } from "@/components/ui/socket-assistant"
 import {
   UploadIcon,
   Camera,
@@ -519,20 +520,13 @@ function CustomerInterface() {
         )}
       </div>
 
-      {/* Socket Assistant */}
-      {socketVisible && !socketExpanded && (
-        <div
-          className="fixed bottom-6 right-6 w-12 h-12 bg-[#f16c63] rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 animate-bounce-in"
-          onClick={handleSocketClick}
-        >
-          <span className="text-xl">🔧</span>
-          {hasNotification && (
-            <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
-              <span className="text-xs text-white font-bold">1</span>
-            </div>
-          )}
-        </div>
-      )}
+      <SocketAssistant
+        isVisible={socketVisible}
+        isExpanded={socketExpanded}
+        onClick={handleSocketClick}
+        hasNotification={hasNotification}
+        showBounceAnimation={true}
+      />
     </div>
   )
 
@@ -905,20 +899,20 @@ function CustomerInterface() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <span className="text-xl">🔧</span>
-                Socket's Diagnosis
+                Our Diagnosis
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-gray-700">Based on your description and vehicle information, it appears you need:</p>
-              <div className="bg-[#fef7f7] border border-[#f16c63] rounded-lg p-4 animate-fade-in-delayed">
-                <h4 className="font-semibold text-[#732621] mb-2">Recommended Services:</h4>
+              <div className="bg-success rounded-lg p-4 animate-fade-in-delayed">
+                <Label className="font-semibold mb-2">Recommended Services</Label>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-center gap-2 animate-fade-in-delayed-1">
-                    <Check className="w-4 h-4 text-[#f16c63]" />
+                    <Check className="w-4 h-4 text-green-900" />
                     Transmission fluid change (~$200)
                   </li>
                   <li className="flex items-center gap-2 animate-fade-in-delayed-2">
-                    <Check className="w-4 h-4 text-[#f16c63]" />
+                    <Check className="w-4 h-4 text-green-900" />
                     Brake pad replacement (~$250-400)
                   </li>
                 </ul>
@@ -949,20 +943,14 @@ function CustomerInterface() {
         />
       )}
 
-      {/* Socket Assistant */}
-      {showDiagnosisResults && !socketExpanded && (
-        <div
-          className="fixed bottom-6 right-6 w-12 h-12 bg-[#f16c63] rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 animate-bounce-in"
-          onClick={handleSocketClick}
-        >
-          <span className="text-xl">🔧</span>
-          {hasNotification && (
-            <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
-              <span className="text-xs text-white font-bold">1</span>
-            </div>
-          )}
-        </div>
-      )}
+      <SocketAssistant
+        isVisible={showDiagnosisResults}
+        isExpanded={socketExpanded}
+        onClick={handleSocketClick}
+        hasNotification={hasNotification}
+        socketImage="socket-holding-rfp.png"
+        showBounceAnimation={true}
+      />
     </div>
   )
 
@@ -1154,11 +1142,11 @@ function CustomerInterface() {
                   <Label className="font-bold">Suggested Services</Label>
                   <ul className="mb-2">
                     <li className="flex items-center">
-                      <CheckSquare className="w-5 h-5 mr-2" />
+                      <CheckSquare className="w-5 h-5 mr-2 text-green-900" />
                       Transmission fluid change
                     </li>
                     <li className="flex items-center">
-                      <CheckSquare className="w-5 h-5 mr-2" />
+                      <CheckSquare className="w-5 h-5 mr-2 text-green-900" />
                       Brake pad replacement
                     </li>
                   </ul>
@@ -1328,8 +1316,7 @@ function CustomerInterface() {
       <Card className="animate-fade-in">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <span className="text-xl">🔧</span>
-            Socket says...
+            All Set!
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -1387,20 +1374,13 @@ function CustomerInterface() {
         socketImage="socket-thumbs-up.png"
       />
 
-      {/* Socket Assistant */}
-      {!socketExpanded && (
-        <div
-          className="fixed bottom-6 right-6 w-12 h-12 bg-[#f16c63] rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 animate-bounce-in"
-          onClick={handleSocketClick}
-        >
-          <span className="text-xl">🔧</span>
-          {hasNotification && (
-            <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
-              <span className="text-xs text-white font-bold">1</span>
-            </div>
-          )}
-        </div>
-      )}
+      <SocketAssistant
+        isVisible={true}
+        isExpanded={socketExpanded}
+        onClick={handleSocketClick}
+        hasNotification={hasNotification}
+        socketImage="socket-thinking.png"
+      />
     </div>
   )
 
@@ -1488,20 +1468,12 @@ function CustomerInterface() {
       {/* Main content */}
       <main>{renderCurrentStep()}</main>
 
-      {/* Socket Assistant - always visible after welcome */}
-      {currentStep !== "welcome" && (
-        <div
-          className="fixed bottom-6 right-6 w-12 h-12 bg-[#f16c63] rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300"
-          onClick={handleSocketClick}
-        >
-          <span className="text-xl">🔧</span>
-          {hasNotification && (
-            <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center animate-bounce">
-              <span className="text-xs text-white font-bold">1</span>
-            </div>
-          )}
-        </div>
-      )}
+      <SocketAssistant
+        isVisible={currentStep !== "welcome"}
+        isExpanded={false}
+        onClick={handleSocketClick}
+        hasNotification={hasNotification}
+      />
     </div>
   )
 }
