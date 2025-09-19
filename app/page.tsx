@@ -394,7 +394,11 @@ export default function CustomerInterface() {
             <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-600 mb-4">Drag and drop files here, or click to browse</p>
             <div className="flex gap-4 justify-center">
-              <Button variant="outline" className="flex items-center gap-2 bg-transparent">
+              <div className="relative">
+                <Button variant="outline" className="flex items-center gap-2 bg-transparent">
+                  <Upload className="w-4 h-4" />
+                  Upload Files
+                </Button>
                 <input
                   type="file"
                   multiple
@@ -402,9 +406,7 @@ export default function CustomerInterface() {
                   onChange={handleFileUpload}
                   className="absolute inset-0 opacity-0 cursor-pointer"
                 />
-                <Upload className="w-4 h-4" />
-                Upload Files
-              </Button>
+              </div>
               <Button variant="outline" className="flex items-center gap-2 bg-transparent">
                 <Camera className="w-4 h-4" />
                 Take Photo
