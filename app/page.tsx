@@ -303,13 +303,21 @@ export default function CustomerInterface() {
             </div>
           </div>
 
-          <Button
-            onClick={() => setCurrentStep("problem-description")}
-            disabled={!selectedCar.make || !selectedCar.model || !selectedCar.year}
-            className="w-full bg-[#f16c63] hover:bg-[#e55a51] text-white"
-          >
-            Continue
-          </Button>
+          <div className="flex items-center justify-between">
+            <Button
+              onClick={() => setCurrentStep("problem-description")}
+              disabled={!selectedCar.make || !selectedCar.model || !selectedCar.year}
+              className="bg-[#f16c63] hover:bg-[#e55a51] text-white"
+            >
+              Continue
+            </Button>
+            <button
+              onClick={() => setCurrentStep("problem-description")}
+              className="text-gray-500 hover:text-gray-700 text-sm cursor-pointer transition-colors"
+            >
+              Skip &gt;
+            </button>
+          </div>
         </CardContent>
       </Card>
     </div>
@@ -349,13 +357,21 @@ export default function CustomerInterface() {
               <ArrowLeft className="w-4 h-4" />
               Back
             </Button>
-            <Button
-              onClick={() => setCurrentStep("media-upload")}
-              disabled={!problemDescription.trim()}
-              className="flex-1 bg-[#f16c63] hover:bg-[#e55a51] text-white"
-            >
-              Continue
-            </Button>
+            <div className="flex-1 flex items-center justify-between">
+              <Button
+                onClick={() => setCurrentStep("media-upload")}
+                disabled={!problemDescription.trim()}
+                className="bg-[#f16c63] hover:bg-[#e55a51] text-white"
+              >
+                Continue
+              </Button>
+              <button
+                onClick={() => setCurrentStep("media-upload")}
+                className="text-gray-500 hover:text-gray-700 text-sm cursor-pointer transition-colors ml-4"
+              >
+                Skip &gt;
+              </button>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -418,12 +434,20 @@ export default function CustomerInterface() {
               <ArrowLeft className="w-4 h-4" />
               Back
             </Button>
-            <Button
-              onClick={() => setCurrentStep("diagnosis")}
-              className="flex-1 bg-[#f16c63] hover:bg-[#e55a51] text-white"
-            >
-              Continue
-            </Button>
+            <div className="flex-1 flex items-center justify-between">
+              <Button
+                onClick={() => setCurrentStep("diagnosis")}
+                className="bg-[#f16c63] hover:bg-[#e55a51] text-white"
+              >
+                Continue
+              </Button>
+              <button
+                onClick={() => setCurrentStep("diagnosis")}
+                className="text-gray-500 hover:text-gray-700 text-sm cursor-pointer transition-colors ml-4"
+              >
+                Skip &gt;
+              </button>
+            </div>
           </div>
         </CardContent>
       </Card>
