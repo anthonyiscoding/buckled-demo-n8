@@ -28,6 +28,8 @@ import {
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { FaGoogle, FaFacebook } from "react-icons/fa"
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
 
 // Mock data
 const carMakes = [
@@ -133,11 +135,10 @@ export default function CustomerInterface() {
   const [problemDescription, setProblemDescription] = useState("")
   const [selectedQuote, setSelectedQuote] = useState<(typeof mockQuotes)[0] | null>(null)
   const [isSignedUp, setIsSignedUp] = useState(false)
-  const [selectedDate, setSelectedDate] = useState<Date>()
+  const [selectedDate, setSelectedDate] = useState<Date | null>()
   const [selectedTime, setSelectedTime] = useState("")
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
   const [uploadedQuoteFiles, setUploadedQuoteFiles] = useState<File[]>([]) // Added state for quote files
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false)
   const [rfpSent, setRfpSent] = useState(false)
   const [proposalReady, setProposalReady] = useState(false)
 
@@ -1011,29 +1012,14 @@ export default function CustomerInterface() {
         <CardContent className="space-y-6">
           <div>
             <Label>Select Date</Label>
-            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn("w-full justify-start text-left font-normal", !selectedDate && "text-muted-foreground")}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {selectedDate ? format(selectedDate, "PPP") : "Pick a date"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={selectedDate}
-                  onSelect={(date) => {
-                    setSelectedDate(date)
-                    setIsCalendarOpen(false)
-                  }}
-                  disabled={(date) => date < new Date() || date > new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
+            <DatePicker
+              selected={selectedDate}
+              onChange={setSelectedDate}
+              minDate={new Date()}
+              maxDate={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)}
+              dateFormat="MMMM d, yyyy"
+              className="w-full px-3 py-2 border rounded-md"
+            />
           </div>
 
           <div>
