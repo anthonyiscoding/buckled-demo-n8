@@ -1,7 +1,10 @@
 "use client"
 
-import React from 'react'
-import Image from 'next/image'
+import React, { useState } from 'react'
+import dynamic from 'next/dynamic'
+
+// Dynamically import SocketChat to avoid SSR issues
+const SocketChat = dynamic(() => import('../socket-chat'), { ssr: false })
 
 interface SocketAssistantProps {
     /** Controls visibility of the Socket Assistant */
@@ -25,12 +28,28 @@ export const SocketAssistant: React.FC<SocketAssistantProps> = ({
     isExpanded = false,
     onClick,
     hasNotification = false,
-    socketImage,
     className = "",
     showBounceAnimation = false,
 }) => {
+    const [isChatOpen, setIsChatOpen] = useState(false)
+
+    const handleClick = () => {
+        if (onClick) {
+            onClick()
+        }
+        setIsChatOpen(true)
+    }
+
+    const handleChatClose = () => {
+        setIsChatOpen(false)
+    }
+
     if (!isVisible || isExpanded) {
-        return null
+        return (
+            <div>
+                {React.createElement(SocketChat, { isOpen: isChatOpen, onClose: handleChatClose })}
+            </div>
+        )
     }
 
     const baseClasses = "fixed bottom-6 right-6 w-16 h-16  rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300"
@@ -38,23 +57,24 @@ export const SocketAssistant: React.FC<SocketAssistantProps> = ({
     const notificationAnimationClasses = hasNotification ? "animate-bounce" : ""
 
     return (
-        <div
-            className={`${baseClasses} ${animationClasses} ${notificationAnimationClasses} ${className}`}
-            onClick={onClick}
-        >
-            <Image
-                src={`/images/socket-thinking.png`}
-                alt="Socket character"
-                className="w-full h-full object-contain animate-socket-appear max-h-[64px]"
-                width={120}
-                height={300}
-            />
+        <div>
+            <div
+                className={`${baseClasses} ${animationClasses} ${notificationAnimationClasses} ${className}`}
+                onClick={handleClick}
+            >
+                <img
+                    src="/images/socket-thinking.png"
+                    alt="Socket character"
+                    className="w-full h-full object-contain animate-socket-appear max-h-[64px]"
+                />
 
-            {hasNotification && (
-                <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-900 rounded-full flex items-center justify-center">
-                    <span className="text-xs text-white font-bold">1</span>
-                </div>
-            )}
+                {hasNotification && (
+                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-900 rounded-full flex items-center justify-center">
+                        <span className="text-xs text-white font-bold">1</span>
+                    </div>
+                )}
+            </div>
+            {React.createElement(SocketChat, { isOpen: isChatOpen, onClose: handleChatClose })}
         </div>
     )
 }

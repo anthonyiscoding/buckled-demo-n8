@@ -1,7 +1,6 @@
 "use client"
 
-import type React from "react"
-
+import React from "react"
 import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Image from 'next/image'
