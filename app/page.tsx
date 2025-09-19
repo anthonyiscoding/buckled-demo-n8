@@ -16,7 +16,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { CalendarIcon, UploadIcon, Camera, Star, Check, ArrowLeft } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
-import { Google, Facebook } from "@/components/ui/social-icons" // Added imports for Google and Facebook icons
+import { FaGoogle, FaFacebook } from 'react-icons/fa'
 
 // Mock data
 const carMakes = [
@@ -579,7 +579,7 @@ export default function CustomerInterface() {
                 <div className="absolute top-0 left-0 w-full h-1 bg-[#f16c63] animate-pulse rounded-t-lg"></div>
               </div>
             </div>
-            
+
             <div className="text-center space-y-2">
               <div className="flex items-center justify-center gap-2">
                 <div className="w-2 h-2 bg-[#f16c63] rounded-full animate-bounce"></div>
@@ -734,10 +734,10 @@ export default function CustomerInterface() {
         </div>
       </div>
     )
-  )
+  }
 
-  const renderSignup = () => (\
-    <div className="max-w-md mx-auto px-6 py-12">\
+  const renderSignup = () => (
+    <div className="max-w-md mx-auto px-6 py-12">
       <Card>
         <CardHeader>
           <CardTitle>Create Your Account</CardTitle>
@@ -750,30 +750,29 @@ export default function CustomerInterface() {
           </div>
           <div>
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password\" placeholder="••••••••\" />
+            <Input id="password" type="password" placeholder="••••••••" />
           </div>
-          <Button\
-            onClick=() => {
-              setIsSignedUp(true)
+          <Button
+            onClick={() => {
+              setIsSignedUp(true);
               setCurrentStep("quotes")
-            }
-            className="w-full bg-[#f16c63] hover:bg-[#e55a51] text-white"
-          >
+            }}
+            className="w-full bg-[#f16c63] hover:bg-[#e55a51] text-white">
             Sign Up
           </Button>
-          <div className=\"space-y-2">
+          <div className="space-y-2">
             <Button variant="outline" className="w-full bg-transparent">
-              <Google className="w-4 h-4 mr-2" />
+              <FaGoogle className="w-4 h-4 mr-2" />
               Continue with Google
-            </Button>\
-            <Button variant=\"outline" className="w-full bg-transparent">
-              <Facebook className="w-4 h-4 mr-2" />
+            </Button>
+            <Button variant="outline" className="w-full bg-transparent">
+              <FaFacebook className="w-4 h-4 mr-2" />
               Continue with Facebook
             </Button>
-          </div>\
+          </div>
         </CardContent>
       </Card>
-    </div>
+    </div >
   )
 
   const renderQuoteDetails = () => (
