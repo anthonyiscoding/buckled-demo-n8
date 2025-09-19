@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState, useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -124,17 +125,97 @@ type Step =
   | "scheduling"
   | "confirmation"
 
+interface CarSelection {
+  make: string
+  model: string
+  year: string
+}
+
 export default function CustomerInterface() {
-  const [currentStep, setCurrentStep] = useState<Step>("welcome")
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  // Get current step from URL, default to welcome
+  const currentStep = (searchParams.get('step') as Step) || "welcome"
+
+  // Function to navigate to a new step
+  const setCurrentStep = (step: Step) => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.set('step', step)
+    router.push(`?${params.toString()}`)
+  }
+
+  // Function to clear all stored progress
+  const clearProgress = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('selectedCar')
+      localStorage.removeItem('problemDescription')
+      localStorage.removeItem('selectedQuote')
+      localStorage.removeItem('isSignedUp')
+      localStorage.removeItem('selectedDate')
+      localStorage.removeItem('selectedTime')
+    }
+    // Reset state
+    setSelectedCar({ make: "", model: "", year: "" })
+    setProblemDescription("")
+    setSelectedQuote(null)
+    setIsSignedUp(false)
+    setSelectedDate(null)
+    setSelectedTime("")
+    // Go back to welcome
+    setCurrentStep("welcome")
+  }
+
   const [socketVisible, setSocketVisible] = useState(false)
   const [socketExpanded, setSocketExpanded] = useState(false)
   const [hasNotification, setHasNotification] = useState(false)
-  const [selectedCar, setSelectedCar] = useState({ make: "", model: "", year: "" })
-  const [problemDescription, setProblemDescription] = useState("")
-  const [selectedQuote, setSelectedQuote] = useState<(typeof mockQuotes)[0] | null>(null)
-  const [isSignedUp, setIsSignedUp] = useState(false)
-  const [selectedDate, setSelectedDate] = useState<Date | null>()
-  const [selectedTime, setSelectedTime] = useState("")
+
+  // Persistent state with localStorage
+  const [selectedCar, setSelectedCar] = useState<CarSelection>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('selectedCar')
+      return saved ? JSON.parse(saved) : { make: "", model: "", year: "" }
+    }
+    return { make: "", model: "", year: "" }
+  })
+
+  const [problemDescription, setProblemDescription] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('problemDescription') || ""
+    }
+    return ""
+  })
+
+  const [selectedQuote, setSelectedQuote] = useState<(typeof mockQuotes)[0] | null>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('selectedQuote')
+      return saved ? JSON.parse(saved) : null
+    }
+    return null
+  })
+
+  const [isSignedUp, setIsSignedUp] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('isSignedUp') === 'true'
+    }
+    return false
+  })
+
+  const [selectedDate, setSelectedDate] = useState<Date | null>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('selectedDate')
+      return saved ? new Date(saved) : null
+    }
+    return null
+  })
+
+  const [selectedTime, setSelectedTime] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('selectedTime') || ""
+    }
+    return ""
+  })
+
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
   const [uploadedQuoteFiles, setUploadedQuoteFiles] = useState<File[]>([]) // Added state for quote files
   const [rfpSent, setRfpSent] = useState(false)
@@ -157,6 +238,43 @@ export default function CustomerInterface() {
     "7:00 PM",
     "8:00 PM",
   ]
+
+  // Save to localStorage when values change
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('selectedCar', JSON.stringify(selectedCar))
+    }
+  }, [selectedCar])
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('problemDescription', problemDescription)
+    }
+  }, [problemDescription])
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('selectedQuote', JSON.stringify(selectedQuote))
+    }
+  }, [selectedQuote])
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('isSignedUp', isSignedUp.toString())
+    }
+  }, [isSignedUp])
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && selectedDate) {
+      localStorage.setItem('selectedDate', selectedDate.toISOString())
+    }
+  }, [selectedDate])
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('selectedTime', selectedTime)
+    }
+  }, [selectedTime])
 
   useEffect(() => {
     if (currentStep === "welcome") {
@@ -185,7 +303,7 @@ export default function CustomerInterface() {
       }, 3000)
       return () => clearTimeout(timer)
     }
-  }, [currentStep])
+  }, [currentStep, setCurrentStep])
 
   useEffect(() => {
     if (currentStep === "rfp-confirmation") {
