@@ -125,6 +125,7 @@ export default function CustomerInterface() {
   const [selectedTime, setSelectedTime] = useState("")
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
   const [uploadedQuoteFiles, setUploadedQuoteFiles] = useState<File[]>([]) // Added state for quote files
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false)
 
   const years = Array.from({ length: 46 }, (_, i) => 2025 - i)
   const timeSlots = [
@@ -744,7 +745,7 @@ export default function CustomerInterface() {
           <CardDescription>Sign up to see all quotes and book services</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div>\
+          <div>
             <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" placeholder="your@email.com" />
           </div>
@@ -762,10 +763,16 @@ export default function CustomerInterface() {
           </Button>
           <div className="space-y-2">
             <Button variant="outline" className="w-full bg-transparent">
-              <FaGoogle className="w-4 h-4 mr-2" />
+              <FaGoogle onClick={() => {
+                setIsSignedUp(true);
+                setCurrentStep("quotes")
+              }} className="w-4 h-4 mr-2" />
               Continue with Google
             </Button>
-            <Button variant="outline" className="w-full bg-transparent">
+            <Button onClick={() => {
+              setIsSignedUp(true);
+              setCurrentStep("quotes")
+            }} variant="outline" className="w-full bg-transparent">
               <FaFacebook className="w-4 h-4 mr-2" />
               Continue with Facebook
             </Button>
@@ -862,7 +869,7 @@ export default function CustomerInterface() {
         <CardContent className="space-y-6">
           <div>
             <Label>Select Date</Label>
-            <Popover>
+            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
@@ -876,7 +883,10 @@ export default function CustomerInterface() {
                 <Calendar
                   mode="single"
                   selected={selectedDate}
-                  onSelect={setSelectedDate}
+                  onSelect={(date) => {
+                    setSelectedDate(date)
+                    setIsCalendarOpen(false)
+                  }}
                   disabled={(date) => date < new Date() || date > new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)}
                   initialFocus
                 />
