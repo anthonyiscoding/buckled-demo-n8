@@ -30,8 +30,10 @@ const SocketChat: React.FC<SocketChatProps> = ({
 }) => {
     const [internalMessages, setInternalMessages] = useState<Message[]>([])
 
-    // Combine internal messages with external messages
-    const messages = [...internalMessages, ...externalMessages]
+    // Combine internal messages with external messages and sort by timestamp
+    const messages = [...internalMessages, ...externalMessages].sort((a, b) => 
+        a.timestamp.getTime() - b.timestamp.getTime()
+    )
     const [inputValue, setInputValue] = useState('')
     const [isTyping, setIsTyping] = useState(false)
     const messagesEndRef = useRef<HTMLDivElement>(null)
