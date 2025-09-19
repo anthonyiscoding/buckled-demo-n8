@@ -591,12 +591,6 @@ function CustomerInterface() {
               >
                 Continue
               </Button>
-              <button
-                onClick={() => setCurrentStep("media-upload")}
-                className="text-gray-500 hover:text-gray-700 text-sm cursor-pointer transition-colors ml-4"
-              >
-                Skip &gt;
-              </button>
             </div>
           </div>
         </CardContent>
