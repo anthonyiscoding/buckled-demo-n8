@@ -1190,15 +1190,15 @@ function CustomerInterface() {
                   <span className="text-gray-700">{rfpSent ? "Processing your request..." : "Sending RFP..."}</span>
                 </div>
 
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-left">
                   <div className="flex items-start gap-3">
-                    <Clock className="w-5 h-5 text-blue-600 mt-0.5" />
+                    <Clock className="w-5 h-5 text-blue-600 -mt-0.5" />
                     <div className="text-sm">
-                      <p className="font-medium text-blue-900 mb-1">Response Time:</p>
-                      <p className="text-blue-700">
-                        • Common requests: Automatic response within seconds
-                        <br />• Complex cases: Response within 24 hours
-                      </p>
+                      <Label className="font-medium text-blue-900 mb-1">Response Time</Label>
+                      <ul>
+                        <li>Common requests: Automatic response within seconds</li>
+                        <li>Complex cases: Response within 24 hours</li>
+                      </ul>
                     </div>
                   </div>
                 </div>
