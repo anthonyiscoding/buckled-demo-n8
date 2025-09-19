@@ -13,7 +13,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Progress } from "@/components/ui/progress"
 import {
-  CalendarIcon,
   UploadIcon,
   Camera,
   Star,
@@ -23,6 +22,7 @@ import {
   FileText,
   Wrench,
   Clock,
+  CheckSquare,
 } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
@@ -1039,14 +1039,24 @@ export default function CustomerInterface() {
                 </div>
               </div>
 
-              <div className="bg-[#fef7f7] border border-[#f16c63] rounded-lg p-4">
-                <h4 className="font-semibold text-[#732621] mb-2">Draft RFP Summary:</h4>
-                <p className="text-sm text-gray-700">
-                  Vehicle: {selectedCar.year} {selectedCar.make} {selectedCar.model}
-                  <br />
-                  Issue: {problemDescription}
-                  <br />
-                  Requested Services: Transmission fluid change, brake pad replacement
+              <div className="bg-success rounded-lg p-4">
+                <h4 className="font-semibold mb-2">Draft RFP Summary</h4>
+                <p className="text-sm align-items">
+                  <p className="font-bold">Vehicle</p>
+                  <p>{selectedCar.year} {selectedCar.make} {selectedCar.model}</p>
+                  <p className="font-bold">Issue</p>
+                  <p>{problemDescription}</p>
+                  <p className="font-bold">Suggested Services</p>
+                  <ul>
+                    <li className="flex items-center">
+                      <CheckSquare className="w-5 h-5 mr-2" />
+                      Transmission fluid change
+                    </li>
+                    <li className="flex items-center">
+                      <CheckSquare className="w-5 h-5 mr-2" />
+                      Brake pad replacement
+                    </li>
+                  </ul>
                 </p>
               </div>
 
@@ -1336,7 +1346,7 @@ export default function CustomerInterface() {
                 </div>
               </div>
               <div className="text-sm text-gray-600">
-                {selectedCar.make && `${selectedCar.year} ${selectedCar.make} ${selectedCar.model}`}
+                {selectedCar.make && `${selectedCar.year != "Don't know" ? selectedCar.year : ""} ${selectedCar.make} ${selectedCar.model}`}
               </div>
             </div>
           </div>
