@@ -10,6 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { ExpandableText } from "@/components/ui/expandable-text"
 import { useActiveQuotes } from "@/hooks/use-service-center-data"
+import { formatTimeAgo } from "@/lib/utils"
 import Link from "next/link"
 import { ArrowLeft, Search, Filter, DollarSign, Clock, Eye, CheckCircle, XCircle, MoreHorizontal } from "lucide-react"
 
@@ -80,19 +81,6 @@ export default function ActiveQuotesPage() {
         return <XCircle className="w-4 h-4" />
       default:
         return null
-    }
-  }
-
-  const formatTimeAgo = (date: Date) => {
-    const now = new Date()
-    const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60))
-
-    if (diffInMinutes < 60) {
-      return `${diffInMinutes} min ago`
-    } else if (diffInMinutes < 1440) {
-      return `${Math.floor(diffInMinutes / 60)} hours ago`
-    } else {
-      return `${Math.floor(diffInMinutes / 1440)} days ago`
     }
   }
 

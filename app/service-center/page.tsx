@@ -2,6 +2,7 @@
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useServiceCenterDashboard } from "@/hooks/use-service-center-data"
+import { formatTimeAgo } from "@/lib/utils"
 import Link from "next/link"
 import {
   Clock,
@@ -67,22 +68,6 @@ export default function ServiceCenterPage() {
       .slice(0, 3)
 
     return activities
-  }
-
-  const formatTimeAgo = (date: Date) => {
-    const now = new Date()
-    const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60))
-
-    if (diffInMinutes < 0) {
-        return "Just now"
-    }
-      else if (diffInMinutes < 60) {
-      return `${diffInMinutes} min ago`
-    } else if (diffInMinutes < 1440) {
-      return `${Math.floor(diffInMinutes / 60)} hours ago`
-    } else {
-      return `${Math.floor(diffInMinutes / 1440)} days ago`
-    }
   }
 
   const recentActivity = getRecentActivity()
