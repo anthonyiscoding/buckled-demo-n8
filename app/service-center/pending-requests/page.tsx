@@ -207,7 +207,7 @@ export default function PendingRequestsPage() {
                       />
                     </TableCell>
                     <TableCell>
-                      <div className="max-w-xs">
+                      <div className="max-w-xs overflow-x-hidden">
                         <ExpandableText text={request.problemDescription} className="text-sm text-gray-900" />
                         {request.photos && request.photos.length > 0 && (
                           <div className="text-xs text-blue-600 mt-1">{request.photos.length} photo(s) attached</div>
