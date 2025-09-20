@@ -4,7 +4,7 @@ import useSWR from "swr"
 import { useRouter } from "next/navigation"
 import { useCallback } from "react"
 import { useSWRReset } from "./swr-provider"
-import { resetAllAppData } from "./global-reset"
+// import { resetAllAppData } from "./global-reset"
 
 // Types
 interface CarSelection {
@@ -316,7 +316,7 @@ export function useNavigation() {
         [router],
     )
 
-    const clearProgress = useCallback(() => {
+    const clearProgressCustomer = useCallback(() => {
         // Use SWR's provider reset approach - this creates a completely fresh cache
         resetCache()
 
@@ -326,14 +326,14 @@ export function useNavigation() {
 
     const clearAllAppData = useCallback(() => {
         // Use the global reset function
-        resetAllAppData()
+        // resetAllAppData()
 
         // Also reset SWR cache
         resetCache()
 
         // Navigate to home page
-        router.push("/")
+        // router.push("/")
     }, [resetCache, router])
 
-    return { setCurrentStep, clearProgress, clearAllAppData }
+    return { setCurrentStep, clearProgressCustomer, clearAllAppData }
 }

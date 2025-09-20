@@ -16,9 +16,7 @@ import {
 
 // SWR hooks for service center data management
 export function usePendingRequests() {
-  const { data, error, mutate } = useSWR<PendingRequest[]>("service-center/pending-requests", null, {
-    fallbackData: defaultPendingRequests,
-  })
+  const { data, error, mutate } = useSWR<PendingRequest[]>("pending-requests", null)
 
   const addRequest = (request: PendingRequest) => {
     mutate([...(data || []), request], false)
@@ -44,9 +42,7 @@ export function usePendingRequests() {
 }
 
 export function useActiveQuotes() {
-  const { data, error, mutate } = useSWR<ActiveQuote[]>("service-center/active-quotes", null, {
-    fallbackData: defaultActiveQuotes,
-  })
+  const { data, error, mutate } = useSWR<ActiveQuote[]>("active-quotes", null)
 
   const addQuote = (quote: ActiveQuote) => {
     mutate([...(data || []), quote], false)
@@ -72,9 +68,7 @@ export function useActiveQuotes() {
 }
 
 export function useScheduledServices() {
-  const { data, error, mutate } = useSWR<ScheduledService[]>("service-center/scheduled-services", null, {
-    fallbackData: defaultScheduledServices,
-  })
+  const { data, error, mutate } = useSWR<ScheduledService[]>("scheduled-services", null)
 
   const addService = (service: ScheduledService) => {
     mutate([...(data || []), service], false)
@@ -100,9 +94,7 @@ export function useScheduledServices() {
 }
 
 export function useCustomerReviews() {
-  const { data, error, mutate } = useSWR<CustomerReview[]>("service-center/customer-reviews", null, {
-    fallbackData: defaultCustomerReviews,
-  })
+  const { data, error, mutate } = useSWR<CustomerReview[]>("customer-reviews", null)
 
   const addReview = (review: CustomerReview) => {
     mutate([...(data || []), review], false)
@@ -123,9 +115,7 @@ export function useCustomerReviews() {
 }
 
 export function useServiceCenterProfile() {
-  const { data, error, mutate } = useSWR<ServiceCenterProfile>("service-center/profile", null, {
-    fallbackData: defaultServiceCenterProfile,
-  })
+  const { data, error, mutate } = useSWR<ServiceCenterProfile>("profile", null)
 
   const updateProfile = (updates: Partial<ServiceCenterProfile>) => {
     mutate({ ...(data || defaultServiceCenterProfile), ...updates }, false)
@@ -141,9 +131,7 @@ export function useServiceCenterProfile() {
 }
 
 export function useRevenueData() {
-  const { data, error, mutate } = useSWR<RevenueData[]>("service-center/revenue-data", null, {
-    fallbackData: defaultRevenueData,
-  })
+  const { data, error, mutate } = useSWR<RevenueData[]>("revenue-data", null)
 
   return {
     revenueData: data || [],
@@ -171,8 +159,8 @@ export function useServiceCenterDashboard() {
     revenueGrowth:
       revenueData.length >= 2
         ? ((revenueData[revenueData.length - 1]?.revenue - revenueData[revenueData.length - 2]?.revenue) /
-            revenueData[revenueData.length - 2]?.revenue) *
-          100
+          revenueData[revenueData.length - 2]?.revenue) *
+        100
         : 0,
   }
 

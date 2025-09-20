@@ -8,13 +8,19 @@ function localStorageProvider() {
   }
 
   // When initializing, we restore the data from `localStorage` into a map.
-  const map = new Map<string, any>(JSON.parse(localStorage.getItem('app-cache') || '[]'))
+  // If localStorage is empty (after reset), this will be an empty array
+  const stored = localStorage.getItem('app-cache') || '[]'
+  const map = new Map<string, any>(JSON.parse(stored))
 
   // Before unloading the app, we write back all the data into `localStorage`.
-  window.addEventListener('beforeunload', () => {
+  const handleBeforeUnload = () => {
     const appCache = JSON.stringify(Array.from(map.entries()))
     localStorage.setItem('app-cache', appCache)
-  })
+  }
+
+  // Remove any existing listener to prevent duplicates
+  window.removeEventListener('beforeunload', handleBeforeUnload)
+  window.addEventListener('beforeunload', handleBeforeUnload)
 
   // We still use the map for write & read for performance.
   return map

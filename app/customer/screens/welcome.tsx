@@ -3,14 +3,14 @@ import { useHasExistingData, useNavigation } from "@/lib/hooks"
 
 export function Welcome() {
     const { hasExistingData, lastStep } = useHasExistingData()
-    const { setCurrentStep, clearProgress } = useNavigation()
+    const { setCurrentStep, clearProgressCustomer } = useNavigation()
 
     const handleContinue = () => {
         setCurrentStep(lastStep)
     }
 
     const handleStartFresh = () => {
-        clearProgress()
+        clearProgressCustomer()
         setCurrentStep("car-selection")
         // Don't call setCurrentStep here since clearProgress already navigates to welcome
         // The user can then click "Get Started" to begin fresh

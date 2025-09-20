@@ -4,21 +4,22 @@ import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { resetAllAppData } from "@/lib/global-reset"
+// import { resetAllAppData } from "@/lib/global-reset"
+import { useNavigation } from "@/lib/hooks"
 
 export default function HomePage() {
   const [isResetting, setIsResetting] = useState(false)
+  const { clearAllAppData } = useNavigation()
 
   const handleResetDemo = () => {
     setIsResetting(true)
-    resetAllAppData()
+    // resetAllAppData()
+    clearAllAppData()
 
     // Show feedback to user
     setTimeout(() => {
       setIsResetting(false)
-      // Optional: Show a toast or alert that data has been reset
-      alert("Demo data has been reset successfully!")
-    }, 500)
+    }, 1000)
   }
 
   return (

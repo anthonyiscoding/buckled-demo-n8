@@ -41,8 +41,7 @@ export function SWRProvider({ children }: SWRProviderProps) {
 
     const resetCache = () => {
         if (typeof window !== 'undefined') {
-            // Clear localStorage
-            localStorage.removeItem('app-cache')
+            // Clear localStorage completely
             localStorage.clear()
         }
 
@@ -66,12 +65,12 @@ export function SWRProvider({ children }: SWRProviderProps) {
                 value={{
                     provider: () => localStorageProvider(),
                     fallback: {
-                        'service-center/pending-requests': defaultPendingRequests,
-                        'service-center/active-quotes': defaultActiveQuotes,
-                        'service-center/scheduled-services': defaultScheduledServices,
-                        'service-center/customer-reviews': defaultCustomerReviews,
-                        'service-center/profile': defaultServiceCenterProfile,
-                        'service-center/revenue-data': defaultRevenueData,
+                        'pending-requests': defaultPendingRequests,
+                        'active-quotes': defaultActiveQuotes,
+                        'scheduled-services': defaultScheduledServices,
+                        'customer-reviews': defaultCustomerReviews,
+                        'profile': defaultServiceCenterProfile,
+                        'revenue-data': defaultRevenueData,
                     },
                 }}
             >
