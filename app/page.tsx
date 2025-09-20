@@ -49,6 +49,9 @@ function CustomerInterface() {
 
   const currentStep = (searchParams.get('step') as Step) || "welcome"
 
+  // Track which steps have already shown their messages to prevent re-running effects
+  const [shownMessages, setShownMessages] = useState<Set<Step>>(new Set())
+
   const {
     socketVisible,
     setSocketVisible,
@@ -87,6 +90,7 @@ function CustomerInterface() {
             text: "Welcome back! I see you have some information saved from before. You can continue where you left off or start fresh with a new quote. What would you like to do?",
             sender: 'socket'
           }, true) // Clear messages first
+          // Don't open chat for returning users - they use the buttons instead
           setShowContinueButton(false)
         } else {
           addSocketMessage({
@@ -97,13 +101,16 @@ function CustomerInterface() {
           setShowContinueButton(true)
           setContinueButtonText("Get Started")
         }
+
+        // Mark this message as shown
+        setShownMessages(prev => new Set(prev).add("welcome"))
       }, 1000)
       return () => clearTimeout(timer)
     }
-  }, [currentStep, hasExistingData, setSocketVisible, addSocketMessage, setShouldOpenChat, setShowContinueButton, setContinueButtonText])
+  }, [currentStep, hasExistingData, shownMessages, setSocketVisible, addSocketMessage, setShouldOpenChat, setShowContinueButton, setContinueButtonText])
 
   useEffect(() => {
-    if (currentStep === "confirmation") {
+    if (currentStep === "confirmation" && !shownMessages.has("confirmation")) {
       setSocketVisible(true)
       const timer = setTimeout(() => {
         addSocketMessage({
@@ -113,10 +120,13 @@ function CustomerInterface() {
         setShouldOpenChat(true)
         setShowContinueButton(true)
         setContinueButtonText("Got it!")
+
+        // Mark this message as shown
+        setShownMessages(prev => new Set(prev).add("confirmation"))
       }, 500)
       return () => clearTimeout(timer)
     }
-  }, [currentStep, setSocketVisible, addSocketMessage, setShouldOpenChat, setShowContinueButton, setContinueButtonText])
+  }, [currentStep, shownMessages, setSocketVisible, addSocketMessage, setShouldOpenChat, setShowContinueButton, setContinueButtonText])
 
   useEffect(() => {
     if (currentStep === "quote-scanning") {

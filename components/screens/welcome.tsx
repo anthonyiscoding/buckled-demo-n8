@@ -5,8 +5,6 @@ export function Welcome() {
     const { hasExistingData, lastStep } = useHasExistingData()
     const { setCurrentStep, clearProgress } = useNavigation()
 
-    console.log('Welcome component - hasExistingData:', hasExistingData, 'lastStep:', lastStep)
-
     const handleContinue = () => {
         setCurrentStep(lastStep)
     }
