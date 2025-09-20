@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { ExpandableText } from "@/components/ui/expandable-text"
 import { usePendingRequests } from "@/hooks/use-service-center-data"
 import Link from "next/link"
 import {
@@ -194,19 +195,20 @@ export default function PendingRequestsPage() {
                   <TableRow key={request.id} className="hover:bg-gray-50">
                     <TableCell>
                       <div>
-                        <div className="font-medium text-gray-900">{request.customerName}</div>
-                        <div className="text-sm text-gray-500">{request.customerEmail}</div>
-                        <div className="text-sm text-gray-500">{request.location}</div>
+                        <ExpandableText text={request.customerName} className="font-medium text-gray-900" />
+                        <ExpandableText text={request.customerEmail} className="text-sm text-gray-500 block mt-1" />
+                        <ExpandableText text={request.location} className="text-sm text-gray-500 block" />
                       </div>
                     </TableCell>
                     <TableCell>
-                      <div className="font-medium">
-                        {request.carYear} {request.carMake} {request.carModel}
-                      </div>
+                      <ExpandableText
+                        text={`${request.carYear} ${request.carMake} ${request.carModel}`}
+                        className="font-medium"
+                      />
                     </TableCell>
                     <TableCell>
                       <div className="max-w-xs">
-                        <p className="text-sm text-gray-900 line-clamp-2">{request.problemDescription}</p>
+                        <ExpandableText text={request.problemDescription} className="text-sm text-gray-900" />
                         {request.photos && request.photos.length > 0 && (
                           <div className="text-xs text-blue-600 mt-1">{request.photos.length} photo(s) attached</div>
                         )}
@@ -225,7 +227,7 @@ export default function PendingRequestsPage() {
                       <div className="text-sm text-gray-600">{request.estimatedResponseTime}</div>
                     </TableCell>
                     <TableCell>
-                      <div className="flex gap-2">
+                      <div className="flex flex-col gap-2">
                         <Button
                           size="sm"
                           onClick={() => handleRespond(request.id)}

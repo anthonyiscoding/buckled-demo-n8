@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { ExpandableText } from "@/components/ui/expandable-text"
 import { useActiveQuotes } from "@/hooks/use-service-center-data"
 import Link from "next/link"
 import { ArrowLeft, Search, Filter, DollarSign, Clock, Eye, CheckCircle, XCircle, MoreHorizontal } from "lucide-react"
@@ -247,12 +248,12 @@ export default function ActiveQuotesPage() {
                 {filteredQuotes.map((quote) => (
                   <TableRow key={quote.id} className="hover:bg-gray-50">
                     <TableCell>
-                      <div className="font-medium text-gray-900">{quote.customerName}</div>
+                      <ExpandableText text={quote.customerName} className="font-medium text-gray-900" />
                     </TableCell>
                     <TableCell>
                       <div>
-                        <div className="font-medium">{quote.carInfo}</div>
-                        <div className="text-sm text-gray-600">{quote.serviceType}</div>
+                        <ExpandableText text={quote.carInfo} className="font-medium" />
+                        <ExpandableText text={quote.serviceType} className="text-sm text-gray-600 block mt-1" />
                         <div className="text-sm text-gray-500">{quote.estimatedDuration}</div>
                       </div>
                     </TableCell>
@@ -277,7 +278,7 @@ export default function ActiveQuotesPage() {
                       <div className="text-sm text-gray-600">{formatExpiresIn(quote.expiresAt)}</div>
                     </TableCell>
                     <TableCell>
-                      <div className="flex gap-2">
+                      <div className="flex flex-col gap-2">
                         {quote.status === "sent" || quote.status === "viewed" ? (
                           <Button size="sm" variant="outline" onClick={() => handleFollowUp(quote.id)}>
                             Follow Up

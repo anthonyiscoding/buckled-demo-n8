@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { ExpandableText } from "@/components/ui/expandable-text"
 import { useScheduledServices } from "@/hooks/use-service-center-data"
 import Link from "next/link"
 import {
@@ -254,18 +255,20 @@ export default function ScheduledServicesPage() {
                   <TableRow key={service.id} className="hover:bg-gray-50">
                     <TableCell>
                       <div>
-                        <div className="font-medium text-gray-900">{service.customerName}</div>
-                        <div className="text-sm text-gray-600 flex items-center gap-1">
+                        <ExpandableText text={service.customerName} className="font-medium text-gray-900" />
+                        <div className="text-sm text-gray-600 flex items-center gap-1 mt-1">
                           <Phone className="w-3 h-3" />
-                          {service.customerPhone}
+                          <ExpandableText text={service.customerPhone} className="" />
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
                       <div>
-                        <div className="font-medium">{service.carInfo}</div>
-                        <div className="text-sm text-gray-600">{service.serviceType}</div>
-                        {service.notes && <div className="text-sm text-gray-500 italic">{service.notes}</div>}
+                        <ExpandableText text={service.carInfo} className="font-medium" />
+                        <ExpandableText text={service.serviceType} className="text-sm text-gray-600 block mt-1" />
+                        {service.notes && (
+                          <ExpandableText text={service.notes} className="text-sm text-gray-500 italic block mt-1" />
+                        )}
                       </div>
                     </TableCell>
                     <TableCell>
@@ -299,7 +302,7 @@ export default function ScheduledServicesPage() {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <div className="flex gap-2">
+                      <div className="flex flex-col gap-2">
                         {service.status === "confirmed" && (
                           <Button
                             size="sm"

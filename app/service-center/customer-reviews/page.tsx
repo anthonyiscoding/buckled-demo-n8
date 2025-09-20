@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { ExpandableText } from "@/components/ui/expandable-text"
 import { useCustomerReviews } from "@/hooks/use-service-center-data"
 import Link from "next/link"
 import { ArrowLeft, Search, Filter, Star, TrendingUp, MessageSquare } from "lucide-react"
@@ -316,12 +317,12 @@ export default function CustomerReviewsPage() {
                 {filteredReviews.map((review) => (
                   <TableRow key={review.id} className="hover:bg-gray-50">
                     <TableCell>
-                      <div className="font-medium text-gray-900">{review.customerName}</div>
+                      <ExpandableText text={review.customerName} className="font-medium text-gray-900" />
                     </TableCell>
                     <TableCell>
                       <div>
-                        <div className="font-medium">{review.serviceType}</div>
-                        <div className="text-sm text-gray-600">{review.carInfo}</div>
+                        <ExpandableText text={review.serviceType} className="font-medium" />
+                        <ExpandableText text={review.carInfo} className="text-sm text-gray-600 block mt-1" />
                       </div>
                     </TableCell>
                     <TableCell>
@@ -332,7 +333,7 @@ export default function CustomerReviewsPage() {
                     </TableCell>
                     <TableCell>
                       <div className="max-w-md">
-                        <p className="text-sm text-gray-900 line-clamp-3">{review.comment}</p>
+                        <ExpandableText text={review.comment} className="text-sm text-gray-900" />
                       </div>
                     </TableCell>
                     <TableCell>
