@@ -162,17 +162,23 @@ export function useSocketMessages() {
         }
     )
 
+    // Normalize messages to ensure timestamps are Date objects
+    const normalizedMessages = (externalSocketMessages || []).map(msg => ({
+        ...msg,
+        timestamp: msg.timestamp instanceof Date ? msg.timestamp : new Date(msg.timestamp)
+    }))
+
     const addSocketMessage = (message: Omit<Message, 'id' | 'timestamp'>) => {
         const newMessage: Message = {
             ...message,
             id: Date.now().toString(),
             timestamp: new Date()
         }
-        setExternalSocketMessages([...externalSocketMessages!, newMessage], { revalidate: false })
+        setExternalSocketMessages([...normalizedMessages, newMessage], { revalidate: false })
     }
 
     return {
-        externalSocketMessages: externalSocketMessages!,
+        externalSocketMessages: normalizedMessages,
         setExternalSocketMessages: (messages: Message[]) => setExternalSocketMessages(messages, { revalidate: false }),
         addSocketMessage
     }
