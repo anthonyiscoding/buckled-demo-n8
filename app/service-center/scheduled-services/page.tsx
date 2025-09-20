@@ -104,11 +104,13 @@ export default function ScheduledServicesPage() {
   }
 
   const isToday = (date: Date) => {
+    date = new Date(date)
     const today = new Date()
     return date.toDateString() === today.toDateString()
   }
 
   const isTomorrow = (date: Date) => {
+    date = new Date(date)
     const tomorrow = new Date()
     tomorrow.setDate(tomorrow.getDate() + 1)
     return date.toDateString() === tomorrow.toDateString()
