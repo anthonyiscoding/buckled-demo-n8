@@ -7,9 +7,20 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { usePendingRequests } from "@/hooks/use-service-center-data"
 import Link from "next/link"
-import { ArrowLeft, Search, Filter, Clock, AlertTriangle, CheckCircle } from "lucide-react"
+import {
+  ArrowLeft,
+  Search,
+  Filter,
+  Clock,
+  AlertTriangle,
+  CheckCircle,
+  MoreHorizontal,
+  MapPin,
+  Mail,
+} from "lucide-react"
 
 export default function PendingRequestsPage() {
   const { requests, updateRequest } = usePendingRequests()
@@ -99,7 +110,7 @@ export default function PendingRequestsPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="border-b bg-white">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link href="/service-center">
@@ -109,8 +120,8 @@ export default function PendingRequestsPage() {
                 </Button>
               </Link>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Pending Requests</h1>
-                <p className="text-gray-600">Manage incoming customer service requests</p>
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Pending Requests</h1>
+                <p className="text-gray-600 text-sm sm:text-base">Manage incoming customer service requests</p>
               </div>
             </div>
             <div className="text-sm text-gray-500">
@@ -120,10 +131,10 @@ export default function PendingRequestsPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {/* Filters */}
-        <Card className="p-6 mb-6">
-          <div className="flex flex-col md:flex-row gap-4">
+        <Card className="p-4 sm:p-6 mb-6">
+          <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -135,9 +146,9 @@ export default function PendingRequestsPage() {
                 />
               </div>
             </div>
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <Select value={urgencyFilter} onValueChange={setUrgencyFilter}>
-                <SelectTrigger className="w-40">
+                <SelectTrigger className="w-full sm:w-40">
                   <Filter className="w-4 h-4 mr-2" />
                   <SelectValue placeholder="Urgency" />
                 </SelectTrigger>
@@ -149,7 +160,7 @@ export default function PendingRequestsPage() {
                 </SelectContent>
               </Select>
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-40">
+                <SelectTrigger className="w-full sm:w-40">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>
@@ -163,8 +174,8 @@ export default function PendingRequestsPage() {
           </div>
         </Card>
 
-        {/* Requests Table */}
-        <Card>
+        {/* Desktop Table - Hidden on mobile */}
+        <Card className="hidden lg:block">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
@@ -242,6 +253,74 @@ export default function PendingRequestsPage() {
             </div>
           )}
         </Card>
+
+        {/* Mobile Cards - Hidden on desktop */}
+        <div className="lg:hidden space-y-4">
+          {filteredRequests.map((request) => (
+            <Card key={request.id} className="p-4">
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex-1">
+                  <h3 className="font-medium text-gray-900">{request.customerName}</h3>
+                  <div className="flex items-center gap-1 text-sm text-gray-600 mt-1">
+                    <Mail className="w-3 h-3" />
+                    {request.customerEmail}
+                  </div>
+                  <div className="flex items-center gap-1 text-sm text-gray-600">
+                    <MapPin className="w-3 h-3" />
+                    {request.location}
+                  </div>
+                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm">
+                      <MoreHorizontal className="w-4 h-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => handleRespond(request.id)}>Respond</DropdownMenuItem>
+                    <DropdownMenuItem>View Details</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+
+              <div className="space-y-2 mb-3">
+                <div>
+                  <span className="text-sm text-gray-600">Vehicle:</span>
+                  <p className="font-medium">
+                    {request.carYear} {request.carMake} {request.carModel}
+                  </p>
+                </div>
+                <div>
+                  <span className="text-sm text-gray-600">Problem:</span>
+                  <p className="text-sm text-gray-900 mt-1">{request.problemDescription}</p>
+                  {request.photos && request.photos.length > 0 && (
+                    <div className="text-xs text-blue-600 mt-1">{request.photos.length} photo(s) attached</div>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <Badge className={`${getUrgencyColor(request.urgency)} flex items-center gap-1`}>
+                  {getUrgencyIcon(request.urgency)}
+                  {request.urgency.charAt(0).toUpperCase() + request.urgency.slice(1)}
+                </Badge>
+                <div className="text-right">
+                  <div className="text-xs text-gray-500">Submitted {formatTimeAgo(request.submittedAt)}</div>
+                  <div className="text-xs text-gray-500">Response: {request.estimatedResponseTime}</div>
+                </div>
+              </div>
+            </Card>
+          ))}
+
+          {filteredRequests.length === 0 && (
+            <div className="text-center py-12">
+              <div className="text-gray-500 mb-2">No requests found</div>
+              <div className="text-sm text-gray-400">
+                {searchTerm || urgencyFilter !== "all" ? "Try adjusting your filters" : "New requests will appear here"}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )

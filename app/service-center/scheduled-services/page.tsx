@@ -7,9 +7,21 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { useScheduledServices } from "@/hooks/use-service-center-data"
 import Link from "next/link"
-import { ArrowLeft, Search, Filter, Calendar, Clock, Phone, CheckCircle, AlertCircle, XCircle } from "lucide-react"
+import {
+  ArrowLeft,
+  Search,
+  Filter,
+  Calendar,
+  Clock,
+  Phone,
+  CheckCircle,
+  AlertCircle,
+  XCircle,
+  MoreHorizontal,
+} from "lucide-react"
 
 export default function ScheduledServicesPage() {
   const { services, updateService } = useScheduledServices()
@@ -109,7 +121,7 @@ export default function ScheduledServicesPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="border-b bg-white">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link href="/service-center">
@@ -119,8 +131,8 @@ export default function ScheduledServicesPage() {
                 </Button>
               </Link>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Scheduled Services</h1>
-                <p className="text-gray-600">Manage upcoming appointments and services</p>
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Scheduled Services</h1>
+                <p className="text-gray-600 text-sm sm:text-base">Manage upcoming appointments and services</p>
               </div>
             </div>
             <div className="text-sm text-gray-500">
@@ -130,9 +142,9 @@ export default function ScheduledServicesPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <Card className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -180,8 +192,8 @@ export default function ScheduledServicesPage() {
         </div>
 
         {/* Filters */}
-        <Card className="p-6 mb-6">
-          <div className="flex flex-col md:flex-row gap-4">
+        <Card className="p-4 sm:p-6 mb-6">
+          <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -193,9 +205,9 @@ export default function ScheduledServicesPage() {
                 />
               </div>
             </div>
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-40">
+                <SelectTrigger className="w-full sm:w-40">
                   <Filter className="w-4 h-4 mr-2" />
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
@@ -208,7 +220,7 @@ export default function ScheduledServicesPage() {
                 </SelectContent>
               </Select>
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-40">
+                <SelectTrigger className="w-full sm:w-40">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>
@@ -222,8 +234,8 @@ export default function ScheduledServicesPage() {
           </div>
         </Card>
 
-        {/* Services Table */}
-        <Card>
+        {/* Desktop Table - Hidden on mobile */}
+        <Card className="hidden lg:block">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
@@ -328,6 +340,97 @@ export default function ScheduledServicesPage() {
             </div>
           )}
         </Card>
+
+        {/* Mobile Cards - Hidden on desktop */}
+        <div className="lg:hidden space-y-4">
+          {filteredServices.map((service) => (
+            <Card key={service.id} className="p-4">
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex-1">
+                  <h3 className="font-medium text-gray-900">{service.customerName}</h3>
+                  <div className="flex items-center gap-1 text-sm text-gray-600 mt-1">
+                    <Phone className="w-3 h-3" />
+                    {service.customerPhone}
+                  </div>
+                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm">
+                      <MoreHorizontal className="w-4 h-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    {service.status === "confirmed" && (
+                      <DropdownMenuItem onClick={() => handleStatusUpdate(service.id, "in-progress")}>
+                        Start Service
+                      </DropdownMenuItem>
+                    )}
+                    {service.status === "in-progress" && (
+                      <DropdownMenuItem onClick={() => handleStatusUpdate(service.id, "completed")}>
+                        Complete
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuItem>View Details</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+
+              <div className="space-y-2 mb-3">
+                <div>
+                  <span className="text-sm text-gray-600">Vehicle:</span>
+                  <p className="font-medium">{service.carInfo}</p>
+                </div>
+                <div>
+                  <span className="text-sm text-gray-600">Service:</span>
+                  <p className="text-sm">{service.serviceType}</p>
+                  {service.notes && <p className="text-sm text-gray-500 italic mt-1">{service.notes}</p>}
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Duration:</span>
+                  <div className="flex items-center gap-1 text-sm">
+                    <Clock className="w-3 h-3" />
+                    {service.estimatedDuration}
+                  </div>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Amount:</span>
+                  <span className="text-lg font-bold">${service.totalCost.toLocaleString()}</span>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <Badge className={`${getStatusColor(service.status)} flex items-center gap-1`}>
+                  {getStatusIcon(service.status)}
+                  {service.status.charAt(0).toUpperCase() + service.status.slice(1)}
+                </Badge>
+                <div className="text-right">
+                  <div
+                    className={`text-sm font-medium ${isToday(service.scheduledDate) ? "text-blue-600" : isTomorrow(service.scheduledDate) ? "text-green-600" : "text-gray-900"}`}
+                  >
+                    {formatDate(service.scheduledDate)}
+                  </div>
+                  {isToday(service.scheduledDate) && (
+                    <Badge className="bg-blue-100 text-blue-800 text-xs mt-1">Today</Badge>
+                  )}
+                  {isTomorrow(service.scheduledDate) && (
+                    <Badge className="bg-green-100 text-green-800 text-xs mt-1">Tomorrow</Badge>
+                  )}
+                </div>
+              </div>
+            </Card>
+          ))}
+
+          {filteredServices.length === 0 && (
+            <div className="text-center py-12">
+              <div className="text-gray-500 mb-2">No scheduled services found</div>
+              <div className="text-sm text-gray-400">
+                {searchTerm || statusFilter !== "all"
+                  ? "Try adjusting your filters"
+                  : "Scheduled services will appear here when quotes are approved"}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )

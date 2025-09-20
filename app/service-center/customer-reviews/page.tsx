@@ -134,7 +134,7 @@ export default function CustomerReviewsPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="border-b bg-white">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link href="/service-center">
@@ -144,8 +144,8 @@ export default function CustomerReviewsPage() {
                 </Button>
               </Link>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Customer Reviews</h1>
-                <p className="text-gray-600">Monitor customer feedback and ratings</p>
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Customer Reviews</h1>
+                <p className="text-gray-600 text-sm sm:text-base">Monitor customer feedback and ratings</p>
               </div>
             </div>
             <div className="text-sm text-gray-500">
@@ -155,7 +155,7 @@ export default function CustomerReviewsPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {/* Overview Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <Card className="p-6">
@@ -226,7 +226,7 @@ export default function CustomerReviewsPage() {
         </div>
 
         {/* Monthly Trend */}
-        <Card className="p-6 mb-6">
+        <Card className="p-4 sm:p-6 mb-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Rating Trend (Last 6 Months)</h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -242,8 +242,8 @@ export default function CustomerReviewsPage() {
         </Card>
 
         {/* Filters */}
-        <Card className="p-6 mb-6">
-          <div className="flex flex-col md:flex-row gap-4">
+        <Card className="p-4 sm:p-6 mb-6">
+          <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -255,9 +255,9 @@ export default function CustomerReviewsPage() {
                 />
               </div>
             </div>
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <Select value={ratingFilter} onValueChange={setRatingFilter}>
-                <SelectTrigger className="w-40">
+                <SelectTrigger className="w-full sm:w-40">
                   <Filter className="w-4 h-4 mr-2" />
                   <SelectValue placeholder="Rating" />
                 </SelectTrigger>
@@ -271,7 +271,7 @@ export default function CustomerReviewsPage() {
                 </SelectContent>
               </Select>
               <Select value={serviceFilter} onValueChange={setServiceFilter}>
-                <SelectTrigger className="w-40">
+                <SelectTrigger className="w-full sm:w-40">
                   <SelectValue placeholder="Service" />
                 </SelectTrigger>
                 <SelectContent>
@@ -284,7 +284,7 @@ export default function CustomerReviewsPage() {
                 </SelectContent>
               </Select>
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-40">
+                <SelectTrigger className="w-full sm:w-40">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>
@@ -300,7 +300,7 @@ export default function CustomerReviewsPage() {
         </Card>
 
         {/* Reviews Table */}
-        <Card>
+        <Card className="hidden lg:block">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
@@ -355,6 +355,52 @@ export default function CustomerReviewsPage() {
             </div>
           )}
         </Card>
+
+        {/* Mobile Cards */}
+        <div className="lg:hidden space-y-4">
+          {filteredReviews.map((review) => (
+            <Card key={review.id} className="p-4">
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex-1">
+                  <h3 className="font-medium text-gray-900">{review.customerName}</h3>
+                  <div className="flex items-center gap-2 mt-1">
+                    <div className="flex">{renderStars(review.rating)}</div>
+                    <span className="text-sm font-medium">{review.rating}</span>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-xs text-gray-500">{formatDate(review.reviewDate)}</div>
+                </div>
+              </div>
+
+              <div className="space-y-2 mb-3">
+                <div>
+                  <span className="text-sm text-gray-600">Service:</span>
+                  <p className="font-medium">{review.serviceType}</p>
+                </div>
+                <div>
+                  <span className="text-sm text-gray-600">Vehicle:</span>
+                  <p className="text-sm text-gray-600">{review.carInfo}</p>
+                </div>
+                <div>
+                  <span className="text-sm text-gray-600">Review:</span>
+                  <p className="text-sm text-gray-900 mt-1">{review.comment}</p>
+                </div>
+              </div>
+            </Card>
+          ))}
+
+          {filteredReviews.length === 0 && (
+            <div className="text-center py-12">
+              <div className="text-gray-500 mb-2">No reviews found</div>
+              <div className="text-sm text-gray-400">
+                {searchTerm || ratingFilter !== "all" || serviceFilter !== "all"
+                  ? "Try adjusting your filters"
+                  : "Customer reviews will appear here after completed services"}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
