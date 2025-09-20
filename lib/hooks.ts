@@ -290,6 +290,51 @@ export function useOtherState() {
     }
 }
 
+// Hook to detect if user has existing session data
+export function useHasExistingData() {
+    const { selectedCar } = useCarSelection()
+    const { problemDescription } = useProblemDescription()
+    const { uploadedFiles } = useUploadedFiles()
+    const { uploadedQuoteFiles } = useUploadedQuoteFiles()
+    const { isSignedUp } = useSignupStatus()
+    const { selectedDate } = useSelectedDate()
+    const { selectedTime } = useSelectedTime()
+
+    // Check if user has filled out any meaningful data
+    const hasCarInfo = selectedCar.make !== "" || selectedCar.model !== "" || selectedCar.year !== ""
+    const hasProblemInfo = problemDescription.trim() !== ""
+    const hasMediaFiles = uploadedFiles.length > 0
+    const hasQuoteFiles = uploadedQuoteFiles.length > 0
+    const hasAccountInfo = isSignedUp
+    const hasSchedulingInfo = selectedDate !== null || selectedTime !== ""
+
+    const hasAnyData = hasCarInfo || hasProblemInfo || hasMediaFiles || hasQuoteFiles || hasAccountInfo || hasSchedulingInfo
+
+    // Determine the last completed step based on data
+    const getLastStep = (): Step => {
+        if (hasSchedulingInfo) return "scheduling"
+        if (hasAccountInfo) return "signup"
+        if (hasQuoteFiles) return "quote-upload"
+        if (hasMediaFiles) return "media-upload"
+        if (hasProblemInfo) return "problem-description"
+        if (hasCarInfo) return "car-selection"
+        return "welcome"
+    }
+
+    return {
+        hasExistingData: hasAnyData,
+        lastStep: getLastStep(),
+        dataBreakdown: {
+            hasCarInfo,
+            hasProblemInfo,
+            hasMediaFiles,
+            hasQuoteFiles,
+            hasAccountInfo,
+            hasSchedulingInfo
+        }
+    }
+}
+
 // Navigation hook
 export function useNavigation() {
     const router = useRouter()

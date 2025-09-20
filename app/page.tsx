@@ -10,7 +10,8 @@ import {
   useSocketMessages,
   useOtherState,
   useUploadedQuoteFiles,
-  useNavigation
+  useNavigation,
+  useHasExistingData
 } from "@/lib/hooks"
 
 // Import all screen components
@@ -73,23 +74,32 @@ function CustomerInterface() {
 
   const { uploadedQuoteFiles } = useUploadedQuoteFiles()
   const { setCurrentStep, clearProgress } = useNavigation()
+  const { hasExistingData } = useHasExistingData()
 
   // Socket refers to the visual character, not web sockets
   useEffect(() => {
     if (currentStep === "welcome") {
       const timer = setTimeout(() => {
         setSocketVisible(true)
-        addSocketMessage({
-          text: "Welcome! I'm here to help you resolve your car diagnosis and repair needs. I'll guide you through the main steps to get you back on the road.",
-          sender: 'socket'
-        }, true) // Clear messages first
-        setShouldOpenChat(true)
-        setShowContinueButton(true)
-        setContinueButtonText("Get Started")
-      }, 100)
+
+        if (hasExistingData) {
+          addSocketMessage({
+            text: "Welcome back! I see you have some information saved from before. You can continue where you left off or start fresh with a new quote. What would you like to do?",
+            sender: 'socket'
+          }, true) // Clear messages first
+        } else {
+          addSocketMessage({
+            text: "Welcome! I'm here to help you resolve your car diagnosis and repair needs. I'll guide you through the main steps to get you back on the road.",
+            sender: 'socket'
+          }, true) // Clear messages first
+          setShouldOpenChat(true)
+          setShowContinueButton(true)
+          setContinueButtonText("Get Started")
+        }
+      }, 1000)
       return () => clearTimeout(timer)
     }
-  }, [currentStep])
+  }, [currentStep, hasExistingData, setSocketVisible, addSocketMessage, setShouldOpenChat, setShowContinueButton, setContinueButtonText])
 
   useEffect(() => {
     if (currentStep === "confirmation") {
