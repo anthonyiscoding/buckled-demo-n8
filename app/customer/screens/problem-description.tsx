@@ -1,8 +1,8 @@
 import { Label } from "@radix-ui/react-label";
 import { ArrowLeft } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
-import { Textarea } from "../ui/textarea";
-import { Button } from "../ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/card";
+import { Textarea } from "../../../components/ui/textarea";
+import { Button } from "../../../components/ui/button";
 import { useCarSelection, useProblemDescription, useNavigation } from "@/lib/hooks";
 
 export function ProblemDescription() {

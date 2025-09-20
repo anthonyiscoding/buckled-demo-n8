@@ -1,8 +1,8 @@
 import { Label } from "@radix-ui/react-label";
 import { Check } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
-import { Progress } from "../ui/progress";
-import { Button } from "../ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/card";
+import { Progress } from "../../../components/ui/progress";
+import { Button } from "../../../components/ui/button";
 import Image from "next/image";
 import { useOtherState, useNavigation } from "@/lib/hooks";
 

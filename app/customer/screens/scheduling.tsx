@@ -1,9 +1,9 @@
-import { Label } from "../ui/label";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../ui/select";
+import { Label } from "../../../components/ui/label";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../../../components/ui/select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
-import { Button } from "../ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/card";
+import { Button } from "../../../components/ui/button";
 import { useSelectedDate, useSelectedTime, useNavigation } from "@/lib/hooks";
 
 const timeSlots = [

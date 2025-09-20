@@ -1,9 +1,9 @@
-import { Label } from "../ui/label";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../ui/select";
-import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
-import { Button } from "../ui/button";
+import { Label } from "../../../components/ui/label";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../../../components/ui/select";
+import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/card";
+import { Button } from "../../../components/ui/button";
 import { useCarSelection, useNavigation } from "@/lib/hooks";
-import { getCarMakes, getCarModels } from "../car-data";
+import { getCarMakes, getCarModels } from "../../../components/car-data";
 
 const carMakes = getCarMakes()
 const carModels = getCarModels()

@@ -1,6 +1,6 @@
 import { UploadIcon, Camera, ArrowLeft } from "lucide-react"
-import { Card, CardHeader, CardTitle, CardContent } from "../ui/card"
-import { Button } from "../ui/button"
+import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/card"
+import { Button } from "../../../components/ui/button"
 import { useUploadedFiles, useNavigation } from "@/lib/hooks"
 
 export function MediaUpload() {

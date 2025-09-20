@@ -1,7 +1,7 @@
 import { UploadIcon, Camera, ArrowLeft } from "lucide-react"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../ui/card"
-import { Button } from "../ui/button"
-import { Progress } from "../ui/progress"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../../../components/ui/card"
+import { Button } from "../../../components/ui/button"
+import { Progress } from "../../../components/ui/progress"
 import { useUploadedQuoteFiles, useNavigation } from "@/lib/hooks"
 
 export function QuoteUpload() {

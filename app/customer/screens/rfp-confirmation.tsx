@@ -1,6 +1,6 @@
 import { Label } from "@radix-ui/react-label";
 import { FileText, ArrowRight, Wrench, Clock, Check } from "lucide-react";
-import { Card, CardContent } from "../ui/card";
+import { Card, CardContent } from "../../../components/ui/card";
 import { useSelectedQuote, useOtherState } from "@/lib/hooks";
 
 export function RfpConfirmation() {

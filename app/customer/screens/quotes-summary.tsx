@@ -1,10 +1,10 @@
 import { cn } from "@/lib/utils"
 import { Star } from "lucide-react"
-import { Card, CardContent } from "../ui/card"
-import { StarRating } from "../ui/star-rating"
-import { Button } from "../ui/button"
+import { Card, CardContent } from "../../../components/ui/card"
+import { StarRating } from "../../../components/ui/star-rating"
+import { Button } from "../../../components/ui/button"
 import { useSignupStatus, useSelectedQuote, useNavigation } from "@/lib/hooks"
-import { getMockQuotes } from "../car-data"
+import { getMockQuotes } from "../../../components/car-data"
 
 const mockQuotes = getMockQuotes()
 

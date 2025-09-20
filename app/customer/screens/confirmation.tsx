@@ -1,6 +1,6 @@
 import { Check } from "lucide-react";
 import { format } from "date-fns";
-import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/card";
 import { useSelectedQuote, useSelectedDate, useSelectedTime } from "@/lib/hooks";
 
 export function Confirmation() {

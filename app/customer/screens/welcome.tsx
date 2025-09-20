@@ -1,4 +1,4 @@
-import { Button } from "../ui/button"
+import { Button } from "../../../components/ui/button"
 import { useHasExistingData, useNavigation } from "@/lib/hooks"
 
 export function Welcome() {

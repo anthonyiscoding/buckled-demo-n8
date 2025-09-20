@@ -1,8 +1,8 @@
 import { Label } from "@radix-ui/react-label";
 import { CheckSquare, ArrowLeft } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
-import { StarRating } from "../ui/star-rating";
-import { Button } from "../ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/card";
+import { StarRating } from "../../../components/ui/star-rating";
+import { Button } from "../../../components/ui/button";
 import { useSelectedQuote, useCarSelection, useProblemDescription, useNavigation } from "@/lib/hooks";
 
 export function QuotesDetail() {

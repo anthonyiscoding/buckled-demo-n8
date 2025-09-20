@@ -1,7 +1,7 @@
 import { Label } from "@radix-ui/react-label"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../ui/card"
-import { Input } from "../ui/input"
-import { Button } from "../ui/button"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../../../components/ui/card"
+import { Input } from "../../../components/ui/input"
+import { Button } from "../../../components/ui/button"
 import { useSignupStatus, useNavigation } from "@/lib/hooks"
 
 export function Signup() {
