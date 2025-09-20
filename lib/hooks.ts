@@ -5,307 +5,307 @@ import { useRouter } from 'next/navigation'
 
 // Types
 interface CarSelection {
-  make: string
-  model: string
-  year: string
+    make: string
+    model: string
+    year: string
 }
 
 type Step =
-  | "welcome"
-  | "car-selection"
-  | "problem-description"
-  | "media-upload"
-  | "quote-upload"
-  | "quote-scanning"
-  | "diagnosis"
-  | "quotes"
-  | "signup"
-  | "quote-details"
-  | "rfp-confirmation"
-  | "scheduling"
-  | "confirmation"
+    | "welcome"
+    | "car-selection"
+    | "problem-description"
+    | "media-upload"
+    | "quote-upload"
+    | "quote-scanning"
+    | "diagnosis"
+    | "quotes"
+    | "signup"
+    | "quote-details"
+    | "rfp-confirmation"
+    | "scheduling"
+    | "confirmation"
 
 interface Message {
-  id: string
-  text: string
-  sender: 'user' | 'socket'
-  timestamp: Date
+    id: string
+    text: string
+    sender: 'user' | 'socket'
+    timestamp: Date
 }
 
 // Custom hooks using SWR for state management
 export function useCarSelection() {
-  const { data: selectedCar, mutate: setSelectedCar } = useSWR<CarSelection>(
-    'selectedCar',
-    null,
-    {
-      fallbackData: { make: "", model: "", year: "" }
-    }
-  )
+    const { data: selectedCar, mutate: setSelectedCar } = useSWR<CarSelection>(
+        'selectedCar',
+        null,
+        {
+            fallbackData: { make: "", model: "", year: "" }
+        }
+    )
 
-  return {
-    selectedCar: selectedCar!,
-    setSelectedCar: (car: CarSelection) => setSelectedCar(car, { revalidate: false })
-  }
+    return {
+        selectedCar: selectedCar!,
+        setSelectedCar: (car: CarSelection) => setSelectedCar(car, { revalidate: false })
+    }
 }
 
 export function useProblemDescription() {
-  const { data: problemDescription, mutate: setProblemDescription } = useSWR<string>(
-    'problemDescription',
-    null,
-    {
-      fallbackData: ""
-    }
-  )
+    const { data: problemDescription, mutate: setProblemDescription } = useSWR<string>(
+        'problemDescription',
+        null,
+        {
+            fallbackData: ""
+        }
+    )
 
-  return {
-    problemDescription: problemDescription!,
-    setProblemDescription: (description: string) => setProblemDescription(description, { revalidate: false })
-  }
+    return {
+        problemDescription: problemDescription!,
+        setProblemDescription: (description: string) => setProblemDescription(description, { revalidate: false })
+    }
 }
 
 export function useSelectedQuote() {
-  const { data: selectedQuote, mutate: setSelectedQuote } = useSWR<any>(
-    'selectedQuote',
-    null,
-    {
-      fallbackData: null
-    }
-  )
+    const { data: selectedQuote, mutate: setSelectedQuote } = useSWR<any>(
+        'selectedQuote',
+        null,
+        {
+            fallbackData: null
+        }
+    )
 
-  return {
-    selectedQuote,
-    setSelectedQuote: (quote: any) => setSelectedQuote(quote, { revalidate: false })
-  }
+    return {
+        selectedQuote,
+        setSelectedQuote: (quote: any) => setSelectedQuote(quote, { revalidate: false })
+    }
 }
 
 export function useSignupStatus() {
-  const { data: isSignedUp, mutate: setIsSignedUp } = useSWR<boolean>(
-    'isSignedUp',
-    null,
-    {
-      fallbackData: false
-    }
-  )
+    const { data: isSignedUp, mutate: setIsSignedUp } = useSWR<boolean>(
+        'isSignedUp',
+        null,
+        {
+            fallbackData: false
+        }
+    )
 
-  return {
-    isSignedUp: isSignedUp!,
-    setIsSignedUp: (status: boolean) => setIsSignedUp(status, { revalidate: false })
-  }
+    return {
+        isSignedUp: isSignedUp!,
+        setIsSignedUp: (status: boolean) => setIsSignedUp(status, { revalidate: false })
+    }
 }
 
 export function useSelectedDate() {
-  const { data: selectedDate, mutate: setSelectedDate } = useSWR<Date | null>(
-    'selectedDate',
-    null,
-    {
-      fallbackData: null
-    }
-  )
+    const { data: selectedDate, mutate: setSelectedDate } = useSWR<Date | null>(
+        'selectedDate',
+        null,
+        {
+            fallbackData: null
+        }
+    )
 
-  return {
-    selectedDate,
-    setSelectedDate: (date: Date | null) => setSelectedDate(date, { revalidate: false })
-  }
+    return {
+        selectedDate,
+        setSelectedDate: (date: Date | null) => setSelectedDate(date, { revalidate: false })
+    }
 }
 
 export function useSelectedTime() {
-  const { data: selectedTime, mutate: setSelectedTime } = useSWR<string>(
-    'selectedTime',
-    null,
-    {
-      fallbackData: ""
-    }
-  )
+    const { data: selectedTime, mutate: setSelectedTime } = useSWR<string>(
+        'selectedTime',
+        null,
+        {
+            fallbackData: ""
+        }
+    )
 
-  return {
-    selectedTime: selectedTime!,
-    setSelectedTime: (time: string) => setSelectedTime(time, { revalidate: false })
-  }
+    return {
+        selectedTime: selectedTime!,
+        setSelectedTime: (time: string) => setSelectedTime(time, { revalidate: false })
+    }
 }
 
 export function useUploadedFiles() {
-  const { data: uploadedFiles, mutate: setUploadedFiles } = useSWR<File[]>(
-    'uploadedFiles',
-    null,
-    {
-      fallbackData: []
-    }
-  )
+    const { data: uploadedFiles, mutate: setUploadedFiles } = useSWR<File[]>(
+        'uploadedFiles',
+        null,
+        {
+            fallbackData: []
+        }
+    )
 
-  return {
-    uploadedFiles: uploadedFiles!,
-    setUploadedFiles: (files: File[]) => setUploadedFiles(files, { revalidate: false })
-  }
+    return {
+        uploadedFiles: uploadedFiles!,
+        setUploadedFiles: (files: File[]) => setUploadedFiles(files, { revalidate: false })
+    }
 }
 
 export function useUploadedQuoteFiles() {
-  const { data: uploadedQuoteFiles, mutate: setUploadedQuoteFiles } = useSWR<File[]>(
-    'uploadedQuoteFiles',
-    null,
-    {
-      fallbackData: []
-    }
-  )
+    const { data: uploadedQuoteFiles, mutate: setUploadedQuoteFiles } = useSWR<File[]>(
+        'uploadedQuoteFiles',
+        null,
+        {
+            fallbackData: []
+        }
+    )
 
-  return {
-    uploadedQuoteFiles: uploadedQuoteFiles!,
-    setUploadedQuoteFiles: (files: File[]) => setUploadedQuoteFiles(files, { revalidate: false })
-  }
+    return {
+        uploadedQuoteFiles: uploadedQuoteFiles!,
+        setUploadedQuoteFiles: (files: File[]) => setUploadedQuoteFiles(files, { revalidate: false })
+    }
 }
 
 export function useSocketMessages() {
-  const { data: externalSocketMessages, mutate: setExternalSocketMessages } = useSWR<Message[]>(
-    'externalSocketMessages',
-    null,
-    {
-      fallbackData: []
-    }
-  )
+    const { data: externalSocketMessages, mutate: setExternalSocketMessages } = useSWR<Message[]>(
+        'externalSocketMessages',
+        null,
+        {
+            fallbackData: []
+        }
+    )
 
-  const addSocketMessage = (message: Omit<Message, 'id' | 'timestamp'>) => {
-    const newMessage: Message = {
-      ...message,
-      id: Date.now().toString(),
-      timestamp: new Date()
+    const addSocketMessage = (message: Omit<Message, 'id' | 'timestamp'>) => {
+        const newMessage: Message = {
+            ...message,
+            id: Date.now().toString(),
+            timestamp: new Date()
+        }
+        setExternalSocketMessages([...externalSocketMessages!, newMessage], { revalidate: false })
     }
-    setExternalSocketMessages([...externalSocketMessages!, newMessage], { revalidate: false })
-  }
 
-  return {
-    externalSocketMessages: externalSocketMessages!,
-    setExternalSocketMessages: (messages: Message[]) => setExternalSocketMessages(messages, { revalidate: false }),
-    addSocketMessage
-  }
+    return {
+        externalSocketMessages: externalSocketMessages!,
+        setExternalSocketMessages: (messages: Message[]) => setExternalSocketMessages(messages, { revalidate: false }),
+        addSocketMessage
+    }
 }
 
 export function useSocketState() {
-  const { data: socketVisible, mutate: setSocketVisible } = useSWR<boolean>(
-    'socketVisible',
-    null,
-    {
-      fallbackData: false
-    }
-  )
+    const { data: socketVisible, mutate: setSocketVisible } = useSWR<boolean>(
+        'socketVisible',
+        null,
+        {
+            fallbackData: false
+        }
+    )
 
-  const { data: shouldOpenChat, mutate: setShouldOpenChat } = useSWR<boolean>(
-    'shouldOpenChat',
-    null,
-    {
-      fallbackData: false
-    }
-  )
+    const { data: shouldOpenChat, mutate: setShouldOpenChat } = useSWR<boolean>(
+        'shouldOpenChat',
+        null,
+        {
+            fallbackData: false
+        }
+    )
 
-  const { data: showContinueButton, mutate: setShowContinueButton } = useSWR<boolean>(
-    'showContinueButton',
-    null,
-    {
-      fallbackData: false
-    }
-  )
+    const { data: showContinueButton, mutate: setShowContinueButton } = useSWR<boolean>(
+        'showContinueButton',
+        null,
+        {
+            fallbackData: false
+        }
+    )
 
-  const { data: continueButtonText, mutate: setContinueButtonText } = useSWR<string>(
-    'continueButtonText',
-    null,
-    {
-      fallbackData: "Continue"
-    }
-  )
+    const { data: continueButtonText, mutate: setContinueButtonText } = useSWR<string>(
+        'continueButtonText',
+        null,
+        {
+            fallbackData: "Continue"
+        }
+    )
 
-  return {
-    socketVisible: socketVisible!,
-    setSocketVisible: (visible: boolean) => setSocketVisible(visible, { revalidate: false }),
-    shouldOpenChat: shouldOpenChat!,
-    setShouldOpenChat: (open: boolean) => setShouldOpenChat(open, { revalidate: false }),
-    showContinueButton: showContinueButton!,
-    setShowContinueButton: (show: boolean) => setShowContinueButton(show, { revalidate: false }),
-    continueButtonText: continueButtonText!,
-    setContinueButtonText: (text: string) => setContinueButtonText(text, { revalidate: false })
-  }
+    return {
+        socketVisible: socketVisible!,
+        setSocketVisible: (visible: boolean) => setSocketVisible(visible, { revalidate: false }),
+        shouldOpenChat: shouldOpenChat!,
+        setShouldOpenChat: (open: boolean) => setShouldOpenChat(open, { revalidate: false }),
+        showContinueButton: showContinueButton!,
+        setShowContinueButton: (show: boolean) => setShowContinueButton(show, { revalidate: false }),
+        continueButtonText: continueButtonText!,
+        setContinueButtonText: (text: string) => setContinueButtonText(text, { revalidate: false })
+    }
 }
 
 export function useOtherState() {
-  const { data: rfpSent, mutate: setRfpSent } = useSWR<boolean>(
-    'rfpSent',
-    null,
-    {
-      fallbackData: false
-    }
-  )
+    const { data: rfpSent, mutate: setRfpSent } = useSWR<boolean>(
+        'rfpSent',
+        null,
+        {
+            fallbackData: false
+        }
+    )
 
-  const { data: proposalReady, mutate: setProposalReady } = useSWR<boolean>(
-    'proposalReady',
-    null,
-    {
-      fallbackData: false
-    }
-  )
+    const { data: proposalReady, mutate: setProposalReady } = useSWR<boolean>(
+        'proposalReady',
+        null,
+        {
+            fallbackData: false
+        }
+    )
 
-  const { data: diagnosisProgress, mutate: setDiagnosisProgress } = useSWR<number>(
-    'diagnosisProgress',
-    null,
-    {
-      fallbackData: 0
-    }
-  )
+    const { data: diagnosisProgress, mutate: setDiagnosisProgress } = useSWR<number>(
+        'diagnosisProgress',
+        null,
+        {
+            fallbackData: 0
+        }
+    )
 
-  const { data: showDiagnosisResults, mutate: setShowDiagnosisResults } = useSWR<boolean>(
-    'showDiagnosisResults',
-    null,
-    {
-      fallbackData: false
-    }
-  )
+    const { data: showDiagnosisResults, mutate: setShowDiagnosisResults } = useSWR<boolean>(
+        'showDiagnosisResults',
+        null,
+        {
+            fallbackData: false
+        }
+    )
 
-  return {
-    rfpSent: rfpSent!,
-    setRfpSent: (sent: boolean) => setRfpSent(sent, { revalidate: false }),
-    proposalReady: proposalReady!,
-    setProposalReady: (ready: boolean) => setProposalReady(ready, { revalidate: false }),
-    diagnosisProgress: diagnosisProgress!,
-    setDiagnosisProgress: (progress: number) => setDiagnosisProgress(progress, { revalidate: false }),
-    showDiagnosisResults: showDiagnosisResults!,
-    setShowDiagnosisResults: (show: boolean) => setShowDiagnosisResults(show, { revalidate: false })
-  }
+    return {
+        rfpSent: rfpSent!,
+        setRfpSent: (sent: boolean) => setRfpSent(sent, { revalidate: false }),
+        proposalReady: proposalReady!,
+        setProposalReady: (ready: boolean) => setProposalReady(ready, { revalidate: false }),
+        diagnosisProgress: diagnosisProgress!,
+        setDiagnosisProgress: (progress: number) => setDiagnosisProgress(progress, { revalidate: false }),
+        showDiagnosisResults: showDiagnosisResults!,
+        setShowDiagnosisResults: (show: boolean) => setShowDiagnosisResults(show, { revalidate: false })
+    }
 }
 
 // Navigation hook
 export function useNavigation() {
-  const router = useRouter()
+    const router = useRouter()
 
-  const setCurrentStep = (step: Step) => {
-    const params = new URLSearchParams(window.location.search)
-    params.set('step', step)
-    router.push(`?${params.toString()}`)
-  }
+    const setCurrentStep = (step: Step) => {
+        const params = new URLSearchParams(window.location.search)
+        params.set('step', step)
+        router.push(`?${params.toString()}`)
+    }
 
-  const clearProgress = () => {
-    // Clear all SWR cache keys
-    const keys = [
-      'selectedCar',
-      'problemDescription',
-      'selectedQuote',
-      'isSignedUp',
-      'selectedDate',
-      'selectedTime',
-      'uploadedFiles',
-      'uploadedQuoteFiles',
-      'externalSocketMessages',
-      'socketVisible',
-      'shouldOpenChat',
-      'showContinueButton',
-      'continueButtonText',
-      'rfpSent',
-      'proposalReady',
-      'diagnosisProgress',
-      'showDiagnosisResults'
-    ]
-    
-    // Clear localStorage cache
-    localStorage.removeItem('app-cache')
-    
-    // Go back to welcome
-    setCurrentStep("welcome")
-  }
+    const clearProgress = () => {
+        // Clear all SWR cache keys
+        const keys = [
+            'selectedCar',
+            'problemDescription',
+            'selectedQuote',
+            'isSignedUp',
+            'selectedDate',
+            'selectedTime',
+            'uploadedFiles',
+            'uploadedQuoteFiles',
+            'externalSocketMessages',
+            'socketVisible',
+            'shouldOpenChat',
+            'showContinueButton',
+            'continueButtonText',
+            'rfpSent',
+            'proposalReady',
+            'diagnosisProgress',
+            'showDiagnosisResults'
+        ]
 
-  return { setCurrentStep, clearProgress }
+        // Clear localStorage cache
+        localStorage.removeItem('app-cache')
+
+        // Go back to welcome
+        setCurrentStep("welcome")
+    }
+
+    return { setCurrentStep, clearProgress }
 }

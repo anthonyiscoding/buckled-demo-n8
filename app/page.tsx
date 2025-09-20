@@ -5,9 +5,9 @@ import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { SocketAssistant } from "@/components/ui/socket-assistant"
 import { SWRProvider } from "@/lib/swr-provider"
-import { 
-  useSocketState, 
-  useSocketMessages, 
+import {
+  useSocketState,
+  useSocketMessages,
   useOtherState,
   useUploadedQuoteFiles,
   useNavigation
