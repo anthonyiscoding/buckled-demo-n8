@@ -1,5 +1,5 @@
-import { Label } from "@radix-ui/react-label";
-import { SelectTrigger, SelectValue, SelectContent, SelectItem, Select } from "@radix-ui/react-select";
+import { Label } from "../ui/label";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../ui/select";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { useCarSelection, useNavigation } from "@/lib/hooks";
@@ -32,7 +32,7 @@ export function CarSelection() {
                                 value={selectedCar.make}
                                 onValueChange={(value) => setSelectedCar({ ...selectedCar, make: value, model: "" })}
                             >
-                                <SelectTrigger>
+                                <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Select make" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -52,7 +52,7 @@ export function CarSelection() {
                                 onValueChange={(value) => setSelectedCar({ ...selectedCar, model: value })}
                                 disabled={!selectedCar.make}
                             >
-                                <SelectTrigger>
+                                <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Select model" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -73,7 +73,7 @@ export function CarSelection() {
                                 onValueChange={(value) => setSelectedCar({ ...selectedCar, year: value })}
                                 disabled={!selectedCar.model}
                             >
-                                <SelectTrigger>
+                                <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Select year" />
                                 </SelectTrigger>
                                 <SelectContent>

@@ -1,6 +1,7 @@
-import { Label } from "@radix-ui/react-label";
-import { SelectTrigger, SelectValue, SelectContent, SelectItem, Select } from "@radix-ui/react-select";
+import { Label } from "../ui/label";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../ui/select";
 import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { useSelectedDate, useSelectedTime, useNavigation } from "@/lib/hooks";
@@ -48,14 +49,14 @@ export function Scheduling() {
                             minDate={new Date()}
                             maxDate={new Date(Date.now() + 60 * 24 * 60 * 60 * 1000)}
                             dateFormat="MMMM d, yyyy"
-                            className="w-full px-3 py-2 border rounded-md"
+                            className="w-full px-3 py-2 border border-input rounded-md bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring disabled:cursor-not-allowed disabled:opacity-50"
                         />
                     </div>
 
                     <div>
                         <Label>Select Time</Label>
                         <Select value={selectedTime} onValueChange={setSelectedTime}>
-                            <SelectTrigger>
+                            <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Choose a time slot" />
                             </SelectTrigger>
                             <SelectContent>
