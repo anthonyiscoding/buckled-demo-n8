@@ -37,7 +37,6 @@ interface Message {
   sender: 'user' | 'socket'
   timestamp: Date
 }
-import { SpeedInsights } from "@vercel/speed-insights/next"
 
 // Custom hook for localStorage with SSR support
 function useLocalStorage<T>(key: string, defaultValue: T) {
