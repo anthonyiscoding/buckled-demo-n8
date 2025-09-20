@@ -8,6 +8,7 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'Buckled.io',
   description: 'Easily find trustworthy car service centers and mechanics in seconds',
+    generator: 'v0.app'
 }
 
 export default function RootLayout({

@@ -1,0 +1,248 @@
+"use client"
+
+import { useState, useMemo } from "react"
+import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { usePendingRequests } from "@/hooks/use-service-center-data"
+import Link from "next/link"
+import { ArrowLeft, Search, Filter, Clock, AlertTriangle, CheckCircle } from "lucide-react"
+
+export default function PendingRequestsPage() {
+  const { requests, updateRequest } = usePendingRequests()
+  const [searchTerm, setSearchTerm] = useState("")
+  const [urgencyFilter, setUrgencyFilter] = useState<string>("all")
+  const [sortBy, setSortBy] = useState<string>("newest")
+
+  // Filter and sort requests
+  const filteredRequests = useMemo(() => {
+    const filtered = requests.filter((request) => {
+      const matchesSearch =
+        request.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        request.carMake.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        request.carModel.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        request.problemDescription.toLowerCase().includes(searchTerm.toLowerCase())
+
+      const matchesUrgency = urgencyFilter === "all" || request.urgency === urgencyFilter
+
+      return matchesSearch && matchesUrgency
+    })
+
+    // Sort requests
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case "newest":
+          return new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime()
+        case "oldest":
+          return new Date(a.submittedAt).getTime() - new Date(b.submittedAt).getTime()
+        case "urgency":
+          const urgencyOrder = { high: 3, medium: 2, low: 1 }
+          return urgencyOrder[b.urgency] - urgencyOrder[a.urgency]
+        case "customer":
+          return a.customerName.localeCompare(b.customerName)
+        default:
+          return 0
+      }
+    })
+
+    return filtered
+  }, [requests, searchTerm, urgencyFilter, sortBy])
+
+  const getUrgencyColor = (urgency: string) => {
+    switch (urgency) {
+      case "high":
+        return "bg-red-100 text-red-800 border-red-200"
+      case "medium":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200"
+      case "low":
+        return "bg-green-100 text-green-800 border-green-200"
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200"
+    }
+  }
+
+  const getUrgencyIcon = (urgency: string) => {
+    switch (urgency) {
+      case "high":
+        return <AlertTriangle className="w-4 h-4" />
+      case "medium":
+        return <Clock className="w-4 h-4" />
+      case "low":
+        return <CheckCircle className="w-4 h-4" />
+      default:
+        return null
+    }
+  }
+
+  const formatTimeAgo = (date: Date) => {
+    const now = new Date()
+    const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60))
+
+    if (diffInMinutes < 60) {
+      return `${diffInMinutes} min ago`
+    } else if (diffInMinutes < 1440) {
+      return `${Math.floor(diffInMinutes / 60)} hours ago`
+    } else {
+      return `${Math.floor(diffInMinutes / 1440)} days ago`
+    }
+  }
+
+  const handleRespond = (requestId: string) => {
+    // In a real app, this would navigate to a quote creation page
+    console.log("Responding to request:", requestId)
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="border-b bg-white">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Link href="/service-center">
+                <Button variant="ghost" size="sm">
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Back to Dashboard
+                </Button>
+              </Link>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">Pending Requests</h1>
+                <p className="text-gray-600">Manage incoming customer service requests</p>
+              </div>
+            </div>
+            <div className="text-sm text-gray-500">
+              {filteredRequests.length} of {requests.length} requests
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        {/* Filters */}
+        <Card className="p-6 mb-6">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Input
+                  placeholder="Search by customer, car, or problem description..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <Select value={urgencyFilter} onValueChange={setUrgencyFilter}>
+                <SelectTrigger className="w-40">
+                  <Filter className="w-4 h-4 mr-2" />
+                  <SelectValue placeholder="Urgency" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Urgency</SelectItem>
+                  <SelectItem value="high">High</SelectItem>
+                  <SelectItem value="medium">Medium</SelectItem>
+                  <SelectItem value="low">Low</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-40">
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="newest">Newest First</SelectItem>
+                  <SelectItem value="oldest">Oldest First</SelectItem>
+                  <SelectItem value="urgency">By Urgency</SelectItem>
+                  <SelectItem value="customer">By Customer</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </Card>
+
+        {/* Requests Table */}
+        <Card>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Customer</TableHead>
+                  <TableHead>Vehicle</TableHead>
+                  <TableHead>Problem</TableHead>
+                  <TableHead>Urgency</TableHead>
+                  <TableHead>Submitted</TableHead>
+                  <TableHead>Response Time</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredRequests.map((request) => (
+                  <TableRow key={request.id} className="hover:bg-gray-50">
+                    <TableCell>
+                      <div>
+                        <div className="font-medium text-gray-900">{request.customerName}</div>
+                        <div className="text-sm text-gray-500">{request.customerEmail}</div>
+                        <div className="text-sm text-gray-500">{request.location}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="font-medium">
+                        {request.carYear} {request.carMake} {request.carModel}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="max-w-xs">
+                        <p className="text-sm text-gray-900 line-clamp-2">{request.problemDescription}</p>
+                        {request.photos && request.photos.length > 0 && (
+                          <div className="text-xs text-blue-600 mt-1">{request.photos.length} photo(s) attached</div>
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge className={`${getUrgencyColor(request.urgency)} flex items-center gap-1 w-fit`}>
+                        {getUrgencyIcon(request.urgency)}
+                        {request.urgency.charAt(0).toUpperCase() + request.urgency.slice(1)}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-sm text-gray-900">{formatTimeAgo(request.submittedAt)}</div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-sm text-gray-600">{request.estimatedResponseTime}</div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          onClick={() => handleRespond(request.id)}
+                          className="bg-blue-600 hover:bg-blue-700"
+                        >
+                          Respond
+                        </Button>
+                        <Button size="sm" variant="outline">
+                          View Details
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+
+          {filteredRequests.length === 0 && (
+            <div className="text-center py-12">
+              <div className="text-gray-500 mb-2">No requests found</div>
+              <div className="text-sm text-gray-400">
+                {searchTerm || urgencyFilter !== "all" ? "Try adjusting your filters" : "New requests will appear here"}
+              </div>
+            </div>
+          )}
+        </Card>
+      </div>
+    </div>
+  )
+}
