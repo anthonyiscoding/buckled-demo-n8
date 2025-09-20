@@ -82,11 +82,11 @@ function CustomerInterface() {
         addSocketMessage({
           text: "Welcome! I'm here to help you resolve your car diagnosis and repair needs. I'll guide you through the main steps to get you back on the road.",
           sender: 'socket'
-        })
+        }, true) // Clear messages first
         setShouldOpenChat(true)
         setShowContinueButton(true)
         setContinueButtonText("Get Started")
-      }, 1000)
+      }, 100)
       return () => clearTimeout(timer)
     }
   }, [currentStep])
@@ -105,7 +105,7 @@ function CustomerInterface() {
       }, 500)
       return () => clearTimeout(timer)
     }
-  }, [currentStep])
+  }, [currentStep, setSocketVisible, addSocketMessage, setShouldOpenChat, setShowContinueButton, setContinueButtonText])
 
   useEffect(() => {
     if (currentStep === "quote-scanning") {
@@ -139,7 +139,7 @@ function CustomerInterface() {
         clearTimeout(advanceTimer)
       }
     }
-  }, [currentStep])
+  }, [currentStep, setRfpSent, setProposalReady, setCurrentStep])
 
   useEffect(() => {
     if (currentStep === "diagnosis") {
@@ -164,7 +164,7 @@ function CustomerInterface() {
 
       requestAnimationFrame(animateProgress)
     }
-  }, [currentStep])
+  }, [currentStep, setDiagnosisProgress, setShowDiagnosisResults])
 
   const handleSocketClick = () => {
     setShouldOpenChat(true)
@@ -268,10 +268,8 @@ function SearchParamsLoader() {
 // Default export wrapped in Suspense and SWR Provider
 export default function Page() {
   return (
-    <SWRProvider>
-      <Suspense fallback={<SearchParamsLoader />}>
-        <CustomerInterface />
-      </Suspense>
-    </SWRProvider>
+    <Suspense fallback={<SearchParamsLoader />}>
+      <CustomerInterface />
+    </Suspense>
   )
 }

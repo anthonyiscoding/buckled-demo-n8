@@ -2,6 +2,7 @@
 
 import useSWR from 'swr'
 import { useRouter } from 'next/navigation'
+import { useCallback } from 'react'
 
 // Types
 interface CarSelection {
@@ -168,19 +169,34 @@ export function useSocketMessages() {
         timestamp: msg.timestamp instanceof Date ? msg.timestamp : new Date(msg.timestamp)
     }))
 
-    const addSocketMessage = (message: Omit<Message, 'id' | 'timestamp'>) => {
+    const addSocketMessage = useCallback((message: Omit<Message, 'id' | 'timestamp'>, clearFirst: boolean = false) => {
         const newMessage: Message = {
             ...message,
             id: Date.now().toString(),
             timestamp: new Date()
         }
-        setExternalSocketMessages([...normalizedMessages, newMessage], { revalidate: false })
-    }
+        const currentMessages = clearFirst ? [] : normalizedMessages
+        const isDuplicate = currentMessages.some((m) => {
+            return m.text === newMessage.text
+        })
+
+        if (isDuplicate) {
+            console.log('Duplicate message prevented:', newMessage.text)
+            return
+        }
+
+        setExternalSocketMessages([...currentMessages, newMessage], { revalidate: false })
+    }, [normalizedMessages, setExternalSocketMessages])
+
+    const clearSocketMessages = useCallback(() => {
+        setExternalSocketMessages([], { revalidate: false })
+    }, [setExternalSocketMessages])
 
     return {
         externalSocketMessages: normalizedMessages,
         setExternalSocketMessages: (messages: Message[]) => setExternalSocketMessages(messages, { revalidate: false }),
-        addSocketMessage
+        addSocketMessage,
+        clearSocketMessages
     }
 }
 
@@ -219,13 +235,13 @@ export function useSocketState() {
 
     return {
         socketVisible: socketVisible!,
-        setSocketVisible: (visible: boolean) => setSocketVisible(visible, { revalidate: false }),
+        setSocketVisible: useCallback((visible: boolean) => setSocketVisible(visible, { revalidate: false }), [setSocketVisible]),
         shouldOpenChat: shouldOpenChat!,
-        setShouldOpenChat: (open: boolean) => setShouldOpenChat(open, { revalidate: false }),
+        setShouldOpenChat: useCallback((open: boolean) => setShouldOpenChat(open, { revalidate: false }), [setShouldOpenChat]),
         showContinueButton: showContinueButton!,
-        setShowContinueButton: (show: boolean) => setShowContinueButton(show, { revalidate: false }),
+        setShowContinueButton: useCallback((show: boolean) => setShowContinueButton(show, { revalidate: false }), [setShowContinueButton]),
         continueButtonText: continueButtonText!,
-        setContinueButtonText: (text: string) => setContinueButtonText(text, { revalidate: false })
+        setContinueButtonText: useCallback((text: string) => setContinueButtonText(text, { revalidate: false }), [setContinueButtonText])
     }
 }
 
@@ -264,13 +280,13 @@ export function useOtherState() {
 
     return {
         rfpSent: rfpSent!,
-        setRfpSent: (sent: boolean) => setRfpSent(sent, { revalidate: false }),
+        setRfpSent: useCallback((sent: boolean) => setRfpSent(sent, { revalidate: false }), [setRfpSent]),
         proposalReady: proposalReady!,
-        setProposalReady: (ready: boolean) => setProposalReady(ready, { revalidate: false }),
+        setProposalReady: useCallback((ready: boolean) => setProposalReady(ready, { revalidate: false }), [setProposalReady]),
         diagnosisProgress: diagnosisProgress!,
-        setDiagnosisProgress: (progress: number) => setDiagnosisProgress(progress, { revalidate: false }),
+        setDiagnosisProgress: useCallback((progress: number) => setDiagnosisProgress(progress, { revalidate: false }), [setDiagnosisProgress]),
         showDiagnosisResults: showDiagnosisResults!,
-        setShowDiagnosisResults: (show: boolean) => setShowDiagnosisResults(show, { revalidate: false })
+        setShowDiagnosisResults: useCallback((show: boolean) => setShowDiagnosisResults(show, { revalidate: false }), [setShowDiagnosisResults])
     }
 }
 
@@ -278,13 +294,13 @@ export function useOtherState() {
 export function useNavigation() {
     const router = useRouter()
 
-    const setCurrentStep = (step: Step) => {
+    const setCurrentStep = useCallback((step: Step) => {
         const params = new URLSearchParams(window.location.search)
         params.set('step', step)
         router.push(`?${params.toString()}`)
-    }
+    }, [router])
 
-    const clearProgress = () => {
+    const clearProgress = useCallback(() => {
         // Clear all SWR cache keys
         const keys = [
             'selectedCar',
@@ -311,7 +327,7 @@ export function useNavigation() {
 
         // Go back to welcome
         setCurrentStep("welcome")
-    }
+    }, [setCurrentStep])
 
     return { setCurrentStep, clearProgress }
 }
