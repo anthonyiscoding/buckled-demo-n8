@@ -25,7 +25,7 @@ export function useSWRReset() {
 
 export function SWRProvider({ children }: SWRProviderProps) {
     const [isClient, setIsClient] = useState(false)
-    const [cacheKey, setCacheKey] = useState(0) // Force re-render with new provider
+    const [useMemoryCache, setUseMemoryCache] = useState(false) // Switch between localStorage and memory cache
 
     useEffect(() => {
         setIsClient(true)
@@ -38,8 +38,13 @@ export function SWRProvider({ children }: SWRProviderProps) {
             localStorage.clear()
         }
 
-        // Force a new provider instance by updating the key
-        setCacheKey(prev => prev + 1)
+        // Switch to memory cache to force fresh state
+        setUseMemoryCache(true)
+
+        // After a brief moment, switch back to localStorage cache for persistence
+        setTimeout(() => {
+            setUseMemoryCache(false)
+        }, 100)
     }
 
     if (!isClient) {
@@ -54,9 +59,9 @@ export function SWRProvider({ children }: SWRProviderProps) {
     return (
         <SWRContext.Provider value={{ resetCache }}>
             <SWRConfig
-                key={cacheKey} // This forces a complete re-mount with fresh cache
+                key={useMemoryCache ? 'memory' : 'persistent'} // Different keys for different providers
                 value={{
-                    provider: () => new Map(), // Fresh Map for each reset
+                    provider: useMemoryCache ? () => new Map() : () => localStorageProvider(),
                     fallback: {},
                 }}
             >

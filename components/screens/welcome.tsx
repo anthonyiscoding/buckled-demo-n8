@@ -5,6 +5,8 @@ export function Welcome() {
     const { hasExistingData, lastStep } = useHasExistingData()
     const { setCurrentStep, clearProgress } = useNavigation()
 
+    console.log('Welcome component - hasExistingData:', hasExistingData, 'lastStep:', lastStep)
+
     const handleContinue = () => {
         setCurrentStep(lastStep)
     }
@@ -12,6 +14,8 @@ export function Welcome() {
     const handleStartFresh = () => {
         clearProgress()
         setCurrentStep("car-selection")
+        // Don't call setCurrentStep here since clearProgress already navigates to welcome
+        // The user can then click "Get Started" to begin fresh
     }
 
     if (hasExistingData) {
