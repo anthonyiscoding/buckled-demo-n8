@@ -87,6 +87,7 @@ function CustomerInterface() {
             text: "Welcome back! I see you have some information saved from before. You can continue where you left off or start fresh with a new quote. What would you like to do?",
             sender: 'socket'
           }, true) // Clear messages first
+          setShowContinueButton(false)
         } else {
           addSocketMessage({
             text: "Welcome! I'm here to help you resolve your car diagnosis and repair needs. I'll guide you through the main steps to get you back on the road.",
@@ -278,8 +279,10 @@ function SearchParamsLoader() {
 // Default export wrapped in Suspense and SWR Provider
 export default function Page() {
   return (
-    <Suspense fallback={<SearchParamsLoader />}>
-      <CustomerInterface />
-    </Suspense>
+    <SWRProvider>
+      <Suspense fallback={<SearchParamsLoader />}>
+        <CustomerInterface />
+      </Suspense>
+    </SWRProvider>
   )
 }

@@ -1,8 +1,9 @@
 "use client"
 
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
+import { useSWRReset } from './swr-provider'
 
 // Types
 interface CarSelection {
@@ -338,6 +339,7 @@ export function useHasExistingData() {
 // Navigation hook
 export function useNavigation() {
     const router = useRouter()
+    const { resetCache } = useSWRReset()
 
     const setCurrentStep = useCallback((step: Step) => {
         const params = new URLSearchParams(window.location.search)
@@ -346,33 +348,12 @@ export function useNavigation() {
     }, [router])
 
     const clearProgress = useCallback(() => {
-        // Clear all SWR cache keys
-        const keys = [
-            'selectedCar',
-            'problemDescription',
-            'selectedQuote',
-            'isSignedUp',
-            'selectedDate',
-            'selectedTime',
-            'uploadedFiles',
-            'uploadedQuoteFiles',
-            'externalSocketMessages',
-            'socketVisible',
-            'shouldOpenChat',
-            'showContinueButton',
-            'continueButtonText',
-            'rfpSent',
-            'proposalReady',
-            'diagnosisProgress',
-            'showDiagnosisResults'
-        ]
+        // Use SWR's provider reset approach - this creates a completely fresh cache
+        resetCache()
 
-        // Clear localStorage cache
-        localStorage.removeItem('app-cache')
-
-        // Go back to welcome
+        // Navigate back to welcome
         setCurrentStep("welcome")
-    }, [setCurrentStep])
+    }, [resetCache, setCurrentStep])
 
     return { setCurrentStep, clearProgress }
 }
