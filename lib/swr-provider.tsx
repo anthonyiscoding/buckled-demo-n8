@@ -3,6 +3,14 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { SWRConfig } from 'swr'
 import { localStorageProvider } from './swr-config'
+import {
+    defaultPendingRequests,
+    defaultActiveQuotes,
+    defaultScheduledServices,
+    defaultCustomerReviews,
+    defaultServiceCenterProfile,
+    defaultRevenueData,
+} from './service-center-data'
 
 interface SWRProviderProps {
     children: React.ReactNode
@@ -25,7 +33,7 @@ export function useSWRReset() {
 
 export function SWRProvider({ children }: SWRProviderProps) {
     const [isClient, setIsClient] = useState(false)
-    const [useMemoryCache, setUseMemoryCache] = useState(false) // Switch between localStorage and memory cache
+    const [cacheKey, setCacheKey] = useState(0) // Use a counter to force complete reset
 
     useEffect(() => {
         setIsClient(true)
@@ -38,13 +46,8 @@ export function SWRProvider({ children }: SWRProviderProps) {
             localStorage.clear()
         }
 
-        // Switch to memory cache to force fresh state
-        setUseMemoryCache(true)
-
-        // After a brief moment, switch back to localStorage cache for persistence
-        setTimeout(() => {
-            setUseMemoryCache(false)
-        }, 100)
+        // Force a complete SWR reset by changing the key
+        setCacheKey(prev => prev + 1)
     }
 
     if (!isClient) {
@@ -59,10 +62,17 @@ export function SWRProvider({ children }: SWRProviderProps) {
     return (
         <SWRContext.Provider value={{ resetCache }}>
             <SWRConfig
-                key={useMemoryCache ? 'memory' : 'persistent'} // Different keys for different providers
+                key={cacheKey} // This will force a complete reset when changed
                 value={{
-                    provider: useMemoryCache ? () => new Map() : () => localStorageProvider(),
-                    fallback: {},
+                    provider: () => localStorageProvider(),
+                    fallback: {
+                        'service-center/pending-requests': defaultPendingRequests,
+                        'service-center/active-quotes': defaultActiveQuotes,
+                        'service-center/scheduled-services': defaultScheduledServices,
+                        'service-center/customer-reviews': defaultCustomerReviews,
+                        'service-center/profile': defaultServiceCenterProfile,
+                        'service-center/revenue-data': defaultRevenueData,
+                    },
                 }}
             >
                 {children}

@@ -93,6 +93,7 @@ export default function ScheduledServicesPage() {
   }
 
   const formatDate = (date: Date) => {
+    date = new Date(date)
     return new Intl.DateTimeFormat("en-US", {
       weekday: "short",
       month: "short",
