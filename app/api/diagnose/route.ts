@@ -67,6 +67,7 @@ export async function POST(request: Request) {
             request,
             body
         }
+        console.error(failedRequest)
         return Response.json(failedRequest, { status: 500 })
     }
 
