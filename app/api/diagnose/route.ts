@@ -2,6 +2,25 @@ import Instructor from "@instructor-ai/instructor";
 import OpenAI from "openai"
 import { z } from "zod"
 
+const ALLOWED_ORIGIN =
+    process.env.NODE_ENV === 'production'
+        ? 'https://v0-customer-interface-pwa.vercel.app/'
+        : '*';
+
+
+export async function OPTIONS() {
+    return new Response(null, {
+        status: 200,
+        headers: {
+            'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            'Access-Control-Allow-Credentials': 'true',
+        },
+    });
+
+}
+
 const openai = new OpenAI({
     apiKey: process.env.DEEPINFRA_API_KEY,
     baseURL: 'https://api.deepinfra.com/v1/openai',
@@ -26,6 +45,7 @@ const DiagnosticSchema = z.object({
 
 export type Diagnostics = z.infer<typeof DiagnosticSchema>
 
+
 export async function POST(request: Request) {
     const body = await request.json()
     const { issues } = body
@@ -38,5 +58,5 @@ export async function POST(request: Request) {
         }
     })
 
-    return Response.json(diagnosis)
+    return Response.json(diagnosis, { headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN } })
 }
