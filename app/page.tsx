@@ -11,12 +11,6 @@ export default function HomePage() {
   const [isResetting, setIsResetting] = useState(false)
   const { clearAllAppData } = useNavigation()
 
-  useEffect(() => {
-    const request = fetch("/api/diagnose")
-    request.then((response) => {
-      console.log(response)
-    })
-  }, [])
   const handleResetDemo = () => {
     setIsResetting(true)
     // resetAllAppData()

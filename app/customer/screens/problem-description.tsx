@@ -3,27 +3,62 @@ import { ArrowLeft } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/card";
 import { Textarea } from "../../../components/ui/textarea";
 import { Button } from "../../../components/ui/button";
-import { useCarSelection, useProblemDescription, useNavigation } from "@/lib/hooks";
+import { useCarSelection, useProblemDescription, useNavigation, useOtherState, useSocketMessages, useSocketState } from "@/lib/hooks";
 import { useEffect } from "react";
+import { error } from "console";
 
 export function ProblemDescription() {
     const { selectedCar } = useCarSelection()
     const { problemDescription, setProblemDescription } = useProblemDescription()
     const { setCurrentStep } = useNavigation()
+    const {
+        setDiagnosisLoading,
+        setDiagnosisResponse,
+        setShowInvalidRequestMessage,
+        diagnosisLoading,
+        showInvalidRequestMessage
+    } = useOtherState()
+    const { addSocketMessage } = useSocketMessages()
+    const { setShouldOpenChat, setShowContinueButton, setContinueButtonText } = useSocketState()
 
-    const handleProblemSubmission = () => {
+    // Reset invalid request state when component mounts
+    useEffect(() => {
+        if (showInvalidRequestMessage) {
+            setShowInvalidRequestMessage(false)
+            setShowContinueButton(false)
+        }
+    }, [showInvalidRequestMessage, setShowInvalidRequestMessage, setShowContinueButton])
+
+    const handleProblemSubmission = async () => {
         console.log(problemDescription)
+        setDiagnosisLoading(true)
+
         fetch("/api/diagnose", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
-                // 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: JSON.stringify({
                 issues: problemDescription
             })
-        }).then(response => console.log(response.json()))
+        }).then(response => response.json()).then((diagnosisData) => {
+            console.log("Diagnosis response:", diagnosisData)
 
+            // Store the response
+            setDiagnosisResponse(diagnosisData)
+
+            // If it's not a real request, store this state but still allow progression
+            if (!diagnosisData.isRealRequest) {
+                setShowInvalidRequestMessage(true)
+            }
+            setDiagnosisLoading(false)
+        }).catch((error) => {
+            console.error("Error submitting problem:", error)
+            setDiagnosisLoading(false)
+
+        })
+
+        // Always proceed, we'll prompt the user if the request was bad
         setCurrentStep("media-upload")
     }
 

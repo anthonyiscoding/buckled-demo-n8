@@ -72,11 +72,15 @@ function CustomerInterface() {
     setDiagnosisProgress,
     setShowDiagnosisResults,
     setRfpSent,
-    setProposalReady
+    setProposalReady,
+    diagnosisResponse,
+    diagnosisLoading,
+    showInvalidRequestMessage,
+    setShowInvalidRequestMessage
   } = useOtherState()
 
   const { uploadedQuoteFiles } = useUploadedQuoteFiles()
-  const { setCurrentStep, clearProgress } = useNavigation()
+  const { setCurrentStep, clearProgressCustomer } = useNavigation()
   const { hasExistingData } = useHasExistingData()
 
   // Socket refers to the visual character, not web sockets
@@ -166,6 +170,13 @@ function CustomerInterface() {
     if (currentStep === "diagnosis") {
       setDiagnosisProgress(0)
       setShowDiagnosisResults(false)
+    }
+  }, [currentStep, setDiagnosisProgress, setShowDiagnosisResults])
+
+  // Separate effect to handle diagnosis progress based on API response
+  useEffect(() => {
+    if (currentStep === "diagnosis" && diagnosisResponse && !diagnosisLoading) {
+      // Only start progress when we have a response and we're not loading
       const duration = 3000
       const startTime = Date.now()
 
@@ -185,7 +196,7 @@ function CustomerInterface() {
 
       requestAnimationFrame(animateProgress)
     }
-  }, [currentStep, setDiagnosisProgress, setShowDiagnosisResults])
+  }, [currentStep, diagnosisResponse, diagnosisLoading, setDiagnosisProgress, setShowDiagnosisResults])
 
   const handleSocketClick = () => {
     setShouldOpenChat(true)
@@ -204,6 +215,10 @@ function CustomerInterface() {
       setCurrentStep("car-selection")
     } else if (currentStep === "confirmation") {
       setShowContinueButton(false)
+    } else if (currentStep === "diagnosis" && showInvalidRequestMessage) {
+      // Handle retry - reset invalid request state and go back to problem description
+      setShowInvalidRequestMessage(false)
+      setCurrentStep("problem-description")
     }
   }
 

@@ -235,6 +235,22 @@ export function useOtherState() {
         },
     )
 
+    const { data: diagnosisLoading, mutate: setDiagnosisLoading } = useSWR<boolean>("diagnosisLoading", null, {
+        fallbackData: false,
+    })
+
+    const { data: diagnosisResponse, mutate: setDiagnosisResponse } = useSWR<any>("diagnosisResponse", null, {
+        fallbackData: null,
+    })
+
+    const { data: showInvalidRequestMessage, mutate: setShowInvalidRequestMessage } = useSWR<boolean>(
+        "showInvalidRequestMessage",
+        null,
+        {
+            fallbackData: false,
+        },
+    )
+
     return {
         rfpSent: rfpSent!,
         setRfpSent: useCallback((sent: boolean) => setRfpSent(sent, { revalidate: false }), [setRfpSent]),
@@ -252,6 +268,21 @@ export function useOtherState() {
         setShowDiagnosisResults: useCallback(
             (show: boolean) => setShowDiagnosisResults(show, { revalidate: false }),
             [setShowDiagnosisResults],
+        ),
+        diagnosisLoading: diagnosisLoading!,
+        setDiagnosisLoading: useCallback(
+            (loading: boolean) => setDiagnosisLoading(loading, { revalidate: false }),
+            [setDiagnosisLoading],
+        ),
+        diagnosisResponse: diagnosisResponse,
+        setDiagnosisResponse: useCallback(
+            (response: any) => setDiagnosisResponse(response, { revalidate: false }),
+            [setDiagnosisResponse],
+        ),
+        showInvalidRequestMessage: showInvalidRequestMessage!,
+        setShowInvalidRequestMessage: useCallback(
+            (show: boolean) => setShowInvalidRequestMessage(show, { revalidate: false }),
+            [setShowInvalidRequestMessage],
         ),
     }
 }
