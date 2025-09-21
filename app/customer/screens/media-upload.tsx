@@ -27,7 +27,7 @@ export function MediaUpload() {
                 <CardContent className="space-y-6">
                     <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
                         <UploadIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                        <p className="text-gray-600 mb-4">Drag and drop files here, or click to browse</p>
+                        <p className="text-gray-600 mb-4">Upload photos of your car's issue(s) to get a more accurate quote</p>
                         <div className="flex gap-4 justify-center">
                             <div className="relative">
                                 <Button variant="outline" className="flex items-center gap-2 bg-transparent">

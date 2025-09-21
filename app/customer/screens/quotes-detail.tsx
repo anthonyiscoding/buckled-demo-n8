@@ -4,7 +4,6 @@ import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui
 import { StarRating } from "../../../components/ui/star-rating";
 import { Button } from "../../../components/ui/button";
 import { useSelectedQuote, useCarSelection, useProblemDescription, useNavigation, useOtherState } from "@/lib/hooks";
-import { Diagnostics } from "@/app/api/diagnose/route";
 
 export function QuotesDetail() {
     const { selectedQuote } = useSelectedQuote()
@@ -15,6 +14,7 @@ export function QuotesDetail() {
 
     // TODO: Improve this
     var finalPrice = diagnosisResponse.services.reduce((total, service) => total + ((service.priceRange.minimumPrice + service.priceRange.maximumPrice) / 2), 0)
+    finalPrice = Math.round((finalPrice / 10)) * 10
     // if (finalPrice < 0 || !(finalPrice instanceof Number)) {
     //     finalPrice = selectedQuote.price
     // }
@@ -33,8 +33,8 @@ export function QuotesDetail() {
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex justify-between items-center">
-                                <span>Service Quote</span>
-                                <span className="text-2xl text-[#f16c63]">Estimate: ${finalPrice}</span>
+                                <span>Service Estimate</span>
+                                <span className="text-2xl text-[#f16c63]">${finalPrice}</span>
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-6">
