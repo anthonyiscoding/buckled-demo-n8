@@ -116,31 +116,6 @@ export function Diagnosis() {
                             <p className="text-sm text-gray-600 animate-fade-in-delayed-3">
                                 We recommend getting a more detailed description to provide accurate quotes.
                             </p>
-                            <Button
-                                onClick={() => setCurrentStep("quotes")}
-                                disabled={isDisabled}
-                                className="w-full bg-[#f16c63] hover:bg-[#e55a51] text-white animate-fade-in-delayed-4 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                Look at General Quotes
-                            </Button>
-                        </CardContent>
-                    </Card>
-                </div>
-            )}
-
-            {/* Show retry button if invalid request */}
-            {showInvalidRequestMessage && showContinueButton && (
-                <div className="animate-fade-in mt-6">
-                    <Card>
-                        <CardContent className="pt-6">
-                            <div className="text-center">
-                                <Button
-                                    onClick={handleRetry}
-                                    className="bg-[#f16c63] hover:bg-[#e55a51] text-white"
-                                >
-                                    Retry Description
-                                </Button>
-                            </div>
                         </CardContent>
                     </Card>
                 </div>
