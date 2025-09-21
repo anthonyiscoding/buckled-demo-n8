@@ -1,16 +1,23 @@
 import { Label } from "@radix-ui/react-label";
-import { CheckSquare, ArrowLeft } from "lucide-react";
+import { CheckSquare, ArrowLeft, Check } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/card";
 import { StarRating } from "../../../components/ui/star-rating";
 import { Button } from "../../../components/ui/button";
-import { useSelectedQuote, useCarSelection, useProblemDescription, useNavigation } from "@/lib/hooks";
+import { useSelectedQuote, useCarSelection, useProblemDescription, useNavigation, useOtherState } from "@/lib/hooks";
+import { Diagnostics } from "@/app/api/diagnose/route";
 
 export function QuotesDetail() {
     const { selectedQuote } = useSelectedQuote()
     const { selectedCar } = useCarSelection()
     const { problemDescription } = useProblemDescription()
     const { setCurrentStep } = useNavigation()
+    const { diagnosisResponse } = useOtherState()
 
+    // TODO: Improve this
+    var finalPrice = diagnosisResponse.services.reduce((total, service) => total + ((service.priceRange.minimumPrice + service.priceRange.maximumPrice) / 2), 0)
+    // if (finalPrice < 0 || !(finalPrice instanceof Number)) {
+    //     finalPrice = selectedQuote.price
+    // }
     return (
         <div className="max-w-2xl mx-auto px-6 py-12">
             {selectedQuote && (
@@ -27,7 +34,7 @@ export function QuotesDetail() {
                         <CardHeader>
                             <CardTitle className="flex justify-between items-center">
                                 <span>Service Quote</span>
-                                <span className="text-2xl text-[#f16c63]">${selectedQuote.price}</span>
+                                <span className="text-2xl text-[#f16c63]">Estimate: ${finalPrice}</span>
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-6">
@@ -54,16 +61,14 @@ export function QuotesDetail() {
                                     <p className="mb-2">{selectedCar.year} {selectedCar.make} {selectedCar.model}</p>
                                     <Label className="font-bold">Issue</Label>
                                     <p className="mb-2">{problemDescription}</p>
-                                    <Label className="font-bold">Suggested Services</Label>
+                                    <Label className="font-bold">Suggested Services (Estimate)</Label>
                                     <ul className="mb-2">
-                                        <li className="flex items-center">
-                                            <CheckSquare className="w-5 h-5 mr-2 text-green-900" />
-                                            Transmission fluid change
-                                        </li>
-                                        <li className="flex items-center">
-                                            <CheckSquare className="w-5 h-5 mr-2 text-green-900" />
-                                            Brake pad replacement
-                                        </li>
+                                        {diagnosisResponse.services.map((service: any, index: number) => (
+                                            <li key={index} className={`flex items-center gap-2 animate-fade-in-delayed-${index + 1}`}>
+                                                <Check className="w-4 h-4 text-green-900" />
+                                                {service.name} (${(service.priceRange.minimumPrice + service.priceRange.maximumPrice) / 2})
+                                            </li>
+                                        ))}
                                     </ul>
                                 </div>
                             </div>
