@@ -7,7 +7,7 @@ const ALLOWED_ORIGIN =
         ? 'https://v0-customer-interface-pwa.vercel.app/'
         : '*';
 
-
+const AI_MODEL = process.env.AI_MODEL ?? "google/gemma-3-27b-it"
 export async function OPTIONS() {
     return new Response(null, {
         status: 200,
@@ -32,7 +32,7 @@ const client = Instructor({
 })
 
 const DiagnosticSchema = z.object({
-    isRealRequest: z.boolean().describe("Determine if the request is a genuine vehicle diagnostic request or not"),
+    isRealRequest: z.boolean().describe("Determine if the request is a genuine vehicle diagnostic request or not."),
     services: z.array(z.object({
         name: z.string().describe("A short name for the service (ex. brake replacement, oil change)."),
         description: z.string().describe("A short description of what the service center will do."),
@@ -53,11 +53,12 @@ export async function POST(request: Request) {
     try {
         const diagnosis = await client.chat.completions.create({
             messages: [{ role: "user", content: `The customer is reporting the following issue(s), as a professional mechanic please succinctly diagnose the following issue(s): ${issues}` }],
-            model: "google/gemma-3-12b-it",
+            model: AI_MODEL,
             response_model: {
                 schema: DiagnosticSchema,
                 name: "User"
             },
+            max_retries: 3
         })
 
         return Response.json(diagnosis, { headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN } })
@@ -65,7 +66,6 @@ export async function POST(request: Request) {
         const failedRequest = {
             error,
             request,
-            body
         }
         console.error(failedRequest)
         return Response.json(failedRequest, { status: 500 })
