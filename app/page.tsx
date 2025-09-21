@@ -26,9 +26,9 @@ export default function HomePage() {
       <div className="container mx-auto px-6 py-16">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Welcome to Buckled.io</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Welcome to the Buckled.io Demo</h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Easily find trustworthy car service centers and mechanics in seconds
+            Below you will find both customer and service center experiences
           </p>
           <div className="mt-6">
             <Button
@@ -57,9 +57,9 @@ export default function HomePage() {
                   />
                 </svg>
               </div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">I'm a Customer</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">Customer Experience</h2>
               <p className="text-gray-600 mb-8 leading-relaxed">
-                Get your car diagnosed, find trusted mechanics, and book repair services with ease.
+                Customers can get their car diagnosed, find trusted mechanics, and book repair services with ease leading to increased trust in Service Centers and repeat business.
               </p>
               <Link href="/customer" className="block">
                 <Button
@@ -85,9 +85,9 @@ export default function HomePage() {
                   />
                 </svg>
               </div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">I'm a Service Center</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">Service Center Experience</h2>
               <p className="text-gray-600 mb-8 leading-relaxed">
-                Manage customer requests, provide quotes, and grow your auto repair business.
+                Service Centers can seamlessly manage customer requests, provide quotes, and grow their auto repair business at below market rate acquisiton costs.
               </p>
               <Link href="/service-center" className="block">
                 <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 text-lg font-medium" size="lg">
