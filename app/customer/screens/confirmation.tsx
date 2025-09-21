@@ -26,21 +26,9 @@ export function Confirmation() {
                 <CardContent className="space-y-4">
                     <p className="text-gray-700">
                         See that was easy! We're sending off this RFP to {selectedQuote?.serviceCenterName}. Remember to check your
-                        email, they will be in touch soon. Our Service Centers are top-notch, customer-focused, and are always guaranteed
+                        email, they will be in touch soon. Our Service Centers are top-notch, customer-focused, and always guaranteed
                         to respond within 24 hours!
                     </p>
-
-                    <div className="bg-success animate-pulse rounded-lg p-4 animate-fade-in-delayed">
-                        <div className="flex items-center justify-center mb-2">
-                            <div className="flex items-center gap-2 text-lg">
-                                <span>📧</span>
-                                <span>RFP</span>
-                                <span>→</span>
-                                <span>🔧</span>
-                                <span>Sent</span>
-                            </div>
-                        </div>
-                    </div>
 
                     <div className="bg-gray-50 rounded-lg p-4 animate-fade-in-delayed-1">
                         <h4 className="font-semibold mb-2">Appointment Details:</h4>
