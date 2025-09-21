@@ -49,14 +49,26 @@ export type Diagnostics = z.infer<typeof DiagnosticSchema>
 export async function POST(request: Request) {
     const body = await request.json()
     const { issues } = body
-    const diagnosis = await client.chat.completions.create({
-        messages: [{ role: "user", content: `The customer is reporting the following issue(s), as a professional mechanic please succinctly diagnose the following issue(s): ${issues}` }],
-        model: "google/gemma-3-12b-it",
-        response_model: {
-            schema: DiagnosticSchema,
-            name: "User"
-        }
-    })
 
-    return Response.json(diagnosis, { headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN } })
+    try {
+        const diagnosis = await client.chat.completions.create({
+            messages: [{ role: "user", content: `The customer is reporting the following issue(s), as a professional mechanic please succinctly diagnose the following issue(s): ${issues}` }],
+            model: "google/gemma-3-12b-it",
+            response_model: {
+                schema: DiagnosticSchema,
+                name: "User"
+            },
+        })
+
+        return Response.json(diagnosis, { headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN } })
+    } catch (error) {
+        const failedRequest = {
+            error,
+            request,
+            body
+        }
+        return Response.json(failedRequest, { status: 500 })
+    }
+
+
 }
