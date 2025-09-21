@@ -68,7 +68,7 @@ export function Diagnosis() {
                                     {diagnosisResponse.services.map((service: any, index: number) => (
                                         <li key={index} className={`flex items-center gap-2 animate-fade-in-delayed-${index + 1}`}>
                                             <Check className="w-4 h-4 text-green-900" />
-                                            {service.name} ({service.priceRange})
+                                            {service.name} (${service.priceRange.minimumPrice} - ${service.priceRange.maximumPrice})
                                         </li>
                                     ))}
                                 </ul>
@@ -114,7 +114,7 @@ export function Diagnosis() {
                                 </ul>
                             </div>
                             <p className="text-sm text-gray-600 animate-fade-in-delayed-3">
-                                We recommend getting a more detailed description to provide accurate quotes.
+                                Please refine your description to provide accurate quotes.
                             </p>
                         </CardContent>
                     </Card>

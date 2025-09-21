@@ -1,10 +1,14 @@
 "use client";
-export function getMockQuotes() {
+import { Diagnostics } from "@/app/api/diagnose/route";
+
+export function getMockQuotes(diagnosis: Diagnostics) {
+    const minPriceTotal = diagnosis.services.reduce((total, service) => total + service.priceRange.minimumPrice, 0)
+    const maxPriceTotal = diagnosis.services.reduce((total, service) => total + service.priceRange.maximumPrice, 0)
     return [
         {
             id: 1,
             serviceCenterName: "AutoCare Plus",
-            price: 450,
+            price: `${Math.round(minPriceTotal * 1.2 / 10) * 10} - ${Math.round(maxPriceTotal * 1.2 / 10) * 10}`,
             rating: 4.8,
             description: "Transmission fluid change and brake pad replacement",
             details: "Complete transmission fluid flush with premium fluid, front and rear brake pad replacement with ceramic pads, brake system inspection",
@@ -14,7 +18,7 @@ export function getMockQuotes() {
         {
             id: 2,
             serviceCenterName: "Precision Motors",
-            price: 425,
+            price: `${Math.round(minPriceTotal * 0.9 / 10) * 10} - ${Math.round(maxPriceTotal * 0.9 / 10) * 10}`,
             rating: 4.7,
             description: "Transmission service and brake work",
             details: "Transmission fluid and filter change, brake pad replacement, rotor resurfacing if needed",
@@ -24,7 +28,7 @@ export function getMockQuotes() {
         {
             id: 3,
             serviceCenterName: "Elite Auto Service",
-            price: 380,
+            price: `${Math.round(minPriceTotal * 1 / 10) * 10} - ${Math.round(maxPriceTotal * 1 / 10) * 10}`,
             rating: 4.9,
             description: "Complete transmission and brake service",
             details: "Full transmission service, brake pad and rotor replacement, brake fluid flush",
@@ -34,7 +38,7 @@ export function getMockQuotes() {
         {
             id: 4,
             serviceCenterName: "Quick Fix Garage",
-            price: 320,
+            price: `${Math.round(minPriceTotal * 0.85 / 10) * 10} - ${Math.round(maxPriceTotal * 0.85 / 10) * 10}`,
             rating: 4.6,
             description: "Transmission fluid and brake maintenance",
             details: "Transmission fluid change, brake pad replacement, basic inspection",
@@ -44,7 +48,7 @@ export function getMockQuotes() {
         {
             id: 5,
             serviceCenterName: "Master Mechanics",
-            price: 395,
+            price: `${Math.round(minPriceTotal * 1.1 / 10) * 10} - ${Math.round(maxPriceTotal * 1.1 / 10) * 10}`,
             rating: 4.8,
             description: "Professional transmission and brake service",
             details: "Premium transmission service, high-performance brake pads, comprehensive inspection",

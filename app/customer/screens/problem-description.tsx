@@ -5,7 +5,6 @@ import { Textarea } from "../../../components/ui/textarea";
 import { Button } from "../../../components/ui/button";
 import { useCarSelection, useProblemDescription, useNavigation, useOtherState, useSocketMessages, useSocketState } from "@/lib/hooks";
 import { useEffect } from "react";
-import { error } from "console";
 
 export function ProblemDescription() {
     const { selectedCar } = useCarSelection()
@@ -21,6 +20,10 @@ export function ProblemDescription() {
     const { addSocketMessage } = useSocketMessages()
     const { setShouldOpenChat, setShowContinueButton, setContinueButtonText } = useSocketState()
 
+    useEffect(() => {
+        setDiagnosisLoading(false)
+        setDiagnosisResponse({})
+    }, [showInvalidRequestMessage])
     // Reset invalid request state when component mounts
     useEffect(() => {
         if (showInvalidRequestMessage) {
@@ -37,6 +40,7 @@ export function ProblemDescription() {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
+                // 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: JSON.stringify({
                 issues: problemDescription
@@ -51,11 +55,11 @@ export function ProblemDescription() {
             if (!diagnosisData.isRealRequest) {
                 setShowInvalidRequestMessage(true)
             }
-            setDiagnosisLoading(false)
         }).catch((error) => {
             console.error("Error submitting problem:", error)
+            setShowInvalidRequestMessage(true)
+        }).finally(() => {
             setDiagnosisLoading(false)
-
         })
 
         // Always proceed, we'll prompt the user if the request was bad

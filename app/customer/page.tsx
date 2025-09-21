@@ -177,7 +177,7 @@ function CustomerInterface() {
   useEffect(() => {
     if (currentStep === "diagnosis" && diagnosisResponse && !diagnosisLoading) {
       // Only start progress when we have a response and we're not loading
-      const duration = 3000
+      const duration = 1000
       const startTime = Date.now()
 
       const animateProgress = () => {

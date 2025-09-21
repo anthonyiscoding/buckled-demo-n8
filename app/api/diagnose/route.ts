@@ -17,9 +17,14 @@ const DiagnosticSchema = z.object({
     services: z.array(z.object({
         name: z.string().describe("A short name for the service (ex. brake replacement, oil change)."),
         description: z.string().describe("A short description of what the service center will do."),
-        priceRange: z.string().describe("An anticipated price range for the service.")
+        priceRange: z.object({
+            minimumPrice: z.coerce.number().int(),
+            maximumPrice: z.coerce.number().int()
+        }).describe("An anticipated price range for the service.")
     })).describe("A list of recommended services to address the customer's provided issues.")
 })
+
+export type Diagnostics = z.infer<typeof DiagnosticSchema>
 
 export async function POST(request: Request) {
     const body = await request.json()

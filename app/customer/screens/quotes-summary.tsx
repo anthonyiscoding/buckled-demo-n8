@@ -3,15 +3,16 @@ import { Star } from "lucide-react"
 import { Card, CardContent } from "../../../components/ui/card"
 import { StarRating } from "../../../components/ui/star-rating"
 import { Button } from "../../../components/ui/button"
-import { useSignupStatus, useSelectedQuote, useNavigation } from "@/lib/hooks"
+import { useSignupStatus, useSelectedQuote, useNavigation, useOtherState } from "@/lib/hooks"
 import { getMockQuotes } from "../../../components/car-data"
 
-const mockQuotes = getMockQuotes()
 
 export function QuotesSummary() {
     const { isSignedUp } = useSignupStatus()
     const { setSelectedQuote } = useSelectedQuote()
     const { setCurrentStep } = useNavigation()
+    const { diagnosisResponse } = useOtherState()
+    const mockQuotes = getMockQuotes(diagnosisResponse)
 
     const quoteLength = isSignedUp ? mockQuotes.length : 1
 
