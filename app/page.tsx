@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -11,6 +11,12 @@ export default function HomePage() {
   const [isResetting, setIsResetting] = useState(false)
   const { clearAllAppData } = useNavigation()
 
+  useEffect(() => {
+    const request = fetch("/api/diagnose")
+    request.then((response) => {
+      console.log(response)
+    })
+  }, [])
   const handleResetDemo = () => {
     setIsResetting(true)
     // resetAllAppData()

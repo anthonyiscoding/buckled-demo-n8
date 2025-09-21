@@ -4,11 +4,28 @@ import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui
 import { Textarea } from "../../../components/ui/textarea";
 import { Button } from "../../../components/ui/button";
 import { useCarSelection, useProblemDescription, useNavigation } from "@/lib/hooks";
+import { useEffect } from "react";
 
 export function ProblemDescription() {
     const { selectedCar } = useCarSelection()
     const { problemDescription, setProblemDescription } = useProblemDescription()
     const { setCurrentStep } = useNavigation()
+
+    const handleProblemSubmission = () => {
+        console.log(problemDescription)
+        fetch("/api/diagnose", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify({
+                issues: problemDescription
+            })
+        }).then(response => console.log(response.json()))
+
+        setCurrentStep("media-upload")
+    }
 
     return (
         <div className="max-w-2xl mx-auto px-6 py-12">
@@ -46,7 +63,7 @@ export function ProblemDescription() {
                         </Button>
                         <div className="flex-1 flex items-center justify-between">
                             <Button
-                                onClick={() => setCurrentStep("media-upload")}
+                                onClick={handleProblemSubmission}
                                 disabled={!problemDescription.trim()}
                                 className="bg-[#f16c63] hover:bg-[#e55a51] text-white"
                             >
