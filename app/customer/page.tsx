@@ -13,7 +13,9 @@ import {
   useNavigation,
   useHasExistingData
 } from "@/lib/hooks"
-
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { LogOut } from "lucide-react";
 // Import all screen components
 import { Welcome } from "@/app/customer/screens/welcome"
 import { CarSelection } from "@/app/customer/screens/car-selection"
@@ -263,7 +265,18 @@ function CustomerInterface() {
           <div className="max-w-6xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <h1 className="text-xl font-semibold text-gray-900">Buckled.io</h1>
+                <Link href="/" className="text-xl font-semibold text-gray-900 hover:text-blue-600">
+                  Buckled.io
+                </Link>
+                <span className="text-sm text-gray-500">Customer Portal</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <Link href="/">
+                  <Button variant="outline" size="sm">
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Exit
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

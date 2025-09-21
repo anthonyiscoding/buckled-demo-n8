@@ -17,6 +17,7 @@ import {
   AlertTriangle,
   CheckCircle,
   Eye,
+  LogOut,
 } from "lucide-react"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 
@@ -91,10 +92,12 @@ export default function ServiceCenterPage() {
                   Profile Settings
                 </Button>
               </Link>
-              <Button variant="outline" size="sm">
-                <User className="w-4 h-4 mr-2" />
-                Sign Out
-              </Button>
+              <Link href="/">
+                <Button variant="outline" size="sm">
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Exit
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
