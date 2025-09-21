@@ -319,21 +319,11 @@ export function useNavigation() {
     const clearProgressCustomer = useCallback(() => {
         // Use SWR's provider reset approach - this creates a completely fresh cache
         resetCache()
-
-        // Navigate back to welcome
-        setCurrentStep("welcome")
-    }, [resetCache, setCurrentStep])
+    }, [resetCache])
 
     const clearAllAppData = useCallback(() => {
-        // Use the global reset function
-        // resetAllAppData()
-
-        // Also reset SWR cache
         resetCache()
-
-        // Navigate to home page
-        // router.push("/")
-    }, [resetCache, router])
+    }, [resetCache])
 
     return { setCurrentStep, clearProgressCustomer, clearAllAppData }
 }

@@ -4,7 +4,6 @@ import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-// import { resetAllAppData } from "@/lib/global-reset"
 import { useNavigation } from "@/lib/hooks"
 
 export default function HomePage() {

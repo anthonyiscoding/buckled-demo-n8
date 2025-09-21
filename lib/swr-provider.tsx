@@ -65,12 +65,21 @@ export function SWRProvider({ children }: SWRProviderProps) {
                 value={{
                     provider: () => localStorageProvider(),
                     fallback: {
+                        // Service Center
                         'pending-requests': defaultPendingRequests,
                         'active-quotes': defaultActiveQuotes,
                         'scheduled-services': defaultScheduledServices,
                         'customer-reviews': defaultCustomerReviews,
                         'profile': defaultServiceCenterProfile,
                         'revenue-data': defaultRevenueData,
+
+                        // Customer
+                        'selectedCar': { make: "", model: "", year: "" },
+                        'problemDescription': "",
+                        'contactInfo': { name: "", email: "", phone: "" },
+                        'currentStep': "car-info",
+                        'appointment': null,
+                        'isComplete': false,
                     },
                 }}
             >
