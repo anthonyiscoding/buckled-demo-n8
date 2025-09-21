@@ -2,13 +2,14 @@ import { UploadIcon, Camera, ArrowLeft } from "lucide-react"
 import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/card"
 import { Button } from "../../../components/ui/button"
 import { useUploadedFiles, useNavigation } from "@/lib/hooks"
+import { getFileDetails } from "@/lib/utils"
 
 export function MediaUpload() {
     const { uploadedFiles, setUploadedFiles } = useUploadedFiles()
     const { setCurrentStep } = useNavigation()
 
     const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const files = Array.from(event.target.files || [])
+        const files = getFileDetails(event)
         setUploadedFiles([...uploadedFiles, ...files])
     }
 
@@ -52,9 +53,9 @@ export function MediaUpload() {
                         <div>
                             <h4 className="font-medium mb-2">Uploaded Files:</h4>
                             <div className="space-y-2">
-                                {uploadedFiles.map((file, index) => (
+                                {uploadedFiles.map((filename, index) => (
                                     <div key={index} className="flex items-center gap-2 p-2 bg-gray-50 rounded">
-                                        <span className="text-sm">{file.name}</span>
+                                        <span className="text-sm">{filename}</span>
                                     </div>
                                 ))}
                             </div>

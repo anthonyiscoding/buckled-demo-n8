@@ -3,13 +3,14 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../..
 import { Button } from "../../../components/ui/button"
 import { Progress } from "../../../components/ui/progress"
 import { useUploadedQuoteFiles, useNavigation } from "@/lib/hooks"
+import { getFileDetails } from "@/lib/utils"
 
 export function QuoteUpload() {
     const { uploadedQuoteFiles, setUploadedQuoteFiles } = useUploadedQuoteFiles()
     const { setCurrentStep } = useNavigation()
 
     const handleQuoteFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const files = Array.from(event.target.files || [])
+        const files = getFileDetails(event)
         setUploadedQuoteFiles([...uploadedQuoteFiles, ...files])
     }
 
@@ -54,9 +55,9 @@ export function QuoteUpload() {
                         <div>
                             <h4 className="font-medium mb-2">Uploaded Quote Files:</h4>
                             <div className="space-y-2">
-                                {uploadedQuoteFiles.map((file, index) => (
+                                {uploadedQuoteFiles.map((filename, index) => (
                                     <div key={index} className="flex items-center gap-2 p-2 bg-gray-50 rounded">
-                                        <span className="text-sm">{file.name}</span>
+                                        <span className="text-sm">{filename}</span>
                                     </div>
                                 ))}
                             </div>

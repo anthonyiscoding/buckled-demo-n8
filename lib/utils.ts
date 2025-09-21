@@ -20,3 +20,11 @@ export function formatTimeAgo(date: Date): string {
     return `${Math.floor(diffInMinutes / 1440)} days ago`
   }
 }
+
+export const getFileDetails = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // TODO: For actual file upload will return name + hash
+  const files = Array.from(event.target.files || [])
+  const names: string[] = []
+  files.forEach(f => names.push(f.name))
+  return names
+}

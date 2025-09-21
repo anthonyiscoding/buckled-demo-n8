@@ -103,24 +103,24 @@ export function useSelectedTime() {
 }
 
 export function useUploadedFiles() {
-    const { data: uploadedFiles, mutate: setUploadedFiles } = useSWR<File[]>("uploadedFiles", null, {
+    const { data: uploadedFiles, mutate: setUploadedFiles } = useSWR<string[]>("uploadedFiles", null, {
         fallbackData: [],
     })
 
     return {
         uploadedFiles: uploadedFiles!,
-        setUploadedFiles: (files: File[]) => setUploadedFiles(files, { revalidate: false }),
+        setUploadedFiles: (files: string[]) => setUploadedFiles(files, { revalidate: false }),
     }
 }
 
 export function useUploadedQuoteFiles() {
-    const { data: uploadedQuoteFiles, mutate: setUploadedQuoteFiles } = useSWR<File[]>("uploadedQuoteFiles", null, {
+    const { data: uploadedQuoteFiles, mutate: setUploadedQuoteFiles } = useSWR<string[]>("uploadedQuoteFiles", null, {
         fallbackData: [],
     })
 
     return {
         uploadedQuoteFiles: uploadedQuoteFiles!,
-        setUploadedQuoteFiles: (files: File[]) => setUploadedQuoteFiles(files, { revalidate: false }),
+        setUploadedQuoteFiles: (files: string[]) => setUploadedQuoteFiles(files, { revalidate: false }),
     }
 }
 
