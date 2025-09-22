@@ -260,24 +260,26 @@ function CustomerInterface() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gray-50">
       {/* Header with breadcrumb navigation */}
-      <div className="border-b bg-white sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link href="/" className="text-xl font-semibold text-gray-900 hover:text-blue-600">
-                <Image src="/images/logos/buckled-horizontal.svg" alt="The buckled.io logo" width={150} height={30} />
-              </Link>
-              <span className="text-sm text-gray-500">Customer Portal</span>
-            </div>
-            <div className="flex items-center gap-4">
-              <Link href="/">
-                <Button variant="outline" size="sm">
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Exit
-                </Button>
-              </Link>
+      <div className="fixed top-0 left-0 right-0 z-[9999] pt-4">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="bg-white rounded-3xl shadow-lg z-[5] w-full px-5 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <Link href="/" className="text-xl font-semibold text-gray-900 hover:text-blue-600">
+                  <Image src="/images/logos/buckled-horizontal.svg" alt="The buckled.io logo" width={150} height={30} />
+                </Link>
+                <span className="text-sm text-gray-500">Customer Portal</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <Link href="/">
+                  <Button variant="outline" size="sm">
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Exit
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -297,7 +299,9 @@ function CustomerInterface() {
             }}
             className="w-full"
           >
-            {renderCurrentStep()}
+            <div className="pt-40">
+              {renderCurrentStep()}
+            </div>
           </motion.div>
         </AnimatePresence>
       </main>
