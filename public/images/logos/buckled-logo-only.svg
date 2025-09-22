@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="299.88901"
+   height="135.64088"
+   viewBox="0 0 299.88901 135.64088"
+   fill="none"
+   version="1.1"
+   id="svg9"
+   sodipodi:docname="buckled-logo-only.svg"
+   inkscape:version="1.4.2 (ebf0e940, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs9" />
+  <sodipodi:namedview
+     id="namedview9"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.82213439"
+     inkscape:cx="506"
+     inkscape:cy="67.507212"
+     inkscape:window-width="2304"
+     inkscape:window-height="1186"
+     inkscape:window-x="527"
+     inkscape:window-y="105"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg9" />
+  <path
+     d="m 86.4387,110.46689 14.9563,14.091 c 7.558,7.116 17.542,11.083 27.92,11.083 h 41.41 c 10.322,0 20.249,-3.92 27.788,-10.961 l 15.445,-14.42 c 13.293,-12.418499 30.815,-19.327899 49.006,-19.327899 h 14.57 c 12.344,0 22.355,-10.0117 22.355,-22.3547 v -0.9306 c 0,-12.343 -10.011,-22.3547 -22.355,-22.3547 h -11.449 c -9.279,0 -17.589,5.7344 -20.889,14.4017 l -6.054,15.9059 c -3.299,8.6674 -11.609,14.4017 -20.888,14.4017 H 81.635 c -9.2784,0 -17.5886,-5.7343 -20.8882,-14.4017 l -6.054,-15.9059 c -3.2996,-8.6673 -11.6098,-14.4017 -20.8882,-14.4017 H 22.3547 C 10.0117,45.291991 0,55.303691 0,67.646691 v 0.9306 c 0,12.343 10.0117,22.3547 22.3547,22.3547 h 14.8624 c 18.303,0 35.9103,6.9846 49.231,19.534899 z"
+     fill="#f16c63"
+     id="path1" />
+  <path
+     d="m 228.331,45.292191 c 5.095,0 8.056,-5.7532 5.095,-9.8988 l -17.391,-24.3383 C 211.081,4.117481 203.081,0 194.555,0 h -89.09 C 96.9762,0 89.0139,4.079871 84.0504,10.961091 l -17.5886,24.4041 c -2.98,4.1362 -0.0282,9.9176 5.0764,9.9176 H 228.322 Z"
+     fill="#f16c63"
+     id="path2" />
+</svg>
