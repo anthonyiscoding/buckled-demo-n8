@@ -218,7 +218,7 @@ function CustomerInterface() {
     setShowContinueButton(false)
 
     if (currentStep === "welcome") {
-      // setCurrentStep("car-selection")
+      setCurrentStep("car-selection")
     } else if (currentStep === "confirmation") {
       setShowContinueButton(false)
     } else if (currentStep === "diagnosis" && showInvalidRequestMessage) {
