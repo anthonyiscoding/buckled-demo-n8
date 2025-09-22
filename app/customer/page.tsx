@@ -3,6 +3,7 @@
 import React from "react"
 import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
+import { motion, AnimatePresence } from "framer-motion"
 import { SocketAssistant } from "@/components/ui/socket-assistant"
 import { SWRProvider } from "@/lib/swr-provider"
 import {
@@ -82,7 +83,7 @@ function CustomerInterface() {
   } = useOtherState()
 
   const { uploadedQuoteFiles } = useUploadedQuoteFiles()
-  const { setCurrentStep, clearProgressCustomer } = useNavigation()
+  const { setCurrentStep, clearProgressCustomer, transitionKey } = useNavigation()
   const { hasExistingData } = useHasExistingData()
 
   // Socket refers to the visual character, not web sockets
@@ -282,7 +283,23 @@ function CustomerInterface() {
       </div>
 
       {/* Main content */}
-      <main>{renderCurrentStep()}</main>
+      <main className="relative overflow-hidden">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={transitionKey}
+            initial={{ x: 300, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -300, opacity: 0 }}
+            transition={{
+              duration: 0.1,
+              ease: "easeInOut"
+            }}
+            className="w-full"
+          >
+            {renderCurrentStep()}
+          </motion.div>
+        </AnimatePresence>
+      </main>
 
       <SocketAssistant
         isVisible={true}

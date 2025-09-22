@@ -338,13 +338,21 @@ export function useNavigation() {
     const router = useRouter()
     const { resetCache } = useSWRReset()
 
+    // Add a transition key that changes on every step change
+    const { data: transitionKey, mutate: setTransitionKey } = useSWR<number>("transitionKey", null, {
+        fallbackData: 0,
+    })
+
     const setCurrentStep = useCallback(
         (step: Step) => {
+            // Increment transition key to trigger animation
+            setTransitionKey((prev) => (prev || 0) + 1, { revalidate: false })
+
             const params = new URLSearchParams(window.location.search)
             params.set("step", step)
             router.push(`/customer?${params.toString()}`)
         },
-        [router],
+        [router, setTransitionKey],
     )
 
     const clearProgressCustomer = useCallback(() => {
@@ -356,5 +364,5 @@ export function useNavigation() {
         resetCache()
     }, [resetCache])
 
-    return { setCurrentStep, clearProgressCustomer, clearAllAppData }
+    return { setCurrentStep, clearProgressCustomer, clearAllAppData, transitionKey: transitionKey! }
 }
