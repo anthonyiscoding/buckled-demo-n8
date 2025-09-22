@@ -46,8 +46,8 @@ export default function HomePage() {
         {/* Main Selection Cards */}
         <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
           {/* Customer Portal */}
-          <Card className="p-8 hover:shadow-lg transition-shadow duration-300 border-2 hover:border-[#f16c63]">
-            <div className="text-center">
+          <Card className="p-8 hover:shadow-lg transition-shadow duration-300 border-2 hover:border-[#f16c63] flex flex-col">
+            <div className="text-center flex-1">
               <div className="w-16 h-16 bg-[#f16c63] rounded-full flex items-center justify-center mx-auto mb-6">
                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -62,20 +62,20 @@ export default function HomePage() {
               <p className="text-gray-600 mb-8 leading-relaxed">
                 Customers can get their car diagnosed, find trusted mechanics, and book repair services with ease leading to increased trust in Service Centers and repeat business.
               </p>
-              <Link href="/customer" className="block">
-                <Button
-                  className="w-full bg-[#f16c63] hover:bg-[#e55a50] text-white py-3 text-lg font-medium"
-                  size="lg"
-                >
-                  Start Car Diagnosis
-                </Button>
-              </Link>
             </div>
+            <Link href="/customer" className="block">
+              <Button
+                className="w-full bg-[#f16c63] hover:bg-[#e55a50] text-white py-3 text-lg font-medium"
+                size="lg"
+              >
+                Start Car Diagnosis
+              </Button>
+            </Link>
           </Card>
 
           {/* Service Center Portal */}
-          <Card className="p-8 hover:shadow-lg transition-shadow duration-300 border-2 hover:border-blue-500">
-            <div className="text-center">
+          <Card className="p-8 hover:shadow-lg transition-shadow duration-300 border-2 hover:border-blue-500 flex flex-col">
+            <div className="text-center flex-1">
               <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -90,12 +90,12 @@ export default function HomePage() {
               <p className="text-gray-600 mb-8 leading-relaxed">
                 Service Centers can seamlessly manage customer requests, provide quotes, and grow their auto repair business at below market rate acquisiton costs.
               </p>
-              <Link href="/service-center" className="block">
-                <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 text-lg font-medium" size="lg">
-                  Access Service Portal
-                </Button>
-              </Link>
             </div>
+            <Link href="/service-center" className="block">
+              <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 text-lg font-medium" size="lg">
+                Access Service Portal
+              </Button>
+            </Link>
           </Card>
         </div>
 
@@ -108,7 +108,7 @@ export default function HomePage() {
             <h3 className="text-2xl font-semibold text-gray-900 mb-8">Planned Integrations</h3>
             <p className="text-gray-600 mb-8">Connect with the tools you already use</p>
 
-            <div className="grid grid-cols-2 md:grid-cols-6 gap-8 items-center justify-items-center">
+            <div className="grid grid-cols-2 lg:grid-cols-6 gap-2 md:gap-4 gap-x-1 lg:gap-x-6 items-center justify-items-center">
               {/* Shop-Ware */}
               <div className="flex flex-col items-center group">
                 <div className="w-32 h-32 bg-orange-500 rounded-lg shadow-md flex items-center justify-center mb-2 group-hover:shadow-lg transition-shadow">
