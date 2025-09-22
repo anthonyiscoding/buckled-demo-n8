@@ -76,7 +76,7 @@ export function CarSelection() {
                                 <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Select year" />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="max-h-[300px]">
                                     {years.map((year) => (
                                         <SelectItem key={year} value={year.toString()}>
                                             {year}

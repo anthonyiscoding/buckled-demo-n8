@@ -260,7 +260,7 @@ function CustomerInterface() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#f8f4f1] to-white">
       {/* Header with breadcrumb navigation */}
       <div className="fixed top-0 left-0 right-0 z-[9999] pt-4">
         <div className="max-w-6xl mx-auto px-6">
@@ -286,7 +286,7 @@ function CustomerInterface() {
       </div>
 
       {/* Main content */}
-      <main className="relative overflow-hidden">
+      <main className="flex relative overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
             key={transitionKey}
@@ -299,7 +299,7 @@ function CustomerInterface() {
             }}
             className="w-full"
           >
-            <div className="pt-40">
+            <div className="min-h-screen flex items-center justify-center">
               {renderCurrentStep()}
             </div>
           </motion.div>
