@@ -30,9 +30,9 @@ export function QuoteUpload() {
                     <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
                         <UploadIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                         <p className="text-gray-600 mb-4">Upload photos or PDFs of existing quotes</p>
-                        <div className="flex gap-4 justify-center">
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <div className="relative">
-                                <Button variant="outline" className="flex items-center gap-2 bg-transparent">
+                                <Button variant="outline" className="flex items-center gap-2 bg-transparent w-full sm:w-auto">
                                     <UploadIcon className="w-4 h-4" />
                                     Upload Quote
                                 </Button>
@@ -44,7 +44,7 @@ export function QuoteUpload() {
                                     className="absolute inset-0 opacity-0 cursor-pointer"
                                 />
                             </div>
-                            <Button variant="outline" className="flex items-center gap-2 bg-transparent">
+                            <Button variant="outline" className="flex items-center gap-2 bg-transparent w-full sm:w-auto">
                                 <Camera className="w-4 h-4" />
                                 Take Photo
                             </Button>
@@ -64,16 +64,16 @@ export function QuoteUpload() {
                         </div>
                     )}
 
-                    <div className="flex gap-4">
+                    <div className="flex flex-col sm:flex-row gap-4">
                         <Button
                             variant="outline"
                             onClick={() => setCurrentStep("media-upload")}
-                            className="flex items-center gap-2"
+                            className="flex items-center gap-2 justify-center"
                         >
                             <ArrowLeft className="w-4 h-4" />
                             Back
                         </Button>
-                        <div className="flex-1 flex items-center justify-between">
+                        <div className="flex-1 flex flex-col sm:flex-row items-center justify-between gap-4">
                             <Button
                                 onClick={() => {
                                     if (uploadedQuoteFiles.length > 0) {
@@ -82,13 +82,13 @@ export function QuoteUpload() {
                                         setCurrentStep("diagnosis")
                                     }
                                 }}
-                                className="bg-[#f16c63] hover:bg-[#e55a51] text-white"
+                                className="bg-[#f16c63] hover:bg-[#e55a51] text-white w-full sm:w-auto"
                             >
                                 Continue
                             </Button>
                             <button
                                 onClick={() => setCurrentStep("diagnosis")}
-                                className="text-gray-500 hover:text-gray-700 text-sm cursor-pointer transition-colors ml-4"
+                                className="text-gray-500 hover:text-gray-700 text-sm cursor-pointer transition-colors"
                             >
                                 Skip &gt;
                             </button>

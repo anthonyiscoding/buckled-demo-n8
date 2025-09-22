@@ -43,7 +43,7 @@ export function QuotesDetail() {
                                 <p className="text-gray-700">{selectedQuote.details}</p>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <h4 className="font-semibold">Estimated Time:</h4>
                                     <p className="text-gray-700">{selectedQuote.estimatedTime}</p>
@@ -73,8 +73,8 @@ export function QuotesDetail() {
                                 </div>
                             </div>
 
-                            <div className="flex gap-4">
-                                <Button variant="outline" onClick={() => setCurrentStep("quotes")} className="flex items-center gap-2">
+                            <div className="flex flex-col sm:flex-row gap-4">
+                                <Button variant="outline" onClick={() => setCurrentStep("quotes")} className="flex items-center gap-2 justify-center">
                                     <ArrowLeft className="w-4 h-4" />
                                     Go Back
                                 </Button>
