@@ -51,6 +51,13 @@ export function Welcome() {
                 <p className="text-xl text-gray-600 mb-8">
                     Get expert car diagnosis and fair quotes from trusted service centers
                 </p>
+                <Button
+                    onClick={handleStartFresh}
+                    variant="outline"
+                    className="border-[#f16c63] text-[#f16c63] hover:bg-[#f16c63] hover:text-white px-8 py-3"
+                >
+                    Start New Quote
+                </Button>
             </div>
         </div>
     )
