@@ -101,8 +101,6 @@ export default function HomePage() {
 
         {/* Additional Info */}
         <div className="text-center mt-16">
-          <p className="text-gray-500 mb-12">Trusted by thousands of customers and service centers nationwide</p>
-
           {/* Integrations Section */}
           <div className="max-w-4xl mx-auto">
             <h3 className="text-2xl font-semibold text-gray-900 mb-8">Planned Integrations</h3>
