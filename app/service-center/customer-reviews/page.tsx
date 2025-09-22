@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ExpandableText } from "@/components/ui/expandable-text"
+import { ServiceCenterHeader } from "@/components/service-center-header"
 import { useCustomerReviews } from "@/hooks/use-service-center-data"
 import Link from "next/link"
 import { ArrowLeft, Search, Filter, Star, TrendingUp, MessageSquare } from "lucide-react"
@@ -134,29 +135,27 @@ export default function CustomerReviewsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#f8f4f1] to-white">
       {/* Header */}
-      <div className="border-b bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link href="/service-center">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back to Dashboard
-                </Button>
-              </Link>
-              <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Customer Reviews</h1>
-                <p className="text-gray-600 text-sm sm:text-base">Monitor customer feedback and ratings</p>
-              </div>
-            </div>
-            <div className="text-sm text-gray-500">
-              {filteredReviews.length} of {reviews.length} reviews
-            </div>
-          </div>
+      <ServiceCenterHeader title="Customer Reviews" subtitle="Monitor customer feedback and ratings" />
+
+      {/* Breadcrumb/Navigation */}
+      <div className="pt-24 pb-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <Link href="/service-center">
+            <Button variant="ghost" size="sm">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Dashboard
+            </Button>
+          </Link>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+        {/* Stats */}
+        <div className="mb-6">
+          <div className="text-sm text-gray-500">
+            {filteredReviews.length} of {reviews.length} reviews
+          </div>
+        </div>
         {/* Overview Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <Card className="p-6">

@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useServiceCenterDashboard } from "@/hooks/use-service-center-data"
 import { formatTimeAgo } from "@/lib/utils"
+import { ServiceCenterHeader } from "@/components/service-center-header"
 import Link from "next/link"
 import {
   Clock,
@@ -20,7 +21,6 @@ import {
   LogOut,
 } from "lucide-react"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
-import Image from "next/image"
 
 export default function ServiceCenterPage() {
   const { stats, requests, quotes, services, reviews, revenueData } = useServiceCenterDashboard()
@@ -77,39 +77,11 @@ export default function ServiceCenterPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#f8f4f1] to-white">
       {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-[9999] pt-4">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="bg-white rounded-3xl shadow-lg z-[5] w-full px-5 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <Link href="/" className="text-xl font-semibold text-gray-900 hover:text-blue-600">
-                  <Image src="/images/logos/buckled-horizontal.svg" alt="The buckled.io logo" width={150} height={30} />
-
-                </Link>
-                <span className="text-sm text-gray-500">Service Center Portal</span>
-              </div>
-              <div className="flex items-center gap-4">
-                <Link href="/service-center/profile">
-                  <Button variant="outline" size="sm">
-                    <Settings className="w-4 h-4 mr-2" />
-                    Profile Settings
-                  </Button>
-                </Link>
-                <Link href="/">
-                  <Button variant="outline" size="sm">
-                    <LogOut className="w-4 h-4 mr-2" />
-                    Exit
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ServiceCenterHeader />
 
       {/* Main Content */}
       <div className="container mx-auto px-6 py-8">
-        <div className="pt-40">
+        <div className="pt-20">
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome to Your Service Center Dashboard</h2>
             <p className="text-gray-600">Manage customer requests, provide quotes, and grow your auto repair business.</p>
@@ -320,13 +292,6 @@ export default function ServiceCenterPage() {
                     <ArrowRight className="w-4 h-4" />
                   </Button>
                 </Link>
-                <Button className="w-full justify-between bg-transparent" variant="outline">
-                  <div className="flex items-center">
-                    <FileText className="w-4 h-4 mr-2" />
-                    Generate Report
-                  </div>
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
               </div>
             </Card>
           </div>

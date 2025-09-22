@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
+import { ServiceCenterHeader } from "@/components/service-center-header"
 import { useServiceCenterProfile } from "@/hooks/use-service-center-data"
 import Link from "next/link"
 import { ArrowLeft, MapPin, Phone, Mail, Globe, Clock, Award, Settings, Save, Plus, X } from "lucide-react"
@@ -97,50 +98,49 @@ export default function ServiceCenterProfilePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#f8f4f1] to-white">
       {/* Header */}
-      <div className="border-b bg-white">
-        <div className="max-w-4xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link href="/service-center">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back to Dashboard
-                </Button>
-              </Link>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">Service Center Profile</h1>
-                <p className="text-gray-600">Manage your business information and settings</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="text-right">
-                <div className="text-sm text-gray-600">Profile Completeness</div>
-                <div className={`text-lg font-bold ${getCompletionColor(profile.profileCompleteness)}`}>
-                  {profile.profileCompleteness}%
-                </div>
-              </div>
-              {!isEditing ? (
-                <Button onClick={() => setIsEditing(true)}>
-                  <Settings className="w-4 h-4 mr-2" />
-                  Edit Profile
-                </Button>
-              ) : (
-                <div className="flex gap-2">
-                  <Button onClick={handleSave} className="bg-green-600 hover:bg-green-700">
-                    <Save className="w-4 h-4 mr-2" />
-                    Save Changes
-                  </Button>
-                  <Button onClick={handleCancel} variant="outline">
-                    Cancel
-                  </Button>
-                </div>
-              )}
-            </div>
-          </div>
+      <ServiceCenterHeader title="Profile Settings" subtitle="Manage your business information and settings" />
+
+      {/* Breadcrumb/Navigation */}
+      <div className="pt-24 pb-4">
+        <div className="max-w-4xl mx-auto px-6">
+          <Link href="/service-center">
+            <Button variant="ghost" size="sm">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Dashboard
+            </Button>
+          </Link>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 py-8">
+      <div className="max-w-4xl mx-auto px-6 py-4">
+        {/* Profile Completeness */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-gray-600">Profile Completeness</div>
+            <div className={`text-lg font-bold ${getCompletionColor(profile.profileCompleteness)}`}>
+              {profile.profileCompleteness}%
+            </div>
+          </div>
+          <div className="flex items-center gap-4 mt-4">
+            {!isEditing ? (
+              <Button onClick={() => setIsEditing(true)}>
+                <Settings className="w-4 h-4 mr-2" />
+                Edit Profile
+              </Button>
+            ) : (
+              <div className="flex gap-2">
+                <Button onClick={handleSave} className="bg-green-600 hover:bg-green-700">
+                  <Save className="w-4 h-4 mr-2" />
+                  Save Changes
+                </Button>
+                <Button onClick={handleCancel} variant="outline">
+                  Cancel
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+
         <div className="space-y-6">
           {/* Basic Information */}
           <Card className="p-6">

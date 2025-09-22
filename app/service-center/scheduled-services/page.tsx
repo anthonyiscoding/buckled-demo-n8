@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { ExpandableText } from "@/components/ui/expandable-text"
+import { ServiceCenterHeader } from "@/components/service-center-header"
 import { useScheduledServices } from "@/hooks/use-service-center-data"
 import Link from "next/link"
 import {
@@ -124,29 +125,27 @@ export default function ScheduledServicesPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#f8f4f1] to-white">
       {/* Header */}
-      <div className="border-b ">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link href="/service-center">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back to Dashboard
-                </Button>
-              </Link>
-              <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Scheduled Services</h1>
-                <p className="text-gray-600 text-sm sm:text-base">Manage upcoming appointments and services</p>
-              </div>
-            </div>
-            <div className="text-sm text-gray-500">
-              {filteredServices.length} of {services.length} services
-            </div>
-          </div>
+      <ServiceCenterHeader title="Scheduled Services" subtitle="Manage upcoming appointments and services" />
+
+      {/* Breadcrumb/Navigation */}
+      <div className="pt-24 pb-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <Link href="/service-center">
+            <Button variant="ghost" size="sm">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Dashboard
+            </Button>
+          </Link>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+        {/* Stats */}
+        <div className="mb-6">
+          <div className="text-sm text-gray-500">
+            {filteredServices.length} of {services.length} services
+          </div>
+        </div>
         {/* Summary Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <Card className="p-4">
