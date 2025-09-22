@@ -86,10 +86,11 @@ function CustomerInterface() {
   const { uploadedQuoteFiles } = useUploadedQuoteFiles()
   const { setCurrentStep, clearProgressCustomer, transitionKey } = useNavigation()
   const { hasExistingData } = useHasExistingData()
+  const [alreadyWelcomed, setAlreadyWelcomed] = useState<boolean>(false)
 
   // Socket refers to the visual character, not web sockets
   useEffect(() => {
-    if (currentStep === "welcome") {
+    if ((currentStep === "welcome" && !alreadyWelcomed) || hasExistingData) {
       const timer = setTimeout(() => {
         setSocketVisible(true)
 
@@ -112,6 +113,7 @@ function CustomerInterface() {
 
         // Mark this message as shown
         setShownMessages(prev => new Set(prev).add("welcome"))
+        setAlreadyWelcomed(true)
       }, 1000)
       return () => clearTimeout(timer)
     }
@@ -216,7 +218,7 @@ function CustomerInterface() {
     setShowContinueButton(false)
 
     if (currentStep === "welcome") {
-      setCurrentStep("car-selection")
+      // setCurrentStep("car-selection")
     } else if (currentStep === "confirmation") {
       setShowContinueButton(false)
     } else if (currentStep === "diagnosis" && showInvalidRequestMessage) {
