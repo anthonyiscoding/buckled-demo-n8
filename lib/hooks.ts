@@ -345,12 +345,11 @@ export function useNavigation() {
 
     const setCurrentStep = useCallback(
         (step: Step) => {
-            // Increment transition key to trigger animation
-            setTransitionKey((prev) => (prev || 0) + 1, { revalidate: false })
-
             const params = new URLSearchParams(window.location.search)
             params.set("step", step)
             router.push(`/customer?${params.toString()}`)
+
+            setTransitionKey((prev) => (prev || 0) + 1, { revalidate: false })
         },
         [router, setTransitionKey],
     )
