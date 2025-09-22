@@ -8,6 +8,9 @@ module.exports = {
     ],
     theme: {
         extend: {
+            fontFamily: {
+                sans: ['var(--font-inter)', 'Inter', 'sans-serif'],
+            },
             colors: {
                 success: 'var(--success)',
             },
