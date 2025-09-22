@@ -333,10 +333,8 @@ function SearchParamsLoader() {
 // Default export wrapped in Suspense and SWR Provider
 export default function Page() {
   return (
-    <SWRProvider>
-      <Suspense fallback={<SearchParamsLoader />}>
-        <CustomerInterface />
-      </Suspense>
-    </SWRProvider>
+    <Suspense fallback={<SearchParamsLoader />}>
+      <CustomerInterface />
+    </Suspense>
   )
 }
