@@ -15,7 +15,7 @@ export function QuoteUpload() {
     }
 
     return (
-        <div className="max-w-2xl mx-auto px-6 py-12">
+        <div className="max-w-2xl mx-auto px-6 pt-24 pb-12">
             <div className="mb-8">
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">Upload existing quotes</h2>
                 <p className="text-gray-600">Have quotes from other service centers? Upload them for comparison (optional)</p>
@@ -104,7 +104,7 @@ export function QuoteScanning() {
     const { uploadedQuoteFiles } = useUploadedQuoteFiles()
 
     return (
-        <div className="max-w-2xl mx-auto px-6 py-12">
+        <div className="max-w-2xl mx-auto px-6 pt-24 pb-12">
             <div className="text-center mb-8">
                 <div className="w-16 h-16 bg-[#f16c63] rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
                     <span className="text-2xl">📄</span>

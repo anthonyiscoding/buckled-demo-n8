@@ -14,7 +14,7 @@ export function Signup() {
     }
 
     return (
-        <div className="max-w-md mx-auto px-6 py-12">
+        <div className="max-w-md mx-auto px-6 pt-24 pb-12">
             <Card>
                 <CardHeader>
                     <CardTitle>Create Your Account</CardTitle>

@@ -37,7 +37,7 @@ export function Diagnosis() {
     }
 
     return (
-        <div className="max-w-2xl mx-auto px-6 py-12">
+        <div className="max-w-2xl mx-auto px-6 pt-24 pb-12">
             <div className="text-center mb-8">
                 <SocketStatus src="/images/socket-thinking.png" alt="Socket thinking" />
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">Analyzing your issue...</h2>

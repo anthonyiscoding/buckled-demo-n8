@@ -10,7 +10,7 @@ export function Confirmation() {
     const { selectedTime } = useSelectedTime()
 
     return (
-        <div className="max-w-2xl mx-auto px-6 py-12">
+        <div className="max-w-2xl mx-auto px-6 pt-24 pb-12">
             <SocketStatus src="/images/socket-thumbs-up.png" alt="Socket giving a thumbs up" />
             <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">Appointment Scheduled!</h2>

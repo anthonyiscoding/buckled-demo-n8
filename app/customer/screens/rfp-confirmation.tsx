@@ -9,7 +9,7 @@ export function RfpConfirmation() {
     const { rfpSent, proposalReady } = useOtherState()
 
     return (
-        <div className="max-w-2xl mx-auto px-6 py-12">
+        <div className="max-w-2xl mx-auto px-6 pt-24 pb-12">
             <div className="text-center">
                 <SocketStatus src="/images/socket-holding-rfp-ready.png" alt="Socket holding an RFP that's ready" />
                 <div className="mb-8">

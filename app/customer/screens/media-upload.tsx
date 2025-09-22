@@ -14,7 +14,7 @@ export function MediaUpload() {
     }
 
     return (
-        <div className="max-w-2xl mx-auto px-6 py-12">
+        <div className="max-w-2xl mx-auto px-6 pt-24 pb-12">
             <div className="mb-8">
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">Share photos or videos</h2>
                 <p className="text-gray-600">Visual evidence helps our experts provide better diagnosis (optional)</p>

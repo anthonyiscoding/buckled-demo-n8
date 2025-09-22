@@ -14,7 +14,7 @@ export function CarSelection() {
     const { setCurrentStep } = useNavigation()
 
     return (
-        <div className="max-w-2xl mx-auto px-6 py-12">
+        <div className="max-w-2xl mx-auto px-6 pt-24 pb-12">
             <div className="mb-8">
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">Tell us about your car</h2>
                 <p className="text-gray-600">We need some basic information to provide accurate diagnosis</p>
@@ -35,7 +35,7 @@ export function CarSelection() {
                                 <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Select make" />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="max-h-[200px] overflow-y-auto z-50" align="start" side="bottom" avoidCollisions={true}>
                                     {carMakes.map((make) => (
                                         <SelectItem key={make} value={make}>
                                             {make}
@@ -55,7 +55,7 @@ export function CarSelection() {
                                 <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Select model" />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="max-h-[200px] overflow-y-auto z-50" align="start" side="bottom" avoidCollisions={true}>
                                     {selectedCar.make &&
                                         carModels[selectedCar.make as keyof typeof carModels]?.map((model) => (
                                             <SelectItem key={model} value={model}>
@@ -76,7 +76,7 @@ export function CarSelection() {
                                 <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Select year" />
                                 </SelectTrigger>
-                                <SelectContent className="max-h-[300px]">
+                                <SelectContent className="max-h-[200px] overflow-y-auto z-50" align="start" side="bottom" avoidCollisions={true}>
                                     {years.map((year) => (
                                         <SelectItem key={year} value={year.toString()}>
                                             {year}

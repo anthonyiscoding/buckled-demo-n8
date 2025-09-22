@@ -19,7 +19,7 @@ export function QuotesDetail() {
     //     finalPrice = selectedQuote.price
     // }
     return (
-        <div className="max-w-2xl mx-auto px-6 py-12">
+        <div className="max-w-2xl mx-auto px-6 pt-24 pb-12">
             {selectedQuote && (
                 <>
                     <div className="mb-8">

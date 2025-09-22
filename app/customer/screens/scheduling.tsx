@@ -27,7 +27,7 @@ export function Scheduling() {
     const { setCurrentStep } = useNavigation()
 
     return (
-        <div className="max-w-2xl mx-auto py-12">
+        <div className="max-w-2xl mx-auto pt-24 pb-12">
             <SocketStatus src="/images/socket-calendar.png" alt="Socket holding a calendar" />
             <div className="mb-8">
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">Schedule Your Service</h2>

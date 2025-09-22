@@ -17,7 +17,7 @@ export function QuotesSummary() {
     const quoteLength = isSignedUp ? mockQuotes.length : 1
 
     return (
-        <div className="max-w-4xl mx-auto px-6 py-12">
+        <div className="max-w-4xl mx-auto px-6 pt-24 pb-12">
             <SocketStatus src="/images/socket-holding-rfp.png" alt="Socket holding an RFP" />
             <div className="mb-8">
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">Service Center Quotes</h2>
