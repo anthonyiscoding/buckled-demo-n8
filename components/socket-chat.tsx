@@ -146,7 +146,7 @@ const SocketChat: React.FC<SocketChatProps> = ({
             {/* Mobile backdrop */}
             <div className="sm:hidden fixed inset-0 bg-black/50 z-40" onClick={onClose} />
 
-            <div className="fixed inset-4 sm:bottom-24 sm:right-4 sm:inset-auto sm:w-90 sm:h-120 bg-white rounded-lg sm:rounded-lg shadow-2xl border border-gray-200 flex flex-col animate-socket-dialog-in z-50">
+            <div className="fixed top-30 bottom-4 right-4 left-4 sm:top-30 sm:bottom-24 sm:right-4 sm:left-auto sm:w-90 sm:h-[calc(100vh-11rem)] bg-white rounded-lg shadow-2xl border border-gray-200 flex flex-col animate-socket-dialog-in z-50">
                 {/* Header */}
                 <div className="p-4 border-b bg-[#f16c63] text-white rounded-t-lg">
                     <div className="flex items-center justify-between">
