@@ -20,6 +20,7 @@ import {
   LogOut,
 } from "lucide-react"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
+import Image from "next/image"
 
 export default function ServiceCenterPage() {
   const { stats, requests, quotes, services, reviews, revenueData } = useServiceCenterDashboard()
@@ -81,7 +82,8 @@ export default function ServiceCenterPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link href="/" className="text-xl font-semibold text-gray-900 hover:text-blue-600">
-                Buckled.io
+                <Image src="/images/logos/buckled-horizontal.svg" alt="The buckled.io logo" width={150} height={30} />
+
               </Link>
               <span className="text-sm text-gray-500">Service Center Portal</span>
             </div>

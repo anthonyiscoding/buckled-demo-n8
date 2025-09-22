@@ -30,6 +30,7 @@ import { QuotesDetail } from "@/app/customer/screens/quotes-detail"
 import { RfpConfirmation } from "@/app/customer/screens/rfp-confirmation"
 import { Scheduling } from "@/app/customer/screens/scheduling"
 import { Confirmation } from "@/app/customer/screens/confirmation"
+import Image from "next/image"
 
 type Step =
   | "welcome"
@@ -266,7 +267,7 @@ function CustomerInterface() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link href="/" className="text-xl font-semibold text-gray-900 hover:text-blue-600">
-                Buckled.io
+                <Image src="/images/logos/buckled-horizontal.svg" alt="The buckled.io logo" width={150} height={30} />
               </Link>
               <span className="text-sm text-gray-500">Customer Portal</span>
             </div>

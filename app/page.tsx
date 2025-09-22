@@ -105,7 +105,7 @@ export default function HomePage() {
 
           {/* Integrations Section */}
           <div className="max-w-4xl mx-auto">
-            <h3 className="text-2xl font-semibold text-gray-900 mb-8">Seamless Integrations</h3>
+            <h3 className="text-2xl font-semibold text-gray-900 mb-8">Planned Integrations</h3>
             <p className="text-gray-600 mb-8">Connect with the tools you already use</p>
 
             <div className="grid grid-cols-2 md:grid-cols-6 gap-8 items-center justify-items-center">
