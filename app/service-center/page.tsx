@@ -75,7 +75,7 @@ export default function ServiceCenterPage() {
   const recentActivity = getRecentActivity()
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#f8f4f1] to-white">
       {/* Header */}
       <div className="fixed top-0 left-0 right-0 z-[9999] pt-4">
         <div className="max-w-6xl mx-auto px-6">

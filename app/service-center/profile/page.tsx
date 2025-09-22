@@ -95,7 +95,7 @@ export default function ServiceCenterProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#f8f4f1] to-white">
       {/* Header */}
       <div className="border-b bg-white">
         <div className="max-w-4xl mx-auto px-6 py-4">
