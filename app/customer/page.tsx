@@ -260,28 +260,26 @@ function CustomerInterface() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header with breadcrumb navigation */}
-      {currentStep !== "welcome" && (
-        <div className="border-b bg-white sticky top-0 z-40">
-          <div className="max-w-6xl mx-auto px-6 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <Link href="/" className="text-xl font-semibold text-gray-900 hover:text-blue-600">
-                  Buckled.io
-                </Link>
-                <span className="text-sm text-gray-500">Customer Portal</span>
-              </div>
-              <div className="flex items-center gap-4">
-                <Link href="/">
-                  <Button variant="outline" size="sm">
-                    <LogOut className="w-4 h-4 mr-2" />
-                    Exit
-                  </Button>
-                </Link>
-              </div>
+      <div className="border-b bg-white sticky top-0 z-40">
+        <div className="max-w-6xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Link href="/" className="text-xl font-semibold text-gray-900 hover:text-blue-600">
+                Buckled.io
+              </Link>
+              <span className="text-sm text-gray-500">Customer Portal</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <Link href="/">
+                <Button variant="outline" size="sm">
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Exit
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
-      )}
+      </div>
 
       {/* Main content */}
       <main>{renderCurrentStep()}</main>

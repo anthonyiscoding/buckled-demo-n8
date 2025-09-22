@@ -5,9 +5,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/card";
 import { Button } from "../../../components/ui/button";
 import { useSelectedDate, useSelectedTime, useNavigation } from "@/lib/hooks";
+import { SocketStatus } from "@/components/ui/socket-status";
 
 const timeSlots = [
-    "7:00 AM",
     "8:00 AM",
     "9:00 AM",
     "10:00 AM",
@@ -19,8 +19,6 @@ const timeSlots = [
     "4:00 PM",
     "5:00 PM",
     "6:00 PM",
-    "7:00 PM",
-    "8:00 PM",
 ]
 
 export function Scheduling() {
@@ -30,6 +28,7 @@ export function Scheduling() {
 
     return (
         <div className="max-w-2xl mx-auto px-6 py-12">
+            <SocketStatus src="/images/socket-calendar.png" alt="Socket holding a calendar" />
             <div className="mb-8">
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">Schedule Your Service</h2>
                 <p className="text-gray-600">Pick a convenient date and time for your appointment</p>

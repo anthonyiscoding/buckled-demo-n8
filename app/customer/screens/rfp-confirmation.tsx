@@ -2,6 +2,7 @@ import { Label } from "@radix-ui/react-label";
 import { FileText, ArrowRight, Wrench, Clock, Check } from "lucide-react";
 import { Card, CardContent } from "../../../components/ui/card";
 import { useSelectedQuote, useOtherState } from "@/lib/hooks";
+import { SocketStatus } from "@/components/ui/socket-status";
 
 export function RfpConfirmation() {
     const { selectedQuote } = useSelectedQuote()
@@ -10,6 +11,7 @@ export function RfpConfirmation() {
     return (
         <div className="max-w-2xl mx-auto px-6 py-12">
             <div className="text-center">
+                <SocketStatus src="/images/socket-holding-rfp-ready.png" alt="Socket holding an RFP that's ready" />
                 <div className="mb-8">
                     <h2 className="text-3xl font-bold text-gray-900 mb-4">Sending Your Request</h2>
                     <p className="text-gray-600 mb-6">We're sending your RFP to {selectedQuote?.serviceCenterName}</p>

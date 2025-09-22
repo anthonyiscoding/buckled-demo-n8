@@ -5,6 +5,7 @@ import { Textarea } from "../../../components/ui/textarea";
 import { Button } from "../../../components/ui/button";
 import { useCarSelection, useProblemDescription, useNavigation, useOtherState, useSocketMessages, useSocketState } from "@/lib/hooks";
 import { useEffect } from "react";
+import Image from "next/image"
 
 export function ProblemDescription() {
     const { selectedCar } = useCarSelection()

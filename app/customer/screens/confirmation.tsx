@@ -2,6 +2,7 @@ import { Check } from "lucide-react";
 import { format } from "date-fns";
 import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/card";
 import { useSelectedQuote, useSelectedDate, useSelectedTime } from "@/lib/hooks";
+import { SocketStatus } from "@/components/ui/socket-status";
 
 export function Confirmation() {
     const { selectedQuote } = useSelectedQuote()
@@ -10,10 +11,8 @@ export function Confirmation() {
 
     return (
         <div className="max-w-2xl mx-auto px-6 py-12">
+            <SocketStatus src="/images/socket-thumbs-up.png" alt="Socket giving a thumbs up" />
             <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Check className="w-8 h-8 text-white" />
-                </div>
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">Appointment Scheduled!</h2>
             </div>
 

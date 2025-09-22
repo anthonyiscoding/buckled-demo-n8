@@ -112,7 +112,7 @@ export const SocketAssistant: React.FC<SocketAssistantProps> = ({
         )
     }
 
-    const baseClasses = "fixed bottom-6 right-6 w-16 h-16  rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300"
+    const baseClasses = "fixed bottom-6 right-6 w-20 h-20 z-10 rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300"
     const animationClasses = showBounceAnimation ? "animate-bounce-in" : ""
 
     return (
@@ -122,7 +122,7 @@ export const SocketAssistant: React.FC<SocketAssistantProps> = ({
                 onClick={handleClick}
             >
                 <img
-                    src="/images/socket-thinking.png"
+                    src="/images/socket-thumbs-up.png"
                     alt="Socket character"
                     className="w-full h-full object-contain animate-socket-appear max-h-[64px]"
                 />

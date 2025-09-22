@@ -6,6 +6,7 @@ import { Button } from "../../../components/ui/button";
 import Image from "next/image";
 import { useOtherState, useNavigation, useSocketState, useSocketMessages } from "@/lib/hooks";
 import { useEffect } from "react";
+import { SocketStatus } from "@/components/ui/socket-status";
 
 export function Diagnosis() {
     const { diagnosisProgress, showDiagnosisResults, diagnosisResponse, showInvalidRequestMessage } = useOtherState()
@@ -38,15 +39,7 @@ export function Diagnosis() {
     return (
         <div className="max-w-2xl mx-auto px-6 py-12">
             <div className="text-center mb-8">
-                <div className="w-32 h-32 flex items-center justify-center mx-auto mb-4">
-                    <Image
-                        src="/images/socket-thinking.png"
-                        alt="Socket character"
-                        className="w-full h-full object-contain animate-socket-appear max-h-[300px]"
-                        width={120}
-                        height={300}
-                    />
-                </div>
+                <SocketStatus src="/images/socket-thinking.png" alt="Socket thinking" />
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">Analyzing your issue...</h2>
                 <Progress value={diagnosisProgress} className="w-full max-w-md mx-auto" />
             </div>

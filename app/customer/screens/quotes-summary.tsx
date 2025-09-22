@@ -5,7 +5,7 @@ import { StarRating } from "../../../components/ui/star-rating"
 import { Button } from "../../../components/ui/button"
 import { useSignupStatus, useSelectedQuote, useNavigation, useOtherState } from "@/lib/hooks"
 import { getMockQuotes } from "../../../components/car-data"
-
+import { SocketStatus } from "@/components/ui/socket-status"
 
 export function QuotesSummary() {
     const { isSignedUp } = useSignupStatus()
@@ -18,6 +18,7 @@ export function QuotesSummary() {
 
     return (
         <div className="max-w-4xl mx-auto px-6 py-12">
+            <SocketStatus src="/images/socket-holding-rfp.png" alt="Socket holding an RFP" />
             <div className="mb-8">
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">Service Center Quotes</h2>
                 <p className="text-gray-600">Compare quotes from trusted service centers in your area</p>
@@ -59,7 +60,7 @@ export function QuotesSummary() {
                 {/* Blurred quotes requiring signup */}
                 {!isSignedUp && (
                     <div className="relative">
-                        <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex items-start justify-center rounded-lg">
+                        <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-1 flex items-start justify-center rounded-lg">
                             <Card className="max-w-sm">
                                 <CardContent className="p-6 text-center">
                                     <h3 className="text-lg font-semibold mb-2">See All Quotes</h3>
